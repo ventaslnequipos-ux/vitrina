@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Catálogo de maquinaria y vehículos en venta. La Vitrina de las Máquinas by Nestor Sierra. WhatsApp 301 795 9540.">
+<title>La Vitrina de las Máquinas</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap">
+<style>
+/* Layout: banda azul noche con marca y contacto, filtros por tipo, grilla de fichas con foto, datos y precio. Un solo tema de marca (claro). */
+:root {
+  --noche: #021F4D; --azul: #053683; --ama: #F0AD13; --graf: #1C1F24;
+  --muted: #5E6672; --linea: #D5D9E0; --hueso: #F6F5F1; --blanco: #FFFFFF; --soft: #C9D4E6;
+  --display: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+  --body: 'Barlow', 'Helvetica Neue', Arial, sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--hueso); color: var(--graf); font-family: var(--body); font-size: 16px; line-height: 1.5; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--noche); }
+.wrap { max-width: 1180px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+header { background: var(--noche); color: var(--blanco); border-top: 6px solid var(--ama); }
+header .wrap { padding-block: 36px 32px; display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-end; justify-content: space-between; }
+.eyebrow { font-family: var(--display); font-weight: 600; letter-spacing: 0.18em; font-size: 15px; color: var(--ama); text-transform: uppercase; }
+h1 { margin: 6px 0 0; font-family: var(--display); font-weight: 700; font-size: clamp(44px, 9vw, 84px); line-height: 0.92; text-transform: uppercase; text-wrap: balance; }
+.by { font-family: var(--display); font-weight: 600; font-size: 24px; color: var(--ama); margin-top: 6px; }
+.contact { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+.contact .label { font-size: 13px; letter-spacing: 0.12em; font-weight: 600; color: var(--soft); }
+.contact .num { font-family: var(--display); font-weight: 700; font-size: 32px; line-height: 1; user-select: all; }
+.btn { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 10px 18px; border-radius: 4px; background: var(--ama); color: var(--noche); font-family: var(--display); font-weight: 700; font-size: 18px; letter-spacing: 0.04em; text-decoration: none; }
+.btn:hover { background: #F7C04A; }
+.btn:focus-visible, .chip:focus-visible { outline: 3px solid var(--azul); outline-offset: 2px; }
+.btn svg { width: 20px; height: 20px; }
+.filters { display: flex; flex-wrap: wrap; gap: 8px; padding-block: 24px 8px; }
+.chip { min-height: 40px; padding: 8px 16px; border: 1px solid var(--linea); border-radius: 999px; background: var(--blanco); color: var(--graf); font-family: var(--body); font-weight: 600; font-size: 15px; cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--noche); border-color: var(--noche); color: var(--blanco); }
+.count { color: var(--muted); font-size: 15px; padding-block: 4px 16px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 20px; padding-bottom: 40px; }
+.card { background: var(--blanco); border: 1px solid var(--linea); display: flex; flex-direction: column; min-width: 0; }
+.card img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; background: var(--linea); }
+.card .body { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 12px; flex: 1; }
+.cat { font-size: 13px; font-weight: 600; letter-spacing: 0.1em; color: var(--azul); text-transform: uppercase; }
+.card h2 { margin: 0; font-family: var(--display); font-weight: 700; font-size: 32px; line-height: 1; color: var(--noche); }
+.facts { display: flex; gap: 8px; flex-wrap: wrap; }
+.fact { background: var(--hueso); border: 1px solid var(--linea); padding: 3px 10px; font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.price { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; background: var(--azul); color: var(--blanco); padding: 10px 14px; }
+.price span { font-size: 12px; letter-spacing: 0.12em; font-weight: 600; color: var(--soft); }
+.price strong { font-family: var(--display); font-weight: 700; font-size: 30px; color: var(--ama); font-variant-numeric: tabular-nums; }
+dl { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 16px; }
+dl div { border-top: 1px solid var(--linea); padding: 6px 0; min-width: 0; }
+dt { font-size: 12px; font-weight: 600; letter-spacing: 0.06em; color: var(--muted); text-transform: uppercase; }
+dd { margin: 0; font-family: var(--display); font-weight: 600; font-size: 19px; overflow-wrap: anywhere; }
+.card .btn { justify-content: center; margin-top: auto; }
+footer { background: var(--noche); color: var(--soft); }
+footer .wrap { padding-block: 28px; display: flex; flex-direction: column; gap: 6px; font-size: 14px; }
+footer strong { color: var(--blanco); font-family: var(--display); font-size: 20px; }
+@media (prefers-reduced-motion: no-preference) { .btn, .chip { transition: background-color .15s; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">Catálogo de venta de maquinaria</div>
+      <h1>La Vitrina de las Máquinas</h1>
+      <div class="by">by Nestor Sierra</div>
+    </div>
+    <div class="contact">
+      <div class="label">WHATSAPP</div>
+      <div class="num">301 795 9540</div>
+      <a class="btn" href="https://wa.me/573017959540?text=Hola%20Nestor%2C%20vi%20el%20cat%C3%A1logo%20de%20La%20Vitrina%20de%20las%20M%C3%A1quinas%20y%20quiero%20m%C3%A1s%20informaci%C3%B3n." target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 21l2.1-5.5A8.4 8.4 0 1 1 21 11.5z"/></svg>
+        Escribir por WhatsApp
+      </a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="filters" role="group" aria-label="Filtrar por tipo de equipo" id="filters"></div>
+  <div class="count" id="count" aria-live="polite"></div>
+  <div class="grid" id="grid"></div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <strong>La Vitrina de las Máquinas by Nestor Sierra</strong>
+    <div>WhatsApp 301 795 9540</div>
+    <div>Precios en pesos colombianos, sujetos a disponibilidad y a cambio sin previo aviso. Los datos técnicos son de referencia; se recomienda inspeccionar el equipo antes de comprar.</div>
+  </div>
+</footer>
+
+<script>
+const EQUIPOS = [
+  { img: "img/dieci.jpg", tipo: "Elevación", cat: "Manipulador telescópico rotativo", nombre: "Dieci Pegasus 38.16", anio: "2018", uso: "6.000 h", precio: "$200.000.000",
+    specs: [["Capacidad máx.", "3.800 kg"], ["Altura de elevación", "15,7 m"], ["Giro de torreta", "400°"], ["Tracción", "4x4"]] },
+  { img: "img/mg120_a.jpg", tipo: "Motoniveladoras", cat: "Motoniveladora", nombre: "Caterpillar 120G", anio: "2007", uso: "12.000 h", precio: "$270.000.000",
+    specs: [["Motor", "Caterpillar 3304"], ["Potencia", "125 hp"], ["Peso operativo", "11.500 kg aprox."], ["Transmisión", "6 avance / 6 reversa"]] },
+  { img: "img/mg140.jpg", tipo: "Motoniveladoras", cat: "Motoniveladora", nombre: "Caterpillar 12G (140G)", anio: "1989", uso: "30.000 h", precio: "$250.000.000",
+    specs: [["Motor", "Caterpillar 3306"], ["Potencia", "135 hp"], ["Hoja", "12 pies (3,66 m)"], ["Eje trasero", "Tándem"]] },
+  { img: "img/cp433.jpg", tipo: "Compactación", cat: "Vibrocompactador", nombre: "Caterpillar CP-433C", anio: "2003", uso: "7.000 h", precio: "$150.000.000",
+    specs: [["Motor", "Caterpillar 3054T"], ["Potencia", "105 hp"], ["Peso operativo", "6.900 kg aprox."], ["Ancho de tambor", "1,68 m"]] },
+  { img: "img/jcb.jpg", tipo: "Excavación", cat: "Retroexcavadora cargadora", nombre: "JCB 3CX", anio: "2020", uso: "7.000 h", precio: "$300.000.000",
+    specs: [["Configuración", "Pala + retro"], ["Cabina", "Cerrada"]] },
+  { img: "img/doosan.jpg", tipo: "Excavación", cat: "Miniexcavadora", nombre: "Doosan DX35Z", anio: "2021", uso: "3.800 h", precio: "$155.000.000",
+    specs: [["Motor", "Yanmar 3TNV88"], ["Peso operativo", "3.660 kg aprox."], ["Prof. de excavación", "3,0 m"], ["Giro de cola", "Cero"]] },
+  { img: "img/hitachi.jpg", tipo: "Excavación", cat: "Excavadora sobre orugas", nombre: "Hitachi Zaxis 130LC", anio: "2013", uso: "12.000 h", precio: "$290.000.000",
+    specs: [["Peso operativo", "13 t aprox."], ["Prof. de excavación", "5,5 m aprox."], ["Cucharón", "0,5 m³ aprox."], ["Tren de rodaje", "Largo (LC)"]] },
+  { img: "img/ir_a.jpg", tipo: "Compactación", cat: "Vibrocompactador", nombre: "Ingersoll Rand SD100", anio: "2014", uso: "8.000 h", precio: "$170.000.000",
+    specs: [["Clase", "10 toneladas"], ["Ancho de tambor", "2,13 m"], ["Tambor", "Liso"], ["Protección", "Techo ROPS"]] },
+  { img: "img/bomag2.jpg", tipo: "Compactación", cat: "Vibrocompactador", nombre: "Bomag", anio: "1988", uso: "Operativo", precio: "$60.000.000",
+    specs: [["Tambor", "Liso"], ["Protección", "Techo ROPS"]] },
+  { img: "img/ford_b.jpg", tipo: "Vehículos", cat: "Volqueta", nombre: "Ford Piragua", anio: "1971", uso: "Operativa", precio: "$48.000.000",
+    specs: [["Motor", "Nissan 180 diésel"], ["Estado", "Totalmente operativa"], ["Carrocería", "Volco"], ["Eje trasero", "Doble llanta"]] },
+  { img: "img/duster_a.jpg", tipo: "Vehículos", cat: "Camioneta SUV", nombre: "Renault Duster Iconic", anio: "2026", uso: "19.000 km", precio: "$90.000.000",
+    specs: [["Motor", "1.3 turbo (TCe)"], ["Potencia", "154 hp"], ["Combustible", "Gasolina"], ["Color", "Gris"]] },
+  { img: "img/h940.jpg", tipo: "Excavación", cat: "Retroexcavadora cargadora", nombre: "Hyundai H940C", anio: "2018", uso: "9.925 h", precio: "$280.000.000",
+    specs: [["Potencia", "136 hp aprox."], ["Peso operativo", "7,5 t aprox."], ["Tracción", "4x4"], ["Cabina", "Cerrada"]] },
+  { img: "img/liugong.jpg", tipo: "Cargadores", cat: "Cargador sobre llantas", nombre: "LiuGong CLG856", anio: "2012", uso: "Clase 5 t", precio: "$180.000.000",
+    specs: [["Potencia", "215 hp aprox."], ["Peso operativo", "16,8 t aprox."], ["Cucharón", "2,7 m³ aprox."], ["Cabina", "Cerrada"]] },
+  { img: "img/ss250.jpg", tipo: "Estabilización", cat: "Estabilizadora de suelos", nombre: "Caterpillar SS-250", anio: "1991", uso: "Estabilizadora", precio: "$190.000.000",
+    specs: [["Motor", "Caterpillar 3306 turbo"], ["Prof. de mezcla", "Hasta 30 cm"], ["Tracción", "4x4"], ["Protección", "Techo ROPS"]] },
+  { img: "img/tanque.jpg", tipo: "Vehículos", cat: "Camión planchón con tanque", nombre: "Ford Planchón", anio: "1965", uso: "Km: no marca", precio: "$80.000.000",
+    specs: [["Carrocería", "Planchón"], ["Equipo montado", "Tanque + motobomba"], ["Eje trasero", "Doble llanta"]] },
+  { img: "img/kia.jpg", tipo: "Vehículos", cat: "Campero", nombre: "Kia Sportage", anio: "2010", uso: "231.000 km", precio: "$40.000.000",
+    specs: [["Color", "Dorado"], ["Equipamiento", "Barras de techo, rines"]] },
+];
+const TIPOS = ["Todos", "Motoniveladoras", "Compactación", "Excavación", "Cargadores", "Estabilización", "Elevación", "Vehículos"];
+const WA = "https://wa.me/573017959540?text=";
+const grid = document.getElementById("grid"), filters = document.getElementById("filters"), count = document.getElementById("count");
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+let actual = "Todos";
+
+function render() {
+  const lista = EQUIPOS.filter(e => actual === "Todos" || e.tipo === actual);
+  count.textContent = lista.length === 1 ? "1 equipo disponible" : `${lista.length} equipos disponibles`;
+  grid.innerHTML = lista.map(e => {
+    const msg = encodeURIComponent(`Hola Nestor, me interesa el equipo ${e.nombre} (${e.anio}) por ${e.precio} que vi en La Vitrina de las Máquinas.`);
+    return `<article class="card">
+      <img src="${esc(e.img)}" alt="${esc(e.cat)} ${esc(e.nombre)}" loading="lazy">
+      <div class="body">
+        <div><div class="cat">${esc(e.cat)}</div><h2>${esc(e.nombre)}</h2></div>
+        <div class="facts"><span class="fact">Año ${esc(e.anio)}</span><span class="fact">${esc(e.uso)}</span></div>
+        <div class="price"><span>PRECIO</span><strong>${esc(e.precio)}</strong></div>
+        <dl>${e.specs.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>
+        <a class="btn" href="${WA}${msg}" target="_blank" rel="noopener">Consultar por WhatsApp</a>
+      </div>
+    </article>`;
+  }).join("");
+}
+filters.innerHTML = TIPOS.map(t => `<button type="button" class="chip" id="f-${t}" aria-pressed="${t === actual}">${t}</button>`).join("");
+filters.addEventListener("click", ev => {
+  const b = ev.target.closest(".chip"); if (!b) return;
+  actual = b.textContent;
+  filters.querySelectorAll(".chip").forEach(c => c.setAttribute("aria-pressed", String(c === b)));
+  render();
+});
+render();
+</script>
+</body>
+</html>
