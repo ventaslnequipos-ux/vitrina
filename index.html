@@ -3,7 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Catálogo de maquinaria y vehículos en venta, verificables en Barranquilla. La Vitrina de las Máquinas by Nestor Sierra. WhatsApp 301 795 9540.">
+<meta name="description" content="Maquinaria y vehículos usados en venta, verificables en Barranquilla. Fotos, datos técnicos y precios. WhatsApp 301 795 9540.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="La Vitrina de las Máquinas">
+<meta property="og:title" content="La Vitrina de las Máquinas · Maquinaria en venta en Barranquilla">
+<meta property="og:description" content="Maquinaria y vehículos usados en venta, verificables en Barranquilla. Fotos, datos técnicos y precios. WhatsApp 301 795 9540.">
+<meta property="og:url" content="https://ventaslnequipos-ux.github.io/vitrina/">
+<meta property="og:image" content="https://ventaslnequipos-ux.github.io/vitrina/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="es_CO">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://ventaslnequipos-ux.github.io/vitrina/og.jpg">
+<link rel="canonical" href="https://ventaslnequipos-ux.github.io/vitrina/">
 <title>La Vitrina de las Máquinas</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -57,7 +69,7 @@ h1 { margin: 6px 0 0; font-family: var(--display); font-weight: 700; font-size: 
 .card h2 { margin: 0; font-family: var(--display); font-weight: 700; font-size: 32px; line-height: 1; color: var(--noche); }
 .facts { display: flex; gap: 8px; flex-wrap: wrap; }
 .fact { background: var(--hueso); border: 1px solid var(--linea); padding: 3px 10px; font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; }
-.price { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; background: var(--azul); color: var(--blanco); padding: 10px 14px; }
+.price { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px; background: var(--azul); color: var(--blanco); padding: 10px 14px; }
 .price span { font-size: 12px; letter-spacing: 0.12em; font-weight: 600; color: var(--soft); }
 .price strong { font-family: var(--display); font-weight: 700; font-size: 30px; color: var(--ama); font-variant-numeric: tabular-nums; }
 dl { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 16px; }
@@ -65,6 +77,20 @@ dl div { border-top: 1px solid var(--linea); padding: 6px 0; min-width: 0; }
 dt { font-size: 12px; font-weight: 600; letter-spacing: 0.06em; color: var(--muted); text-transform: uppercase; }
 dd { margin: 0; font-family: var(--display); font-weight: 600; font-size: 19px; overflow-wrap: anywhere; }
 .card .btn { justify-content: center; margin-top: auto; }
+.media { position: relative; }
+.badge { position: absolute; top: 12px; left: 12px; background: var(--ama); color: var(--noche); font-family: var(--display); font-weight: 700; font-size: 15px; letter-spacing: 0.08em; padding: 4px 10px; text-transform: uppercase; }
+.btn.ghost { background: transparent; color: var(--blanco); border: 2px solid var(--ama); }
+.btn.ghost:hover { background: rgba(240, 173, 19, 0.15); }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.feat-wrap { padding-block: 28px 4px; }
+.feat-label { font-family: var(--display); font-weight: 700; font-size: 15px; letter-spacing: 0.16em; color: var(--azul); text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+.feat-label svg { width: 18px; height: 18px; color: var(--ama); }
+.feat { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); background: var(--blanco); border: 2px solid var(--noche); }
+.feat .media { aspect-ratio: 4 / 3; min-height: 100%; }
+.feat .media img, .feat .media .nophoto { position: absolute; inset: 0; width: 100%; height: 100%; aspect-ratio: auto; object-fit: cover; object-position: 50% 62%; display: block; }
+.feat .body { padding: 24px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.feat h2 { margin: 0; font-family: var(--display); font-weight: 700; font-size: clamp(34px, 5vw, 48px); line-height: 1; color: var(--noche); }
+.feat .price strong { font-size: 38px; }
 footer { background: var(--noche); color: var(--soft); }
 footer .wrap { padding-block: 28px; display: flex; flex-direction: column; gap: 6px; font-size: 14px; }
 footer strong { color: var(--blanco); font-family: var(--display); font-size: 20px; }
@@ -87,6 +113,10 @@ footer strong { color: var(--blanco); font-family: var(--display); font-size: 20
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 21l2.1-5.5A8.4 8.4 0 1 1 21 11.5z"/></svg>
         Escribir por WhatsApp
       </a>
+      <a class="btn ghost" href="https://wa.me/?text=Mira%20el%20cat%C3%A1logo%20de%20maquinaria%20en%20venta%20de%20La%20Vitrina%20de%20las%20M%C3%A1quinas%20(equipos%20verificables%20en%20Barranquilla)%3A%20https%3A%2F%2Fventaslnequipos-ux.github.io%2Fvitrina%2F" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
+        Compartir catálogo
+      </a>
     </div>
   </div>
 </header>
@@ -102,6 +132,7 @@ footer strong { color: var(--blanco); font-family: var(--display); font-size: 20
 </section>
 
 <main class="wrap">
+  <section class="feat-wrap" id="destacado" aria-label="Equipo destacado de la semana"></section>
   <div class="toolbar">
     <div class="sort">
       <label for="orden">Ordenar por</label>
@@ -179,7 +210,15 @@ const EQUIPOS = [
   { img: "img/cs78b.jpg", tipo: "Compactación", cat: "Vibrocompactador", nombre: "Caterpillar CS78B", anio: 2017, uso: "7.070 h", precio: 290000000,
     specs: [["Motor", "Caterpillar C7.1"], ["Potencia", "173 hp"], ["Peso operativo", "18,8 t aprox."], ["Ancho de tambor", "2,13 m"]] },
 ];
-const TIPOS = ["Todos", "Excavación", "Cargadores", "Minicargadores", "Compactación", "Motoniveladoras", "Bulldozers", "Estabilización", "Elevación", "Vehículos"];
+// Fecha de ingreso al catálogo: la etiqueta "Nuevo ingreso" se muestra 15 días y luego se quita sola.
+const INGRESOS = {
+  "Case 580 Super N": "2026-10-23", "SDLG LG936": "2026-10-23", "Stone PD-54 (3 t)": "2026-10-23", "Bobcat S570": "2026-10-23",
+  "Caterpillar D5N": "2026-10-23", "Bobcat 853": "2026-10-23", "Ingersoll Rand SD-100": "2026-10-23", "Caterpillar CS78B": "2026-10-23",
+};
+// Equipo destacado de la semana (cambiar el nombre para rotarlo).
+const DESTACADO = "Caterpillar CS78B";
+const esNuevo = e => INGRESOS[e.nombre] && (Date.now() - Date.parse(INGRESOS[e.nombre] + "T00:00:00-05:00")) < 15 * 864e5;
+const TIPOS = ["Todos", "Nuevos ingresos", "Excavación", "Cargadores", "Minicargadores", "Compactación", "Motoniveladoras", "Bulldozers", "Estabilización", "Elevación", "Vehículos"];
 const WA = "https://wa.me/573017959540?text=";
 const grid = document.getElementById("grid"), filters = document.getElementById("filters"), count = document.getElementById("count"), orden = document.getElementById("orden");
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -195,15 +234,32 @@ function ordenar(lista) {
   if (v === "anio-asc") return lista.sort((a, b) => a.anio - b.anio);
   return lista;
 }
+const msgDe = e => encodeURIComponent(`Hola Nestor, me interesa el equipo ${e.nombre} (${e.anio})${e.precio ? " por " + cop(e.precio) : ""} que vi en La Vitrina de las Máquinas.`);
+const fotoDe = (e, lazy) => `<div class="media">${e.img ? `<img src="${esc(e.img)}" alt="${esc(e.cat)} ${esc(e.nombre)}"${lazy ? ' loading="lazy"' : ""}>`
+  : `<div class="nophoto">${camara}Fotos disponibles por WhatsApp</div>`}${esNuevo(e) ? '<span class="badge">Nuevo ingreso</span>' : ""}</div>`;
+const estrella = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5l2.9 6 6.6.8-4.9 4.5 1.3 6.5L12 17l-5.9 3.3 1.3-6.5-4.9-4.5 6.6-.8z"/></svg>';
+function renderDestacado() {
+  const e = EQUIPOS.find(x => x.nombre === DESTACADO), cont = document.getElementById("destacado");
+  if (!e) { cont.hidden = true; return; }
+  cont.innerHTML = `<div class="feat-label">${estrella}Equipo destacado de la semana</div>
+    <article class="feat">
+      ${fotoDe(e, false)}
+      <div class="body">
+        <div><div class="cat">${esc(e.cat)}</div><h2>${esc(e.nombre)}</h2></div>
+        <div class="facts"><span class="fact">Año ${e.anio}</span><span class="fact">${esc(e.uso)}</span></div>
+        <div class="price"><span>PRECIO</span><strong>${cop(e.precio)}</strong></div>
+        <dl>${e.specs.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>
+        <div class="actions"><a class="btn" href="${WA}${msgDe(e)}" target="_blank" rel="noopener">Consultar por WhatsApp</a></div>
+      </div>
+    </article>`;
+}
 function render() {
-  const lista = ordenar(EQUIPOS.filter(e => actual === "Todos" || e.tipo === actual));
+  const lista = ordenar(EQUIPOS.filter(e => actual === "Todos" || (actual === "Nuevos ingresos" ? esNuevo(e) : e.tipo === actual)));
   count.textContent = lista.length === 1 ? "1 equipo disponible" : `${lista.length} equipos disponibles`;
   grid.innerHTML = lista.map(e => {
-    const msg = encodeURIComponent(`Hola Nestor, me interesa el equipo ${e.nombre} (${e.anio})${e.precio ? " por " + cop(e.precio) : ""} que vi en La Vitrina de las Máquinas.`);
-    const foto = e.img ? `<img src="${esc(e.img)}" alt="${esc(e.cat)} ${esc(e.nombre)}" loading="lazy">`
-                       : `<div class="nophoto">${camara}Fotos disponibles por WhatsApp</div>`;
+    const msg = msgDe(e);
     return `<article class="card">
-      ${foto}
+      ${fotoDe(e, true)}
       <div class="body">
         <div><div class="cat">${esc(e.cat)}</div><h2>${esc(e.nombre)}</h2></div>
         <div class="facts"><span class="fact">Año ${e.anio}</span><span class="fact">${esc(e.uso)}</span></div>
@@ -214,7 +270,7 @@ function render() {
     </article>`;
   }).join("");
 }
-filters.innerHTML = TIPOS.filter(t => t === "Todos" || EQUIPOS.some(e => e.tipo === t))
+filters.innerHTML = TIPOS.filter(t => t === "Todos" || (t === "Nuevos ingresos" ? EQUIPOS.some(esNuevo) : EQUIPOS.some(e => e.tipo === t)))
   .map(t => `<button type="button" class="chip" aria-pressed="${t === actual}">${t}</button>`).join("");
 filters.addEventListener("click", ev => {
   const b = ev.target.closest(".chip"); if (!b) return;
@@ -223,6 +279,7 @@ filters.addEventListener("click", ev => {
   render();
 });
 orden.addEventListener("change", render);
+renderDestacado();
 render();
 </script>
 </body>
