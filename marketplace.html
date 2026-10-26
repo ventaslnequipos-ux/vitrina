@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Publicaciones Marketplace · La Vitrina</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap">
+<style>
+:root { --noche: #021F4D; --azul: #053683; --ama: #F0AD13; --graf: #1C1F24; --muted: #5E6672; --linea: #D5D9E0; --hueso: #F6F5F1; --blanco: #FFFFFF; --ok: #1F7A3F;
+  --display: 'Barlow Condensed', 'Arial Narrow', sans-serif; --body: 'Barlow', Arial, sans-serif; color-scheme: light; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--hueso); color: var(--graf); font-family: var(--body); font-size: 16px; line-height: 1.5; }
+.wrap { max-width: 900px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+header { background: var(--noche); color: var(--blanco); border-top: 6px solid var(--ama); }
+header .wrap { padding-block: 24px; }
+h1 { margin: 0; font-family: var(--display); font-size: 36px; line-height: 1; }
+header p { margin: 8px 0 0; color: #DCE3EE; }
+.steps { background: var(--blanco); border: 1px solid var(--linea); padding: 16px 20px; margin-block: 20px; }
+.steps ol { margin: 6px 0 0; padding-left: 20px; }
+.progress { font-weight: 600; color: var(--azul); }
+.item { background: var(--blanco); border: 1px solid var(--linea); margin-bottom: 20px; }
+.item.done { opacity: 0.55; }
+.head { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 16px; background: var(--noche); color: var(--blanco); }
+.head h2 { margin: 0; font-family: var(--display); font-size: 24px; line-height: 1.1; min-width: 0; }
+.head label { display: flex; align-items: center; gap: 6px; font-size: 14px; white-space: nowrap; cursor: pointer; }
+.head input { width: 20px; height: 20px; }
+.photo { width: 100%; max-height: 420px; object-fit: cover; display: block; }
+.tip { font-size: 13px; color: var(--muted); padding: 6px 16px 0; }
+.field { padding: 12px 16px; border-top: 1px solid var(--linea); display: flex; flex-direction: column; gap: 6px; }
+.field .k { font-size: 12px; font-weight: 600; letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase; }
+.field .v { white-space: pre-wrap; overflow-wrap: anywhere; background: var(--hueso); border: 1px solid var(--linea); padding: 10px 12px; font-size: 15px; }
+.field .row { display: flex; gap: 10px; align-items: flex-start; }
+.field .row .v { flex: 1; min-width: 0; }
+button.copy { min-height: 44px; padding: 8px 16px; border: 0; border-radius: 4px; background: var(--ama); color: var(--noche); font-family: var(--display); font-weight: 700; font-size: 17px; cursor: pointer; flex-shrink: 0; }
+button.copy.ok { background: var(--ok); color: var(--blanco); }
+button.copy:focus-visible { outline: 3px solid var(--azul); outline-offset: 2px; }
+.warn { color: #8A4B00; font-weight: 600; }
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <h1>Publicaciones para Marketplace</h1>
+  <p>Uso interno de La Vitrina de las Máquinas · Textos listos para copiar y pegar</p>
+</div></header>
+<main class="wrap">
+  <div class="steps">
+    <strong>Cómo publicar cada equipo (2 minutos):</strong>
+    <ol>
+      <li>En Facebook abre <strong>Marketplace → Vender → Artículo</strong> (o Vehículo para camionetas y camiones).</li>
+      <li>Mantén presionada la foto de abajo y guárdala; súbela en Facebook.</li>
+      <li>Copia y pega el <strong>título</strong>, el <strong>precio</strong> y la <strong>descripción</strong>.</li>
+      <li>Ubicación: <strong>Barranquilla</strong>. Publica y marca el equipo como publicado aquí.</li>
+    </ol>
+    <p>Consejo: publica 3 o 4 equipos por día, no todos el mismo día.</p>
+    <div class="progress" id="progreso"></div>
+  </div>
+  <div id="lista"></div>
+</main>
+<script src="equipos.js"></script>
+<script>
+const URL_CAT = "https://ventaslnequipos-ux.github.io/vitrina/";
+const cop = n => "$" + n.toLocaleString("es-CO").replace(/,/g, ".");
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const lista = document.getElementById("lista"), prog = document.getElementById("progreso");
+let hechos = {};
+try { hechos = JSON.parse(localStorage.getItem("mk_hechos") || "{}"); } catch (e) {}
+const guardar = () => { try { localStorage.setItem("mk_hechos", JSON.stringify(hechos)); } catch (e) {} };
+
+function titulo(e) { return `${e.nombre} ${e.anio} · ${e.cat}`.slice(0, 99); }
+function descripcion(e) {
+  return [
+    `🚜 ${e.cat} ${e.nombre}`,
+    `✅ Año ${e.anio} · ${e.uso.replace(/ h$/, " horas")}`,
+    e.precio ? `💰 Precio: ${cop(e.precio)} COP` : `💰 Precio: a consultar`,
+    ``,
+    `📋 Datos técnicos:`,
+    ...e.specs.map(([k, v]) => `• ${k}: ${v}`),
+    ``,
+    `📍 Ubicado en Barranquilla, Atlántico. Equipo verificable: agende su visita e inspecciónelo antes de comprar.`,
+    `📲 WhatsApp 301 795 9540`,
+    `🔎 Vea este y más equipos en el catálogo: ${URL_CAT}`,
+    ``,
+    `La Vitrina de las Máquinas by Nestor Sierra`,
+  ].join("\n");
+}
+function campo(k, v, id) {
+  return `<div class="field"><div class="k">${k}</div><div class="row"><div class="v" id="${id}">${esc(v)}</div>
+    <button type="button" class="copy" data-target="${id}">Copiar</button></div></div>`;
+}
+function pintar() {
+  lista.innerHTML = EQUIPOS.map((e, i) => `
+    <article class="item${hechos[e.nombre] ? " done" : ""}">
+      <div class="head"><h2>${i + 1}. ${esc(e.nombre)}</h2>
+        <label><input type="checkbox" data-n="${esc(e.nombre)}" ${hechos[e.nombre] ? "checked" : ""}> Publicado</label></div>
+      ${e.img ? `<img class="photo" src="${esc(e.img)}" alt="${esc(e.nombre)}"><div class="tip">Mantén presionada la foto para guardarla.</div>` : ""}
+      ${campo("Título", titulo(e), "t" + i)}
+      ${e.precio ? campo("Precio", String(e.precio), "p" + i) : `<div class="field"><div class="k">Precio</div><div class="warn">Sin precio todavía: espera a tenerlo antes de publicar este equipo.</div></div>`}
+      ${campo("Descripción", descripcion(e), "d" + i)}
+    </article>`).join("");
+  const n = Object.values(hechos).filter(Boolean).length;
+  prog.textContent = `Publicados: ${n} de ${EQUIPOS.length}`;
+}
+lista.addEventListener("click", async ev => {
+  const b = ev.target.closest("button.copy"); if (!b) return;
+  const el = document.getElementById(b.dataset.target);
+  try { await navigator.clipboard.writeText(el.textContent); }
+  catch (err) { const r = document.createRange(); r.selectNodeContents(el); const s = getSelection(); s.removeAllRanges(); s.addRange(r); document.execCommand && document.execCommand("copy"); }
+  b.textContent = "Copiado ✓"; b.classList.add("ok");
+  setTimeout(() => { b.textContent = "Copiar"; b.classList.remove("ok"); }, 1800);
+});
+lista.addEventListener("change", ev => {
+  const c = ev.target.closest("input[data-n]"); if (!c) return;
+  hechos[c.dataset.n] = c.checked; guardar(); pintar();
+});
+pintar();
+</script>
+</body>
+</html>
