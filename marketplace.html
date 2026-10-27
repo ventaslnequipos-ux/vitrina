@@ -68,11 +68,11 @@ let hechos = {};
 try { hechos = JSON.parse(localStorage.getItem("mk_hechos") || "{}"); } catch (e) {}
 const guardar = () => { try { localStorage.setItem("mk_hechos", JSON.stringify(hechos)); } catch (e) {} };
 
-function titulo(e) { return `${e.nombre} ${e.anio} · ${e.cat}`.slice(0, 99); }
+function titulo(e) { return `${e.nombre}${e.anio ? " " + e.anio : ""} · ${e.cat}`.slice(0, 99); }
 function descripcion(e) {
   return [
     `🚜 ${e.cat} ${e.nombre}`,
-    `✅ Año ${e.anio} · ${e.uso.replace(/ h$/, " horas")}`,
+    `✅ ${e.anio ? "Año " + e.anio + " · " : ""}${e.uso.replace(/ h$/, " horas")}`,
     e.precio ? `💰 Precio: ${cop(e.precio)} COP` : `💰 Precio: a consultar`,
     ``,
     `📋 Datos técnicos:`,

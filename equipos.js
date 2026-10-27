@@ -59,4 +59,6 @@ const EQUIPOS = [
     specs: [["Motor", "Caterpillar C6.6"], ["Potencia", "150 hp aprox."], ["Peso operativo", "16 t aprox."], ["Protección", "Techo ROPS"]] },
   { img: "img/d5n07.jpg", tipo: "Bulldozers", cat: "Bulldozer sobre orugas", nombre: "Caterpillar D5N (2007)", anio: 2007, uso: "12.500 h", precio: 300000000,
     specs: [["Peso operativo", "12,7 t aprox."], ["Hoja", "2,7 m³ aprox."], ["Protección", "Techo ROPS"]] },
+  { img: "img/grua.jpg", tipo: "Vehículos", cat: "Camión grúa con tanque", nombre: "Camión grúa + tanque 9 m³", anio: 0, uso: "Listo para traspaso", precio: 95000000,
+    specs: [["Capacidad de carga", "Hasta 13 t"], ["Tanque", "9 m³"], ["Documentos", "Listo para traspaso"], ["Eje trasero", "Doble llanta"]] },
 ];

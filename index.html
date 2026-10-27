@@ -221,6 +221,8 @@ const EQUIPOS = [
     specs: [["Motor", "Caterpillar C6.6"], ["Potencia", "150 hp aprox."], ["Peso operativo", "16 t aprox."], ["Protección", "Techo ROPS"]] },
   { img: "img/d5n07.jpg", tipo: "Bulldozers", cat: "Bulldozer sobre orugas", nombre: "Caterpillar D5N (2007)", anio: 2007, uso: "12.500 h", precio: 300000000,
     specs: [["Peso operativo", "12,7 t aprox."], ["Hoja", "2,7 m³ aprox."], ["Protección", "Techo ROPS"]] },
+  { img: "img/grua.jpg", tipo: "Vehículos", cat: "Camión grúa con tanque", nombre: "Camión grúa + tanque 9 m³", anio: 0, uso: "Listo para traspaso", precio: 95000000,
+    specs: [["Capacidad de carga", "Hasta 13 t"], ["Tanque", "9 m³"], ["Documentos", "Listo para traspaso"], ["Eje trasero", "Doble llanta"]] },
 ];
 // Fecha de ingreso al catálogo: la etiqueta "Nuevo ingreso" se muestra 15 días y luego se quita sola.
 const INGRESOS = {
@@ -228,6 +230,7 @@ const INGRESOS = {
   "Caterpillar D5N": "2026-10-23", "Bobcat 853": "2026-10-23", "Ingersoll Rand SD-100": "2026-10-23", "Caterpillar CS78B": "2026-10-23",
   "SDLG RS7120H (12 t)": "2026-10-26", "Caterpillar D6N (2017)": "2026-10-26", "Caterpillar D5K2 LGP": "2026-10-26",
   "Kobelco SK210LC-9": "2026-10-26", "Caterpillar D6N (2007)": "2026-10-26", "Caterpillar D5N (2007)": "2026-10-26",
+  "Camión grúa + tanque 9 m³": "2026-10-26",
 };
 // Equipo destacado de la semana (cambiar el nombre para rotarlo).
 const DESTACADO = "Caterpillar CS78B";
@@ -244,11 +247,11 @@ function ordenar(lista) {
   const v = orden.value, sinPrecioAlFinal = (a, b, f) => (a.precio === 0) - (b.precio === 0) || f(a, b);
   if (v === "precio-desc") return lista.sort((a, b) => sinPrecioAlFinal(a, b, (x, y) => y.precio - x.precio));
   if (v === "precio-asc") return lista.sort((a, b) => sinPrecioAlFinal(a, b, (x, y) => x.precio - y.precio));
-  if (v === "anio-desc") return lista.sort((a, b) => b.anio - a.anio);
-  if (v === "anio-asc") return lista.sort((a, b) => a.anio - b.anio);
+  if (v === "anio-desc") return lista.sort((a, b) => !a.anio - !b.anio || b.anio - a.anio);
+  if (v === "anio-asc") return lista.sort((a, b) => !a.anio - !b.anio || a.anio - b.anio);
   return lista;
 }
-const msgDe = e => encodeURIComponent(`Hola Nestor, me interesa el equipo ${e.nombre} (${e.anio})${e.precio ? " por " + cop(e.precio) : ""} que vi en La Vitrina de las Máquinas.`);
+const msgDe = e => encodeURIComponent(`Hola Nestor, me interesa el equipo ${e.nombre}${e.anio ? " (" + e.anio + ")" : ""}${e.precio ? " por " + cop(e.precio) : ""} que vi en La Vitrina de las Máquinas.`);
 const fotoDe = (e, lazy) => `<div class="media">${e.img ? `<img src="${esc(e.img)}" alt="${esc(e.cat)} ${esc(e.nombre)}"${lazy ? ' loading="lazy"' : ""}>`
   : `<div class="nophoto">${camara}Fotos disponibles por WhatsApp</div>`}${esNuevo(e) ? '<span class="badge">Nuevo ingreso</span>' : ""}</div>`;
 const estrella = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5l2.9 6 6.6.8-4.9 4.5 1.3 6.5L12 17l-5.9 3.3 1.3-6.5-4.9-4.5 6.6-.8z"/></svg>';
@@ -260,7 +263,7 @@ function renderDestacado() {
       ${fotoDe(e, false)}
       <div class="body">
         <div><div class="cat">${esc(e.cat)}</div><h2>${esc(e.nombre)}</h2></div>
-        <div class="facts"><span class="fact">Año ${e.anio}</span><span class="fact">${esc(e.uso)}</span></div>
+        <div class="facts"><span class="fact">${e.anio ? "Año " + e.anio : "Año por confirmar"}</span><span class="fact">${esc(e.uso)}</span></div>
         <div class="price"><span>PRECIO</span><strong>${cop(e.precio)}</strong></div>
         <dl>${e.specs.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>
         <div class="actions"><a class="btn" href="${WA}${msgDe(e)}" target="_blank" rel="noopener">Consultar por WhatsApp</a></div>
@@ -276,7 +279,7 @@ function render() {
       ${fotoDe(e, true)}
       <div class="body">
         <div><div class="cat">${esc(e.cat)}</div><h2>${esc(e.nombre)}</h2></div>
-        <div class="facts"><span class="fact">Año ${e.anio}</span><span class="fact">${esc(e.uso)}</span></div>
+        <div class="facts"><span class="fact">${e.anio ? "Año " + e.anio : "Año por confirmar"}</span><span class="fact">${esc(e.uso)}</span></div>
         <div class="price"><span>PRECIO</span><strong>${cop(e.precio)}</strong></div>
         <dl>${e.specs.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>
         <a class="btn" href="${WA}${msg}" target="_blank" rel="noopener">Consultar por WhatsApp</a>
