@@ -82,7 +82,7 @@ a { color: var(--ama); }
 .puntos button[aria-current="true"] span { background: var(--ama); }
 .tiempo { flex: 1; height: 3px; background: var(--linea); overflow: hidden; }
 .tiempo i { display: block; height: 100%; width: 100%; background: var(--oro); transform-origin: left; transform: scaleX(0); }
-.tiempo i.corre { animation: llena 10s linear forwards; }
+.tiempo i.corre { animation: llena 4s linear forwards; }
 .carrusel:hover .tiempo i.corre, .carrusel:focus-within .tiempo i.corre { animation-play-state: paused; }
 @keyframes llena { to { transform: scaleX(1); } }
 .lema { margin: 12px 0 0; font-family: var(--texto); font-weight: 600; font-size: clamp(20px, 2.6vw, 28px); line-height: 1.2; color: var(--hueso); letter-spacing: 0.01em; }
@@ -317,7 +317,7 @@ function lote(e, grande) {
     barra.classList.remove("corre"); void barra.offsetWidth; if (!quieto) barra.classList.add("corre");
     clearTimeout(t); if (!quieto) programar();
   }
-  function programar() { t = setTimeout(function paso() { if (pausa) { t = setTimeout(paso, 500); return; } ir(i + 1); }, 10000); }
+  function programar() { t = setTimeout(function paso() { if (pausa) { t = setTimeout(paso, 500); return; } ir(i + 1); }, 4000); }
   const car = document.getElementById("carrusel");
   car.addEventListener("mouseenter", () => pausa = true); car.addEventListener("mouseleave", () => pausa = false);
   car.addEventListener("focusin", () => pausa = true); car.addEventListener("focusout", () => pausa = false);
