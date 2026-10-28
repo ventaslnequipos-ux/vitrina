@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Yellow Yard by Nestor Sierra · Maquinaria en Barranquilla</title>
 <meta name="description" content="Tu próxima máquina está en el patio amarillo. Maquinaria y vehículos usados en venta, verificables en Barranquilla. WhatsApp 301 795 9540.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Yellow Yard">
-<meta property="og:title" content="Yellow Yard · Tu próxima máquina está en el patio amarillo">
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta property="og:title" content="Yellow Yard by Nestor Sierra · Tu próxima máquina está en el patio amarillo">
 <meta property="og:description" content="Tu próxima máquina está en el patio amarillo. Maquinaria y vehículos usados en venta, verificables en Barranquilla. WhatsApp 301 795 9540.">
 <meta property="og:url" content="https://ventaslnequipos-ux.github.io/vitrina/">
 <meta property="og:image" content="https://ventaslnequipos-ux.github.io/vitrina/og.jpg">
@@ -17,307 +17,362 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://ventaslnequipos-ux.github.io/vitrina/og.jpg">
 <link rel="canonical" href="https://ventaslnequipos-ux.github.io/vitrina/">
-<title>Yellow Yard · Maquinaria</title>
-<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="icon" href="logo.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Zilla+Slab:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
 <style>
-/* Marca Yellow Yard: encabezado negro con placa (borde oro, Y amarilla, césped), franja de confianza, filtros, grilla de fichas claras con precio sobre negro. Un solo tema de marca. */
+/* Versión 2: patio de maquinaria. Cinta de lotes arriba, rótulo grande, sello de verificación,
+   lotes en fila tipo ficha técnica con etiqueta colgante de precio. Tema oscuro único. */
 :root {
-  --noche: #0E0E0E; --azul: #7A5C00; --ama: #FFC20E; --oro: #C9A227; --graf: #1A1A1A;
-  --muted: #5B5F66; --linea: #DDD9CF; --hueso: #F2F0EA; --blanco: #FFFFFF; --soft: #BFC5CC; --ama-claro: #FFF6DA;
-  --anton: 'Anton', Impact, 'Arial Narrow', sans-serif;
-  --display: 'Barlow Condensed', 'Arial Narrow', sans-serif;
-  --body: 'Barlow', 'Helvetica Neue', Arial, sans-serif;
-  color-scheme: light;
+  --negro: #0D0D0D; --carbon: #151515; --panel: #1C1C1C; --linea: #2E2E2E;
+  --ama: #FFC20E; --oro: #C9A227; --plata: #BFC5CC; --hueso: #ECE8DE; --gris: #9EA3AA;
+  --rotulo: 'Alfa Slab One', Rockwell, 'Roboto Slab', Georgia, serif;
+  --texto: 'Zilla Slab', Rockwell, Georgia, serif;
+  --mono: 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  color-scheme: dark;
 }
 * { box-sizing: border-box; }
-body { margin: 0; background: var(--hueso); color: var(--graf); font-family: var(--body); font-size: 16px; line-height: 1.5; }
-body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--noche); }
-.wrap { max-width: 1180px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
-header { background: var(--noche); color: var(--blanco); border-top: 6px solid var(--ama); }
-header .wrap { padding-block: 36px 32px; display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-end; justify-content: space-between; }
-.brand { display: flex; align-items: center; gap: clamp(16px, 3vw, 32px); min-width: 0; }
-.brand .placa { width: clamp(92px, 16vw, 150px); height: auto; flex-shrink: 0; }
-h1 { margin: 0; font-family: var(--anton); font-weight: 400; font-size: clamp(52px, 10vw, 96px); line-height: 0.88; letter-spacing: 0.01em; text-transform: uppercase; }
-h1 span { color: var(--ama); }
-.tag { font-family: var(--display); font-weight: 700; font-size: clamp(14px, 2.2vw, 20px); letter-spacing: 0.26em; color: var(--soft); margin-top: 10px; }
-.slogan { font-family: var(--display); font-weight: 600; font-size: clamp(19px, 2.6vw, 26px); color: #E9E9E9; margin-top: 6px; }
-.slogan strong { color: var(--ama); font-weight: 800; }
-.contact { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
-.contact .label { font-size: 13px; letter-spacing: 0.12em; font-weight: 600; color: var(--soft); }
-.contact .num { font-family: var(--display); font-weight: 700; font-size: 32px; line-height: 1; user-select: all; }
-.btn { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 10px 18px; border-radius: 4px; background: var(--ama); color: var(--noche); font-family: var(--display); font-weight: 700; font-size: 18px; letter-spacing: 0.04em; text-decoration: none; }
-.btn:hover { background: #F7C04A; }
-.btn:focus-visible, .chip:focus-visible, select:focus-visible { outline: 3px solid var(--azul); outline-offset: 2px; }
-.btn svg { width: 20px; height: 20px; }
-.trust { background: #1A1A1A; border-top: 1px solid #2B2B2B; border-bottom: 4px solid var(--oro); }
-.trust .wrap { padding-block: 18px; display: flex; gap: 16px; align-items: flex-start; }
-.trust svg { flex-shrink: 0; width: 36px; height: 36px; color: var(--oro); margin-top: 2px; }
-.trust strong { display: block; font-family: var(--display); font-weight: 700; font-size: 22px; color: var(--blanco); line-height: 1.15; }
-.trust p { margin: 2px 0 0; color: #D2D2D2; max-width: 80ch; }
-.toolbar { display: flex; flex-direction: column; gap: 14px; padding-block: 24px 8px; }
-.sort { align-self: flex-start; }
-.filters { display: flex; flex-wrap: wrap; gap: 8px; min-width: 0; }
-.chip { min-height: 40px; padding: 8px 16px; border: 1px solid var(--linea); border-radius: 999px; background: var(--blanco); color: var(--graf); font-family: var(--body); font-weight: 600; font-size: 15px; cursor: pointer; }
-.chip[aria-pressed="true"] { background: var(--noche); border-color: var(--noche); color: var(--blanco); }
-.sort { display: flex; flex-direction: column; gap: 4px; }
-.sort label { font-size: 12px; font-weight: 600; letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase; }
-.sort select { min-height: 44px; padding: 8px 40px 8px 14px; border: 1px solid var(--noche); border-radius: 4px; background: var(--blanco); color: var(--noche); font-family: var(--body); font-weight: 600; font-size: 15px; max-width: 100%; }
-.count { color: var(--muted); font-size: 15px; padding-block: 4px 16px; }
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 20px; padding-bottom: 40px; }
-.card { background: var(--blanco); border: 1px solid var(--linea); display: flex; flex-direction: column; min-width: 0; }
-.card img, .nophoto { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; background: var(--linea); }
-.nophoto { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; background: var(--noche); color: var(--soft); font-family: var(--display); font-size: 20px; font-weight: 600; text-align: center; padding: 16px; }
-.nophoto svg { width: 44px; height: 44px; color: var(--ama); }
-.card .body { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 12px; flex: 1; }
-.cat { font-size: 13px; font-weight: 600; letter-spacing: 0.1em; color: var(--azul); text-transform: uppercase; }
-.card h2 { margin: 0; font-family: var(--anton); font-weight: 400; font-size: 30px; line-height: 1.05; letter-spacing: 0.01em; color: var(--noche); }
-.facts { display: flex; gap: 8px; flex-wrap: wrap; }
-.fact { background: var(--hueso); border: 1px solid var(--linea); padding: 3px 10px; font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; }
-.price { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px; background: var(--noche); color: var(--blanco); padding: 10px 14px; border-left: 4px solid var(--oro); }
-.price span { font-size: 12px; letter-spacing: 0.12em; font-weight: 600; color: var(--soft); }
-.price strong { font-family: var(--anton); font-weight: 400; font-size: 30px; color: var(--ama); font-variant-numeric: tabular-nums; }
-dl { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 16px; }
-dl div { border-top: 1px solid var(--linea); padding: 6px 0; min-width: 0; }
-dt { font-size: 12px; font-weight: 600; letter-spacing: 0.06em; color: var(--muted); text-transform: uppercase; }
-dd { margin: 0; font-family: var(--display); font-weight: 600; font-size: 19px; overflow-wrap: anywhere; }
-.card .btn { justify-content: center; margin-top: auto; }
-.media { position: relative; }
-.badge { position: absolute; top: 12px; left: 12px; background: var(--ama); color: var(--noche); font-family: var(--display); font-weight: 700; font-size: 15px; letter-spacing: 0.08em; padding: 4px 10px; text-transform: uppercase; }
-.btn.ghost { background: transparent; color: var(--blanco); border: 2px solid var(--ama); }
-.btn.ghost:hover { background: rgba(240, 173, 19, 0.15); }
-.actions { display: flex; flex-wrap: wrap; gap: 10px; }
-.feat-wrap { padding-block: 28px 4px; }
-.feat-label { font-family: var(--display); font-weight: 700; font-size: 15px; letter-spacing: 0.16em; color: var(--azul); text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
-.feat-label svg { width: 18px; height: 18px; color: var(--ama); }
-.feat { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); background: var(--blanco); border: 2px solid var(--noche); }
-.feat .media { aspect-ratio: 4 / 3; min-height: 100%; }
-.feat .media img, .feat .media .nophoto { position: absolute; inset: 0; width: 100%; height: 100%; aspect-ratio: auto; object-fit: cover; object-position: 50% 62%; display: block; }
-.feat .body { padding: 24px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
-.feat h2 { margin: 0; font-family: var(--anton); font-weight: 400; font-size: clamp(34px, 5vw, 48px); line-height: 1; color: var(--noche); }
-.feat .price strong { font-size: 38px; }
-footer { background: var(--noche); color: var(--soft); }
-footer .wrap { padding-block: 28px; display: flex; flex-direction: column; gap: 6px; font-size: 14px; }
-footer strong { color: var(--blanco); font-family: var(--anton); font-weight: 400; font-size: 24px; letter-spacing: 0.02em; }
-footer strong span { color: var(--ama); }
-footer .slogan { margin: 0; font-size: 18px; }
-@media (prefers-reduced-motion: no-preference) { .btn, .chip { transition: background-color .15s; } }
+html, body { margin: 0; background: var(--negro); color: var(--hueso); font-family: var(--texto); font-size: 17px; line-height: 1.5; }
+.wrap { max-width: 1240px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+a { color: var(--ama); }
+:focus-visible { outline: 3px solid var(--ama); outline-offset: 3px; }
+
+/* Cinta de lotes */
+.cinta { background: var(--ama); color: var(--negro); overflow: hidden; white-space: nowrap; font-family: var(--mono); font-weight: 600; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; padding-top: env(safe-area-inset-top, 0px); }
+.cinta .pista { display: inline-flex; gap: 48px; padding-block: 8px; animation: correr 60s linear infinite; }
+.cinta span::before { content: "■ "; }
+@keyframes correr { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .cinta .pista { animation: none; } }
+
+/* Rótulo */
+.rotulo { background: var(--negro); }
+.rotulo .wrap { padding-block: 34px 26px; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 28px; align-items: center; }
+.rotulo img { width: clamp(84px, 13vw, 132px); height: auto; display: block; }
+.marca { font-family: var(--rotulo); font-weight: 400; font-size: clamp(40px, 8.4vw, 104px); line-height: 0.95; text-transform: uppercase; letter-spacing: 0; margin: 0; }
+.marca em { font-style: normal; color: var(--ama); }
+.by { font-family: var(--texto); font-weight: 700; font-size: clamp(22px, 2.9vw, 34px); letter-spacing: 0.02em; color: var(--oro); margin-top: 8px; }
+.by::before { content: ""; display: inline-block; width: 28px; height: 2px; background: var(--oro); vertical-align: middle; margin-right: 10px; }
+
+/* Escena: el buldócer pasa empujando tierra y detrás sale la placa */
+.rotulo { overflow-x: clip; }
+.escena { position: relative; width: clamp(84px, 13vw, 132px); }
+.escena .placa { display: block; width: 100%; height: auto; animation: surge 3.6s cubic-bezier(.2,.8,.2,1) both; }
+.escena .tren { position: absolute; left: 0; bottom: -2px; width: 210%; display: flex; align-items: flex-end; z-index: 3; animation: tren 3.6s cubic-bezier(.3,.1,.6,1) both; pointer-events: none; }
+.escena .tren svg { display: block; height: auto; }
+.escena .tren .dz { width: 56%; }
+.escena .tren .mt { width: 44%; margin-left: -4%; }
+.escena .oruga { animation: oruga .5s linear 7; }
+@keyframes oruga { to { stroke-dashoffset: -26; } }
+@keyframes tren {
+  0% { transform: translateX(-110%); opacity: 1; }
+  72% { transform: translateX(105%); opacity: 1; }
+  80%, 100% { transform: translateX(120%); opacity: 0; }
+}
+@keyframes surge {
+  0%, 46% { transform: translateY(55%) scale(0.55); opacity: 0; }
+  68% { transform: translateY(-7%) scale(1.05); opacity: 1; }
+  80%, 100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) { .escena .placa { animation: none; } .escena .tren { display: none; } }
+
+/* Carrusel de destacados */
+.carrusel { position: relative; }
+.carrusel .slide { display: none; }
+.carrusel .slide.activa { display: block; animation: entra .6s ease both; }
+@keyframes entra { from { opacity: 0; transform: translateX(16px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .carrusel .slide.activa { animation: none; } }
+.mando { display: flex; align-items: center; gap: 14px; margin-top: 14px; }
+.mando button.flecha { width: 44px; height: 44px; background: var(--panel); color: var(--ama); border: 1px solid var(--linea); font-size: 22px; line-height: 1; cursor: pointer; }
+.puntos { display: flex; gap: 8px; }
+.puntos button { width: 44px; height: 44px; padding: 0; background: none; border: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.puntos button span { display: block; width: 30px; height: 6px; background: var(--linea); }
+.puntos button[aria-current="true"] span { background: var(--ama); }
+.tiempo { flex: 1; height: 3px; background: var(--linea); overflow: hidden; }
+.tiempo i { display: block; height: 100%; width: 100%; background: var(--oro); transform-origin: left; transform: scaleX(0); }
+.tiempo i.corre { animation: llena 10s linear forwards; }
+.carrusel:hover .tiempo i.corre, .carrusel:focus-within .tiempo i.corre { animation-play-state: paused; }
+@keyframes llena { to { transform: scaleX(1); } }
+.lema { margin: 12px 0 0; font-family: var(--texto); font-weight: 600; font-size: clamp(20px, 2.6vw, 28px); line-height: 1.2; color: var(--hueso); letter-spacing: 0.01em; }
+.lema b { color: var(--ama); }
+.ubic { font-family: var(--mono); font-size: 13px; letter-spacing: 0.14em; color: var(--plata); margin-top: 10px; text-transform: uppercase; }
+.sello { width: 150px; height: 150px; flex-shrink: 0; }
+@media (max-width: 760px) { .rotulo .wrap { grid-template-columns: auto minmax(0, 1fr); } .sello { display: none; } }
+
+/* Césped */
+.cesped { display: block; width: 100%; height: 26px; background: var(--negro); }
+
+/* Barra de contacto */
+.contacto { background: var(--carbon); border-block: 1px solid var(--linea); }
+.contacto .wrap { padding-block: 14px; display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: center; justify-content: space-between; }
+.contacto .dato { font-family: var(--mono); font-size: 14px; color: var(--plata); }
+.contacto .dato strong { color: var(--hueso); font-size: 18px; letter-spacing: 0.04em; user-select: all; }
+.acciones { display: flex; flex-wrap: wrap; gap: 10px; }
+.boton { display: inline-flex; align-items: center; gap: 10px; min-height: 46px; padding: 10px 20px; background: var(--ama); color: var(--negro); text-decoration: none; font-family: var(--texto); font-weight: 700; font-size: 19px; letter-spacing: 0.01em; clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%); }
+.boton:hover { background: #FFD24D; }
+.boton.linea { background: transparent; color: var(--ama); box-shadow: inset 0 0 0 2px var(--ama); clip-path: none; }
+.boton svg { width: 20px; height: 20px; }
+
+/* Lote destacado */
+.destacado { padding-block: 36px 8px; }
+.rotulito { font-family: var(--mono); font-size: 13px; font-weight: 600; letter-spacing: 0.16em; color: var(--ama); text-transform: uppercase; display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.rotulito::after { content: ""; flex: 1; height: 1px; background: var(--linea); }
+
+/* Patio: filtros + lotes */
+.patio { display: flex; flex-wrap: wrap; gap: 32px; padding-block: 28px 56px; }
+.patio aside { flex: 1 1 220px; max-width: 100%; }
+.patio .lotes { flex: 999 1 640px; min-width: 0; display: flex; flex-direction: column; gap: 22px; }
+.filtros { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; border-top: 1px solid var(--linea); }
+.filtros button { width: 100%; min-height: 44px; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 4px; background: none; border: 0; border-bottom: 1px solid var(--linea); color: var(--hueso); font-family: var(--texto); font-size: 17px; font-weight: 600; text-align: left; cursor: pointer; }
+.filtros button span { font-family: var(--mono); font-size: 13px; color: var(--gris); }
+.filtros button[aria-pressed="true"] { color: var(--ama); }
+.filtros button[aria-pressed="true"] span { color: var(--ama); }
+@media (max-width: 899px) { .filtros { flex-direction: row; flex-wrap: wrap; gap: 8px; border: 0; } .filtros button { width: auto; border: 1px solid var(--linea); padding: 8px 12px; } .filtros button[aria-pressed="true"] { border-color: var(--ama); } }
+.orden { display: flex; flex-direction: column; gap: 6px; margin-top: 22px; }
+.orden label { font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; color: var(--gris); text-transform: uppercase; }
+.orden select { min-height: 44px; padding: 8px 12px; background: var(--panel); color: var(--hueso); border: 1px solid var(--linea); font-family: var(--texto); font-size: 15px; font-weight: 600; max-width: 100%; }
+.conteo { font-family: var(--mono); font-size: 13px; color: var(--gris); letter-spacing: 0.08em; text-transform: uppercase; }
+
+/* Lote */
+.lote { display: grid; grid-template-columns: minmax(0, 360px) minmax(0, 1fr); background: var(--panel); border: 1px solid var(--linea); }
+@media (max-width: 760px) { .lote { grid-template-columns: minmax(0, 1fr); } }
+.lote.grande { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); border-color: var(--oro); }
+@media (max-width: 760px) { .lote.grande { grid-template-columns: minmax(0, 1fr); } }
+.foto { position: relative; min-height: 240px; background: #111; }
+.foto img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+@media (max-width: 760px) { .foto { min-height: 0; aspect-ratio: 4 / 3; } }
+.sinfoto { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: var(--rotulo); font-weight: 400; font-size: 22px; color: var(--plata); text-transform: uppercase; }
+.nuevo { position: absolute; top: 0; left: 0; background: var(--ama); color: var(--negro); font-family: var(--mono); font-weight: 600; font-size: 12px; letter-spacing: 0.12em; padding: 6px 10px; text-transform: uppercase; }
+.info { padding: 20px 22px 22px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.cabeza { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; }
+.num { font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; color: var(--gris); text-transform: uppercase; }
+.tipo { font-family: var(--mono); font-size: 12px; letter-spacing: 0.12em; color: var(--ama); text-transform: uppercase; }
+.lote h2 { margin: 4px 0 0; font-family: var(--rotulo); font-weight: 400; font-size: clamp(22px, 2.5vw, 30px); line-height: 1.08; text-transform: uppercase; color: #FFFFFF; overflow-wrap: break-word; }
+.etiqueta { position: relative; flex-shrink: 0; background: var(--ama); color: var(--negro); padding: 10px 16px 10px 26px; clip-path: polygon(14px 0, 100% 0, 100% 100%, 14px 100%, 0 50%); text-align: right; }
+.etiqueta::before { content: ""; position: absolute; left: 12px; top: 50%; width: 7px; height: 7px; margin-top: -3.5px; border-radius: 50%; background: var(--panel); }
+.etiqueta small { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; }
+.etiqueta strong { display: block; font-family: var(--rotulo); font-weight: 400; font-size: 21px; line-height: 1.1; white-space: nowrap; }
+@media (max-width: 480px) { .cabeza { flex-direction: column; } .etiqueta { align-self: flex-start; } }
+.ficha { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 18px; font-family: var(--mono); font-size: 13px; }
+.ficha div { display: flex; justify-content: space-between; gap: 10px; padding: 7px 0; border-bottom: 1px dashed var(--linea); min-width: 0; }
+.ficha dt { color: var(--gris); text-transform: uppercase; letter-spacing: 0.04em; }
+.ficha dd { margin: 0; color: var(--hueso); text-align: right; overflow-wrap: anywhere; }
+@media (max-width: 480px) { .ficha { grid-template-columns: minmax(0, 1fr); } }
+.info .boton { align-self: flex-start; margin-top: auto; }
+/* Botón de WhatsApp de cada lote: brillo que pasa y el ícono que timbra */
+.wpp { position: relative; overflow: hidden; transition: transform .15s ease; }
+.wpp svg { width: 24px; height: 24px; flex-shrink: 0; transform-origin: 50% 60%; animation: timbre 5s ease-in-out infinite; animation-delay: var(--d, 0s); }
+.wpp::after { content: ""; position: absolute; inset: 0; background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,.7) 48%, transparent 66%); transform: translateX(-130%); animation: brillo 5s ease-in-out infinite; animation-delay: var(--d, 0s); pointer-events: none; }
+.wpp:hover { transform: translateY(-2px); }
+@keyframes brillo { 0%, 62% { transform: translateX(-130%); } 82%, 100% { transform: translateX(130%); } }
+@keyframes timbre { 0%, 80%, 100% { transform: rotate(0); } 83% { transform: rotate(-16deg); } 86% { transform: rotate(14deg); } 89% { transform: rotate(-9deg); } 92% { transform: rotate(5deg); } 95% { transform: rotate(0); } }
+@media (prefers-reduced-motion: reduce) { .wpp svg, .wpp::after { animation: none; } .wpp::after { display: none; } }
+
+/* Pie */
+footer { background: var(--negro); }
+footer .wrap { padding-block: 28px 40px; display: flex; flex-wrap: wrap; gap: 20px 40px; justify-content: space-between; color: var(--gris); font-size: 14px; }
+footer .firma { font-family: var(--rotulo); font-weight: 400; font-size: 32px; color: #FFFFFF; text-transform: uppercase; line-height: 1; }
+footer .firma em { font-style: normal; color: var(--ama); }
+footer p { margin: 6px 0 0; max-width: 60ch; }
 </style>
 </head>
 <body>
 
-<header>
+<div class="cinta" aria-label="Últimos ingresos"><div class="pista" id="cinta"></div></div>
+
+<header class="rotulo">
   <div class="wrap">
-    <div class="brand">
-      <svg class="placa" viewBox="0 0 200 250" role="img" aria-label="Logo Yellow Yard: placa negra con borde de oro, Y amarilla y césped amarillo">
-        <defs><linearGradient id="oroL" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F3DC8A"/><stop offset="0.5" stop-color="#B88A2A"/><stop offset="1" stop-color="#E9C766"/></linearGradient></defs>
-        <path d="M24 4 H176 L196 24 V226 L176 246 H24 L4 226 V24 Z" fill="#0E0E0E" stroke="url(#oroL)" stroke-width="6"/>
-        <path d="M40 30 H82 L100 74 L118 30 H160 L118 122 V170 H82 V122 Z" fill="#FFC20E"/>
-        <text x="100" y="196" text-anchor="middle" font-family="Anton, Impact, sans-serif" font-size="17" letter-spacing="3" fill="url(#oroL)">YELLOW YARD</text>
-        <path transform="translate(0 -4)" fill="#FFC20E" d="M14.0 236 L20.0 218.2 L20.1 236 Z M18.4 236 L22.1 218.9 L24.6 236 Z M22.9 236 L26.5 218.8 L28.3 236 Z M26.8 236 L28.9 224.7 L33.8 236 Z M31.8 236 L35.8 214.7 L37.0 236 Z M35.6 236 L41.4 212.2 L40.7 236 Z M39.3 236 L40.2 217.4 L45.9 236 Z M44.0 236 L43.5 218.6 L49.1 236 Z M47.7 236 L47.1 222.6 L53.1 236 Z M51.6 236 L57.1 219.8 L57.8 236 Z M56.0 236 L59.2 217.0 L62.3 236 Z M60.6 236 L62.3 219.6 L67.2 236 Z M65.4 236 L71.5 212.1 L72.9 236 Z M70.8 236 L72.2 221.6 L77.5 236 Z M75.6 236 L80.4 225.0 L81.4 236 Z M79.7 236 L82.0 214.1 L85.8 236 Z M84.1 236 L84.3 214.1 L91.5 236 Z M89.4 236 L91.9 213.3 L94.9 236 Z M93.4 236 L94.1 220.4 L100.8 236 Z M98.7 236 L100.4 215.1 L105.3 236 Z M103.5 236 L109.3 221.3 L108.7 236 Z M107.2 236 L108.9 224.3 L114.1 236 Z M112.2 236 L116.9 225.2 L117.4 236 Z M116.0 236 L118.3 218.2 L121.4 236 Z M119.9 236 L120.0 215.8 L125.4 236 Z M123.8 236 L126.6 224.4 L130.4 236 Z M128.6 236 L134.7 222.2 L134.1 236 Z M132.6 236 L138.8 221.7 L139.6 236 Z M137.6 236 L142.9 220.5 L143.2 236 Z M141.6 236 L148.3 224.6 L148.2 236 Z M146.4 236 L151.0 222.4 L151.9 236 Z M150.3 236 L150.3 221.9 L156.2 236 Z M154.5 236 L155.3 217.8 L159.8 236 Z M158.3 236 L161.2 220.8 L164.8 236 Z M163.0 236 L167.2 219.2 L170.4 236 Z M168.3 236 L169.5 223.4 L175.5 236 Z M173.5 236 L175.3 214.6 L180.7 236 Z M178.7 236 L184.5 215.6 L184.2 236 Z"/>
-        <rect x="12" y="232" width="176" height="4" fill="#FFC20E"/>
-      </svg>
-      <div style="min-width: 0">
-        <h1>Yellow <span>Yard</span></h1>
-        <div class="tag">MAQUINARIA · BARRANQUILLA</div>
-        <div class="slogan">Tu próxima máquina está en el <strong>patio amarillo</strong>.</div>
+    <div class="escena">
+      <img class="placa" src="logo.svg" alt="Logo Yellow Yard by Nestor Sierra">
+      <div class="tren">
+        <svg class="dz" viewBox="0 0 240 140" aria-hidden="true">
+          <path d="M22 92 H8 V124 L2 132 H12 V102 H22 Z" fill="#222"/><rect x="20" y="70" width="34" height="32" fill="#E0A800"/>
+          <path d="M50 102 V26 H104 L112 62 V102 Z" fill="#FFC20E"/><rect x="44" y="16" width="74" height="10" fill="#1A1A1A"/>
+          <path d="M58 34 H100 L106 60 H58 Z" fill="#202428"/><path d="M62 38 H74 L66 56 H62 Z" fill="#3A4048"/>
+          <rect x="62" y="68" width="22" height="22" fill="#161616"/><path d="M65 71 H70 L73 77 L76 71 H81 L75 81 V87 H71 V81 Z" fill="#FFC20E"/>
+          <path d="M108 102 V58 H170 L180 68 V102 Z" fill="#FFC20E"/><rect x="108" y="76" width="72" height="5" fill="#161616"/>
+          <rect x="138" y="34" width="8" height="24" fill="#222"/><rect x="135" y="30" width="14" height="6" fill="#222"/>
+          <path d="M150 64 L200 76" stroke="#555" stroke-width="7" stroke-linecap="round"/><path d="M118 100 L198 94" stroke="#1A1A1A" stroke-width="9" stroke-linecap="round"/>
+          <path d="M194 34 Q214 82 198 134 H210 Q228 82 206 34 Z" fill="#C9A227"/>
+          <rect x="18" y="102" width="168" height="34" rx="17" fill="#1A1A1A"/>
+          <rect class="oruga" x="20" y="104" width="164" height="30" rx="15" fill="none" stroke="#3A3A3A" stroke-width="5" stroke-dasharray="7 6"/>
+          <circle cx="36" cy="119" r="13" fill="#4A4A4A"/><circle cx="168" cy="119" r="13" fill="#4A4A4A"/>
+          <circle cx="66" cy="124" r="7" fill="#5A5A5A"/><circle cx="91" cy="124" r="7" fill="#5A5A5A"/><circle cx="116" cy="124" r="7" fill="#5A5A5A"/><circle cx="141" cy="124" r="7" fill="#5A5A5A"/>
+        </svg>
+        <svg class="mt" viewBox="0 0 230 130" aria-hidden="true"><path d="M0 130 C14 112 22 70 58 52 C80 40 92 18 122 16 C150 14 166 40 184 62 C204 86 214 112 230 130 Z" fill="#6B4A22"/><path d="M24 130 C40 104 62 80 90 72 C112 66 136 70 158 88 C176 102 192 118 204 130 Z" fill="#8A6230"/><circle cx="70" cy="70" r="6" fill="#4E3418"/><circle cx="150" cy="56" r="5" fill="#4E3418"/><circle cx="96" cy="100" r="7" fill="#4E3418"/></svg>
       </div>
     </div>
-    <div class="contact">
-      <div class="label">WHATSAPP · NESTOR SIERRA</div>
-      <div class="num">301 795 9540</div>
-      <a class="btn" href="https://wa.me/573017959540?text=Hola%20Nestor%2C%20vi%20el%20cat%C3%A1logo%20de%20Yellow%20Yard%20y%20quiero%20m%C3%A1s%20informaci%C3%B3n." target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 21l2.1-5.5A8.4 8.4 0 1 1 21 11.5z"/></svg>
-        Escribir por WhatsApp
-      </a>
-      <a class="btn ghost" href="https://wa.me/?text=Mira%20el%20cat%C3%A1logo%20de%20maquinaria%20en%20venta%20de%20Yellow%20Yard%20(equipos%20verificables%20en%20Barranquilla)%3A%20https%3A%2F%2Fventaslnequipos-ux.github.io%2Fvitrina%2F" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
-        Compartir catálogo
-      </a>
+    <div style="min-width: 0">
+      <h1 class="marca">Yellow <em>Yard</em></h1>
+      <div class="by">by Nestor Sierra</div>
+      <p class="lema">Tu próxima máquina está en el <b>patio amarillo</b>.</p>
+      <div class="ubic">Maquinaria usada · Barranquilla, Atlántico</div>
     </div>
+    <svg class="sello" viewBox="0 0 160 160" role="img" aria-label="Sello: equipos verificados en patio, Barranquilla">
+      <defs><path id="giro" d="M80 80 m-58 0 a58 58 0 1 1 116 0 a58 58 0 1 1 -116 0"/></defs>
+      <circle cx="80" cy="80" r="76" fill="none" stroke="#C9A227" stroke-width="3"/>
+      <circle cx="80" cy="80" r="44" fill="none" stroke="#C9A227" stroke-width="1.5" stroke-dasharray="3 4"/>
+      <text font-family="IBM Plex Mono, monospace" font-size="12.5" font-weight="600" letter-spacing="3.2" fill="#C9A227"><textPath href="#giro">VERIFICADO EN PATIO · BARRANQUILLA ·</textPath></text>
+      <path d="M62 82 l12 12 l26 -28" fill="none" stroke="#FFC20E" stroke-width="8" stroke-linecap="square"/>
+    </svg>
   </div>
 </header>
 
-<section class="trust" aria-label="Garantía de verificación">
+<svg class="cesped" viewBox="0 0 1200 26" preserveAspectRatio="none" aria-hidden="true"><path id="pasto" fill="#FFC20E" d=""/></svg>
+
+<section class="contacto" aria-label="Contacto">
   <div class="wrap">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.6-3 8.4-7 10-4-1.6-7-5.4-7-10V6l7-3z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg>
-    <div>
-      <strong>Equipos verificables, ubicados en Barranquilla</strong>
-      <p>Todos los equipos de este catálogo están en Barranquilla (Atlántico) y disponibles para inspección física antes de la compra. Agende su visita, compruebe el estado, el horómetro y la documentación de cada máquina, y compre con total confianza.</p>
+    <div class="dato">Asesor comercial Nestor Sierra · WhatsApp <strong>301 795 9540</strong></div>
+    <div class="acciones">
+      <a class="boton" href="https://wa.me/573017959540?text=Hola%20Nestor%2C%20vi%20el%20cat%C3%A1logo%20de%20Yellow%20Yard%20y%20quiero%20m%C3%A1s%20informaci%C3%B3n." target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>Escribir por WhatsApp</a>
+      <a class="boton linea" href="https://wa.me/?text=Mira%20el%20cat%C3%A1logo%20de%20Yellow%20Yard%2C%20maquinaria%20verificable%20en%20Barranquilla%3A%20https%3A%2F%2Fventaslnequipos-ux.github.io%2Fvitrina%2F" target="_blank" rel="noopener">Compartir catálogo</a>
     </div>
   </div>
 </section>
 
 <main class="wrap">
-  <section class="feat-wrap" id="destacado" aria-label="Equipo destacado de la semana"></section>
-  <div class="toolbar">
-    <div class="sort">
-      <label for="orden">Ordenar por</label>
-      <select id="orden">
-        <option value="catalogo">Orden del catálogo</option>
-        <option value="precio-desc">Precio: mayor a menor</option>
-        <option value="precio-asc">Precio: menor a mayor</option>
-        <option value="anio-desc">Año: más nuevo a más antiguo</option>
-        <option value="anio-asc">Año: más antiguo a más nuevo</option>
-      </select>
+  <section class="destacado" aria-label="Lotes destacados de la semana">
+    <div class="rotulito"><span>Lotes destacados · <span id="semana"></span></span></div>
+    <div class="carrusel" id="carrusel">
+      <div id="slides" aria-live="polite"></div>
+      <div class="mando">
+        <button type="button" class="flecha" id="prev" aria-label="Lote destacado anterior">‹</button>
+        <div class="puntos" id="puntos"></div>
+        <button type="button" class="flecha" id="next" aria-label="Siguiente lote destacado">›</button>
+        <div class="tiempo" aria-hidden="true"><i id="barra"></i></div>
+      </div>
     </div>
-    <div class="filters" role="group" aria-label="Filtrar por tipo de equipo" id="filters"></div>
+  </section>
+  <div class="patio">
+    <aside aria-label="Filtros">
+      <div class="rotulito">Tipo de equipo</div>
+      <ul class="filtros" id="filtros"></ul>
+      <div class="orden">
+        <label for="orden">Ordenar por</label>
+        <select id="orden">
+          <option value="catalogo">Orden del patio</option>
+          <option value="precio-desc">Precio: mayor a menor</option>
+          <option value="precio-asc">Precio: menor a mayor</option>
+          <option value="anio-desc">Año: más nuevo primero</option>
+          <option value="anio-asc">Año: más antiguo primero</option>
+        </select>
+      </div>
+    </aside>
+    <div class="lotes">
+      <div class="conteo" id="conteo" aria-live="polite"></div>
+      <div id="lista" style="display: flex; flex-direction: column; gap: 22px"></div>
+    </div>
   </div>
-  <div class="count" id="count" aria-live="polite"></div>
-  <div class="grid" id="grid"></div>
 </main>
 
 <footer>
   <div class="wrap">
-    <strong>YELLOW <span>YARD</span> · MAQUINARIA · BARRANQUILLA</strong>
-    <div class="slogan">Tu próxima máquina está en el <strong style="font-family: inherit; font-size: inherit; letter-spacing: 0">patio amarillo</strong>.</div>
-    <div>Asesor comercial: Nestor Sierra</div>
-    <div>WhatsApp 301 795 9540 · Barranquilla, Atlántico</div>
-    <div>Precios en pesos colombianos, sujetos a disponibilidad y a cambio sin previo aviso. Los datos técnicos son de referencia; todos los equipos pueden inspeccionarse antes de la compra.</div>
+    <div>
+      <div class="firma">Yellow <em>Yard</em></div>
+      <div class="by" style="font-size: 22px">by Nestor Sierra</div>
+      <p>Tu próxima máquina está en el patio amarillo. Todos los equipos están en Barranquilla y se pueden inspeccionar antes de comprar.</p>
+    </div>
+    <div>
+      <div>WhatsApp 301 795 9540 · Nestor Sierra</div>
+      <p>Precios en pesos colombianos, sujetos a disponibilidad y a cambio sin previo aviso. Datos técnicos de referencia.</p>
+    </div>
   </div>
 </footer>
 
+<script src="equipos.js"></script>
 <script>
-// precio y anio en número para ordenar; precio 0 = a consultar
-const EQUIPOS = [
-  { img: "img/dieci2.jpg", tipo: "Elevación", cat: "Manipulador telescópico rotativo", nombre: "Dieci Pegasus 38.16", anio: 2018, uso: "6.000 h", precio: 200000000,
-    specs: [["Capacidad máx.", "3.800 kg"], ["Altura de elevación", "15,7 m"], ["Giro de torreta", "400°"], ["Tracción", "4x4"]] },
-  { img: "img/mg120_a.jpg", tipo: "Motoniveladoras", cat: "Motoniveladora", nombre: "Caterpillar 120G", anio: 2007, uso: "12.000 h", precio: 270000000,
-    specs: [["Motor", "Caterpillar 3304"], ["Potencia", "125 hp"], ["Peso operativo", "11.500 kg aprox."], ["Transmisión", "6 avance / 6 reversa"]] },
-  { img: "img/mg140.jpg", tipo: "Motoniveladoras", cat: "Motoniveladora", nombre: "Caterpillar 12G (140G)", anio: 1989, uso: "30.000 h", precio: 250000000,
-    specs: [["Motor", "Caterpillar 3306"], ["Potencia", "135 hp"], ["Hoja", "12 pies (3,66 m)"], ["Eje trasero", "Tándem"]] },
-  { img: "img/cp433.jpg", tipo: "Compactación", cat: "Vibrocompactador", nombre: "Caterpillar CP-433C", anio: 2003, uso: "7.000 h", precio: 150000000,
-    specs: [["Motor", "Caterpillar 3054T"], ["Potencia", "105 hp"], ["Peso operativo", "6.900 kg aprox."], ["Ancho de tambor", "1,68 m"]] },
-  { img: "img/jcb.jpg", tipo: "Excavación", cat: "Retroexcavadora cargadora", nombre: "JCB 3CX", anio: 2020, uso: "7.000 h", precio: 300000000,
-    specs: [["Configuración", "Pala + retro"], ["Cabina", "Cerrada"]] },
-  { img: "img/doosan.jpg", tipo: "Excavación", cat: "Miniexcavadora", nombre: "Doosan DX35Z", anio: 2021, uso: "3.800 h", precio: 155000000,
-    specs: [["Motor", "Yanmar 3TNV88"], ["Peso operativo", "3.660 kg aprox."], ["Prof. de excavación", "3,0 m"], ["Giro de cola", "Cero"]] },
-  { img: "img/hitachi.jpg", tipo: "Excavación", cat: "Excavadora sobre orugas", nombre: "Hitachi Zaxis 130LC", anio: 2013, uso: "12.000 h", precio: 290000000,
-    specs: [["Peso operativo", "13 t aprox."], ["Prof. de excavación", "5,5 m aprox."], ["Cucharón", "0,5 m³ aprox."], ["Tren de rodaje", "Largo (LC)"]] },
-  { img: "img/ir_a.jpg", tipo: "Compactación", cat: "Vibrocompactador", nombre: "Ingersoll Rand SD100", anio: 2014, uso: "8.000 h", precio: 170000000,
-    specs: [["Clase", "10 toneladas"], ["Ancho de tambor", "2,13 m"], ["Tambor", "Liso"], ["Protección", "Techo ROPS"]] },
-  { img: "img/bomag2.jpg", tipo: "Compactación", cat: "Vibrocompactador", nombre: "Bomag", anio: 1988, uso: "Operativo", precio: 60000000,
-    specs: [["Tambor", "Liso"], ["Protección", "Techo ROPS"]] },
-  { img: "img/ford_b.jpg", tipo: "Vehículos", cat: "Volqueta", nombre: "Ford Piragua", anio: 1971, uso: "Operativa", precio: 48000000,
-    specs: [["Motor", "Nissan 180 diésel"], ["Estado", "Totalmente operativa"], ["Carrocería", "Volco"], ["Eje trasero", "Doble llanta"]] },
-  { img: "img/duster_a.jpg", tipo: "Vehículos", cat: "Camioneta SUV", nombre: "Renault Duster Iconic", anio: 2026, uso: "19.000 km", precio: 90000000,
-    specs: [["Motor", "1.3 turbo (TCe)"], ["Potencia", "154 hp"], ["Combustible", "Gasolina"], ["Color", "Gris"]] },
-  { img: "img/h940.jpg", tipo: "Excavación", cat: "Retroexcavadora cargadora", nombre: "Hyundai H940C", anio: 2018, uso: "9.925 h", precio: 280000000,
-    specs: [["Potencia", "136 hp aprox."], ["Peso operativo", "7,5 t aprox."], ["Tracción", "4x4"], ["Cabina", "Cerrada"]] },
-  { img: "img/liugong.jpg", tipo: "Cargadores", cat: "Cargador sobre llantas", nombre: "LiuGong CLG856", anio: 2012, uso: "Clase 5 t", precio: 180000000,
-    specs: [["Potencia", "215 hp aprox."], ["Peso operativo", "16,8 t aprox."], ["Cucharón", "2,7 m³ aprox."], ["Cabina", "Cerrada"]] },
-  { img: "img/ss250.jpg", tipo: "Estabilización", cat: "Estabilizadora de suelos", nombre: "Caterpillar SS-250", anio: 1991, uso: "Estabilizadora", precio: 190000000,
-    specs: [["Motor", "Caterpillar 3306 turbo"], ["Prof. de mezcla", "Hasta 30 cm"], ["Tracción", "4x4"], ["Protección", "Techo ROPS"]] },
-  { img: "img/tanque.jpg", tipo: "Vehículos", cat: "Camión planchón con tanque", nombre: "Ford Planchón", anio: 1965, uso: "Km: no marca", precio: 80000000,
-    specs: [["Carrocería", "Planchón"], ["Equipo montado", "Tanque + motobomba"], ["Eje trasero", "Doble llanta"]] },
-  { img: "img/kia.jpg", tipo: "Vehículos", cat: "Campero", nombre: "Kia Sportage", anio: 2010, uso: "231.000 km", precio: 40000000,
-    specs: [["Color", "Dorado"], ["Equipamiento", "Barras de techo, rines"]] },
-  { img: "img/case580.jpg", tipo: "Excavación", cat: "Retroexcavadora cargadora", nombre: "Case 580 Super N", anio: 2005, uso: "4.500 h", precio: 220000000,
-    specs: [["Configuración", "Pala + retro"], ["Potencia", "95 hp aprox."], ["Peso operativo", "8 t aprox."], ["Cabina", "Cerrada"]] },
-  { img: "img/lg936.jpg", tipo: "Cargadores", cat: "Cargador frontal", nombre: "SDLG LG936", anio: 2021, uso: "9.000 h", precio: 140000000,
-    specs: [["Carga nominal", "3.000 kg"], ["Cucharón", "1,8 m³"], ["Motor", "Weichai, 92 kW"], ["Peso operativo", "10,4 t aprox."]] },
-  { img: "img/pd54.jpg", tipo: "Compactación", cat: "Vibrocompactador", nombre: "Stone PD-54 (3 t)", anio: 2006, uso: "Horas por confirmar", precio: 60000000,
-    specs: [["Clase", "3 toneladas"], ["Peso operativo", "3.100 kg aprox."], ["Motor", "Diésel"], ["Protección", "Techo ROPS"]] },
-  { img: "img/s570.jpg", tipo: "Minicargadores", cat: "Minicargador", nombre: "Bobcat S570", anio: 2014, uso: "10.500 h", precio: 120000000,
-    specs: [["Capacidad operativa", "885 kg aprox."], ["Motor", "Kubota diésel"], ["Peso operativo", "2.940 kg aprox."], ["Cabina", "Cerrada"]] },
-  { img: "img/d5n.jpg", tipo: "Bulldozers", cat: "Bulldozer sobre orugas", nombre: "Caterpillar D5N", anio: 2006, uso: "5.000 h", precio: 0,
-    specs: [["Motor", "Caterpillar 3126B"], ["Potencia", "121 hp"], ["Peso operativo", "12,7 t aprox."], ["Hoja", "2,7 m³ aprox."]] },
-  { img: "img/b853.jpg", tipo: "Minicargadores", cat: "Minicargador", nombre: "Bobcat 853", anio: 1997, uso: "4.000 h", precio: 60000000,
-    specs: [["Motor", "Kubota V2203"], ["Potencia", "58 hp"], ["Capacidad operativa", "770 kg aprox."], ["Protección", "Cabina ROPS"]] },
-  { img: "img/sd100b.jpg", tipo: "Compactación", cat: "Vibrocompactador", nombre: "Ingersoll Rand SD-100", anio: 2001, uso: "Sin horómetro", precio: 120000000,
-    specs: [["Clase", "10 toneladas"], ["Ancho de tambor", "2,13 m"], ["Tambor", "Liso"], ["Protección", "Techo ROPS"]] },
-  { img: "img/cs78b.jpg", tipo: "Compactación", cat: "Vibrocompactador", nombre: "Caterpillar CS78B", anio: 2017, uso: "7.070 h", precio: 290000000,
-    specs: [["Motor", "Caterpillar C7.1"], ["Potencia", "173 hp"], ["Peso operativo", "18,8 t aprox."], ["Ancho de tambor", "2,13 m"]] },
-  { img: "img/rs7120.jpg", tipo: "Compactación", cat: "Vibrocompactador", nombre: "SDLG RS7120H (12 t)", anio: 2015, uso: "3.500 h", precio: 210000000,
-    specs: [["Peso", "12 toneladas"], ["Tambor", "Liso"], ["Incluye", "Kit pata de cabra (piñas)"], ["Cabina", "Cerrada"]] },
-  { img: "img/d6n17.jpg", tipo: "Bulldozers", cat: "Bulldozer sobre orugas", nombre: "Caterpillar D6N (2017)", anio: 2017, uso: "4.500 h", precio: 600000000,
-    specs: [["Motor", "Caterpillar C6.6"], ["Potencia", "150 hp aprox."], ["Peso operativo", "16 t aprox."], ["Cabina", "Cerrada"]] },
-  { img: "img/d5k2.jpg", tipo: "Bulldozers", cat: "Bulldozer sobre orugas", nombre: "Caterpillar D5K2 LGP", anio: 2020, uso: "4.700 h", precio: 520000000,
-    specs: [["Motor", "Caterpillar C4.4"], ["Tren de rodaje", "LGP (baja presión)"], ["Peso operativo", "9,5 t aprox."], ["Cabina", "Cerrada"]] },
-  { img: "img/sk210.jpg", tipo: "Excavación", cat: "Excavadora sobre orugas", nombre: "Kobelco SK210LC-9", anio: 2017, uso: "7.500 h", precio: 430000000,
-    specs: [["Peso operativo", "21,5 t aprox."], ["Cucharón", "1,0 m³ aprox."], ["Tren de rodaje", "Largo (LC)"], ["Cabina", "Cerrada"]] },
-  { img: "img/d6n07.jpg", tipo: "Bulldozers", cat: "Bulldozer sobre orugas", nombre: "Caterpillar D6N (2007)", anio: 2007, uso: "12.500 h", precio: 350000000,
-    specs: [["Motor", "Caterpillar C6.6"], ["Potencia", "150 hp aprox."], ["Peso operativo", "16 t aprox."], ["Protección", "Techo ROPS"]] },
-  { img: "img/d5n07.jpg", tipo: "Bulldozers", cat: "Bulldozer sobre orugas", nombre: "Caterpillar D5N (2007)", anio: 2007, uso: "12.500 h", precio: 300000000,
-    specs: [["Peso operativo", "12,7 t aprox."], ["Hoja", "2,7 m³ aprox."], ["Protección", "Techo ROPS"]] },
-  { img: "img/grua.jpg", tipo: "Vehículos", cat: "Camión grúa con tanque", nombre: "Camión grúa + tanque 9 m³", anio: 0, uso: "Listo para traspaso", precio: 95000000,
-    specs: [["Capacidad de carga", "Hasta 13 t"], ["Tanque", "9 m³"], ["Documentos", "Listo para traspaso"], ["Eje trasero", "Doble llanta"]] },
-];
-// Fecha de ingreso al catálogo: la etiqueta "Nuevo ingreso" se muestra 15 días y luego se quita sola.
-const INGRESOS = {
-  "Case 580 Super N": "2026-10-23", "SDLG LG936": "2026-10-23", "Stone PD-54 (3 t)": "2026-10-23", "Bobcat S570": "2026-10-23",
-  "Caterpillar D5N": "2026-10-23", "Bobcat 853": "2026-10-23", "Ingersoll Rand SD-100": "2026-10-23", "Caterpillar CS78B": "2026-10-23",
-  "SDLG RS7120H (12 t)": "2026-10-26", "Caterpillar D6N (2017)": "2026-10-26", "Caterpillar D5K2 LGP": "2026-10-26",
-  "Kobelco SK210LC-9": "2026-10-26", "Caterpillar D6N (2007)": "2026-10-26", "Caterpillar D5N (2007)": "2026-10-26",
-  "Camión grúa + tanque 9 m³": "2026-10-26",
-};
-// Equipo destacado de la semana (cambiar el nombre para rotarlo).
-const DESTACADO = "Caterpillar CS78B";
-const esNuevo = e => INGRESOS[e.nombre] && (Date.now() - Date.parse(INGRESOS[e.nombre] + "T00:00:00-05:00")) < 15 * 864e5;
-const TIPOS = ["Todos", "Nuevos ingresos", "Excavación", "Cargadores", "Minicargadores", "Compactación", "Motoniveladoras", "Bulldozers", "Estabilización", "Elevación", "Vehículos"];
 const WA = "https://wa.me/573017959540?text=";
-const grid = document.getElementById("grid"), filters = document.getElementById("filters"), count = document.getElementById("count"), orden = document.getElementById("orden");
+const DEST = typeof DESTACADO !== "undefined" ? DESTACADO : "";
+const ING = typeof INGRESOS !== "undefined" ? INGRESOS : {};
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const cop = n => n > 0 ? "$" + n.toLocaleString("es-CO").replace(/,/g, ".") : "A consultar";
-const camara = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>';
-let actual = "Todos";
+const esNuevo = e => ING[e.nombre] && (Date.now() - Date.parse(ING[e.nombre] + "T00:00:00-05:00")) < 15 * 864e5;
+const LOTES = EQUIPOS.map((e, i) => ({ ...e, lote: String(i + 1).padStart(2, "0") }));
 
-function ordenar(lista) {
-  const v = orden.value, sinPrecioAlFinal = (a, b, f) => (a.precio === 0) - (b.precio === 0) || f(a, b);
-  if (v === "precio-desc") return lista.sort((a, b) => sinPrecioAlFinal(a, b, (x, y) => y.precio - x.precio));
-  if (v === "precio-asc") return lista.sort((a, b) => sinPrecioAlFinal(a, b, (x, y) => x.precio - y.precio));
-  if (v === "anio-desc") return lista.sort((a, b) => !a.anio - !b.anio || b.anio - a.anio);
-  if (v === "anio-asc") return lista.sort((a, b) => !a.anio - !b.anio || a.anio - b.anio);
-  return lista;
-}
-const msgDe = e => encodeURIComponent(`Hola Nestor, me interesa el equipo ${e.nombre}${e.anio ? " (" + e.anio + ")" : ""}${e.precio ? " por " + cop(e.precio) : ""} que vi en Yellow Yard.`);
-const fotoDe = (e, lazy) => `<div class="media">${e.img ? `<img src="${esc(e.img)}" alt="${esc(e.cat)} ${esc(e.nombre)}"${lazy ? ' loading="lazy"' : ""}>`
-  : `<div class="nophoto">${camara}Fotos disponibles por WhatsApp</div>`}${esNuevo(e) ? '<span class="badge">Nuevo ingreso</span>' : ""}</div>`;
-const estrella = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5l2.9 6 6.6.8-4.9 4.5 1.3 6.5L12 17l-5.9 3.3 1.3-6.5-4.9-4.5 6.6-.8z"/></svg>';
-function renderDestacado() {
-  const e = EQUIPOS.find(x => x.nombre === DESTACADO), cont = document.getElementById("destacado");
-  if (!e) { cont.hidden = true; return; }
-  cont.innerHTML = `<div class="feat-label">${estrella}Equipo destacado de la semana</div>
-    <article class="feat">
-      ${fotoDe(e, false)}
-      <div class="body">
-        <div><div class="cat">${esc(e.cat)}</div><h2>${esc(e.nombre)}</h2></div>
-        <div class="facts"><span class="fact">${e.anio ? "Año " + e.anio : "Año por confirmar"}</span><span class="fact">${esc(e.uso)}</span></div>
-        <div class="price"><span>PRECIO</span><strong>${cop(e.precio)}</strong></div>
-        <dl>${e.specs.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>
-        <div class="actions"><a class="btn" href="${WA}${msgDe(e)}" target="_blank" rel="noopener">Consultar por WhatsApp</a></div>
+// Césped de la franja
+(function () { let d = "", x = 0, s = 7; while (x < 1200) { s = (s * 9301 + 49297) % 233280; const h = 8 + (s / 233280) * 18, w = 7 + (s % 5); d += `M${x} 26 L${x + w / 2 + ((s % 7) - 3)} ${26 - h} L${x + w} 26 Z `; x += w * 0.7; } document.getElementById("pasto").setAttribute("d", d); })();
+
+// Cinta con los últimos ingresos
+(function () {
+  const items = LOTES.filter(esNuevo).concat(LOTES.filter(e => !esNuevo(e)).slice(0, 4))
+    .map(e => `<span>Lote ${e.lote} · ${esc(e.nombre)} ${e.anio || ""} · ${cop(e.precio)}</span>`).join("");
+  document.getElementById("cinta").innerHTML = items + items;
+})();
+
+const msg = e => encodeURIComponent(`Hola Nestor, me interesa el lote ${e.lote}: ${e.nombre}${e.anio ? " (" + e.anio + ")" : ""}${e.precio ? " por " + cop(e.precio) : ""}, que vi en Yellow Yard.`);
+function lote(e, grande) {
+  const ficha = [["Año", e.anio || "Por confirmar"], ["Uso", e.uso]].concat(e.specs);
+  return `<article class="lote${grande ? " grande" : ""}">
+    <div class="foto">${e.img ? `<img src="${esc(e.img)}" alt="${esc(e.cat)} ${esc(e.nombre)}"${grande ? "" : ' loading="lazy"'}>` : `<div class="sinfoto">Fotos por WhatsApp</div>`}${esNuevo(e) ? '<span class="nuevo">Nuevo ingreso</span>' : ""}</div>
+    <div class="info">
+      <div class="cabeza">
+        <div style="min-width: 0"><div class="num">Lote ${e.lote}</div><div class="tipo">${esc(e.cat)}</div><h2>${esc(e.nombre)}</h2></div>
+        <div class="etiqueta"><small>PRECIO COP</small><strong>${cop(e.precio)}</strong></div>
       </div>
-    </article>`;
+      <dl class="ficha">${ficha.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>
+      <a class="boton wpp" style="--d: ${(parseInt(e.lote, 10) % 5) * 0.9}s" href="${WA}${msg(e)}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>Consultar lote por WhatsApp</a>
+    </div>
+  </article>`;
 }
-function render() {
-  const lista = ordenar(EQUIPOS.filter(e => actual === "Todos" || (actual === "Nuevos ingresos" ? esNuevo(e) : e.tipo === actual)));
-  count.textContent = lista.length === 1 ? "1 equipo disponible" : `${lista.length} equipos disponibles`;
-  grid.innerHTML = lista.map(e => {
-    const msg = msgDe(e);
-    return `<article class="card">
-      ${fotoDe(e, true)}
-      <div class="body">
-        <div><div class="cat">${esc(e.cat)}</div><h2>${esc(e.nombre)}</h2></div>
-        <div class="facts"><span class="fact">${e.anio ? "Año " + e.anio : "Año por confirmar"}</span><span class="fact">${esc(e.uso)}</span></div>
-        <div class="price"><span>PRECIO</span><strong>${cop(e.precio)}</strong></div>
-        <dl>${e.specs.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>
-        <a class="btn" href="${WA}${msg}" target="_blank" rel="noopener">Consultar por WhatsApp</a>
-      </div>
-    </article>`;
-  }).join("");
-}
-filters.innerHTML = TIPOS.filter(t => t === "Todos" || (t === "Nuevos ingresos" ? EQUIPOS.some(esNuevo) : EQUIPOS.some(e => e.tipo === t)))
-  .map(t => `<button type="button" class="chip" aria-pressed="${t === actual}">${t}</button>`).join("");
-filters.addEventListener("click", ev => {
-  const b = ev.target.closest(".chip"); if (!b) return;
-  actual = b.textContent;
-  filters.querySelectorAll(".chip").forEach(c => c.setAttribute("aria-pressed", String(c === b)));
-  render();
+
+// Destacados de la semana: max(3, 10 % del total). Rotan solos cada lunes entre los lotes con foto y precio.
+(function () {
+  const cuantos = Math.max(3, Math.ceil(LOTES.length * 0.1));
+  const lunes0 = Date.parse("2026-01-05T00:00:00-05:00");
+  const semana = Math.floor((Date.now() - lunes0) / (7 * 864e5));
+  let pool = LOTES.filter(e => e.img && e.precio > 0);
+  // mezcla fija para que cada semana salgan equipos de distintos tipos
+  let sem = 7; pool = pool.map(e => { sem = (sem * 9301 + 49297) % 233280; return [sem, e]; }).sort((a, b) => a[0] - b[0]).map(x => x[1]);
+  const manual = (typeof FIJOS !== "undefined" ? FIJOS : []).map(n => LOTES.find(e => e.nombre === n)).filter(Boolean);
+  const rot = []; for (let k = 0; rot.length < cuantos && k < pool.length; k++) { const e = pool[(semana * cuantos + k) % pool.length]; if (!manual.includes(e) && !rot.includes(e)) rot.push(e); }
+  const sel = manual.concat(rot).slice(0, cuantos);
+  const ini = new Date(lunes0 + semana * 7 * 864e5);
+  document.getElementById("semana").textContent = "Semana del " + ini.toLocaleDateString("es-CO", { day: "numeric", month: "long", timeZone: "America/Bogota" });
+  const slides = document.getElementById("slides"), puntos = document.getElementById("puntos"), barra = document.getElementById("barra");
+  slides.innerHTML = sel.map((e, i) => `<div class="slide" role="group" aria-roledescription="lote destacado" aria-label="${i + 1} de ${sel.length}">${lote(e, true)}</div>`).join("");
+  puntos.innerHTML = sel.map((e, i) => `<button type="button" aria-label="Ver ${esc(e.nombre)}"><span></span></button>`).join("");
+  const s = [...slides.children], p = [...puntos.children];
+  const quieto = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let i = 0, t = null, pausa = false;
+  function ir(n) {
+    i = (n + s.length) % s.length;
+    s.forEach((x, k) => x.classList.toggle("activa", k === i));
+    p.forEach((x, k) => x.setAttribute("aria-current", String(k === i)));
+    barra.classList.remove("corre"); void barra.offsetWidth; if (!quieto) barra.classList.add("corre");
+    clearTimeout(t); if (!quieto) programar();
+  }
+  function programar() { t = setTimeout(function paso() { if (pausa) { t = setTimeout(paso, 500); return; } ir(i + 1); }, 10000); }
+  const car = document.getElementById("carrusel");
+  car.addEventListener("mouseenter", () => pausa = true); car.addEventListener("mouseleave", () => pausa = false);
+  car.addEventListener("focusin", () => pausa = true); car.addEventListener("focusout", () => pausa = false);
+  document.getElementById("prev").onclick = () => ir(i - 1);
+  document.getElementById("next").onclick = () => ir(i + 1);
+  p.forEach((b, k) => b.onclick = () => ir(k));
+  ir(0);
+})();
+
+const TIPOS = ["Todos", "Nuevos ingresos", ...new Set(LOTES.map(e => e.tipo))];
+const cuenta = t => t === "Todos" ? LOTES.length : t === "Nuevos ingresos" ? LOTES.filter(esNuevo).length : LOTES.filter(e => e.tipo === t).length;
+let actual = "Todos";
+const filtros = document.getElementById("filtros"), orden = document.getElementById("orden");
+filtros.innerHTML = TIPOS.filter(t => cuenta(t) > 0).map(t => `<li><button type="button" aria-pressed="${t === actual}" data-t="${esc(t)}">${esc(t)} <span>${String(cuenta(t)).padStart(2, "0")}</span></button></li>`).join("");
+filtros.addEventListener("click", ev => {
+  const b = ev.target.closest("button"); if (!b) return;
+  actual = b.dataset.t;
+  filtros.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+  pintar();
 });
-orden.addEventListener("change", render);
-renderDestacado();
-render();
+orden.addEventListener("change", pintar);
+function pintar() {
+  let l = LOTES.filter(e => actual === "Todos" || (actual === "Nuevos ingresos" ? esNuevo(e) : e.tipo === actual));
+  const v = orden.value, sp = (a, b, f) => (a.precio === 0) - (b.precio === 0) || f(a, b);
+  if (v === "precio-desc") l.sort((a, b) => sp(a, b, (x, y) => y.precio - x.precio));
+  if (v === "precio-asc") l.sort((a, b) => sp(a, b, (x, y) => x.precio - y.precio));
+  if (v === "anio-desc") l.sort((a, b) => !a.anio - !b.anio || b.anio - a.anio);
+  if (v === "anio-asc") l.sort((a, b) => !a.anio - !b.anio || a.anio - b.anio);
+  document.getElementById("conteo").textContent = `${l.length} ${l.length === 1 ? "lote" : "lotes"} en el patio`;
+  document.getElementById("lista").innerHTML = l.map(e => lote(e, false)).join("");
+}
+pintar();
 </script>
 </body>
 </html>

@@ -70,5 +70,7 @@ const INGRESOS = {
   "Kobelco SK210LC-9": "2026-10-26", "Caterpillar D6N (2007)": "2026-10-26", "Caterpillar D5N (2007)": "2026-10-26",
   "Camión grúa + tanque 9 m³": "2026-10-26",
 };
+// Carrusel de destacados: rota solo cada lunes (mínimo 3 o el 10 % del total). Si un equipo debe quedar fijo, poner su nombre aquí.
+const FIJOS = [];
 // Equipo destacado de la semana (cambiar el nombre para rotarlo).
 const DESTACADO = "Caterpillar CS78B";
