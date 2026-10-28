@@ -62,3 +62,13 @@ const EQUIPOS = [
   { img: "img/grua.jpg", tipo: "Vehículos", cat: "Camión grúa con tanque", nombre: "Camión grúa + tanque 9 m³", anio: 0, uso: "Listo para traspaso", precio: 95000000,
     specs: [["Capacidad de carga", "Hasta 13 t"], ["Tanque", "9 m³"], ["Documentos", "Listo para traspaso"], ["Eje trasero", "Doble llanta"]] },
 ];
+// Fecha de ingreso al catálogo: la etiqueta "Nuevo ingreso" se muestra 15 días y luego se quita sola.
+const INGRESOS = {
+  "Case 580 Super N": "2026-10-23", "SDLG LG936": "2026-10-23", "Stone PD-54 (3 t)": "2026-10-23", "Bobcat S570": "2026-10-23",
+  "Caterpillar D5N": "2026-10-23", "Bobcat 853": "2026-10-23", "Ingersoll Rand SD-100": "2026-10-23", "Caterpillar CS78B": "2026-10-23",
+  "SDLG RS7120H (12 t)": "2026-10-26", "Caterpillar D6N (2017)": "2026-10-26", "Caterpillar D5K2 LGP": "2026-10-26",
+  "Kobelco SK210LC-9": "2026-10-26", "Caterpillar D6N (2007)": "2026-10-26", "Caterpillar D5N (2007)": "2026-10-26",
+  "Camión grúa + tanque 9 m³": "2026-10-26",
+};
+// Equipo destacado de la semana (cambiar el nombre para rotarlo).
+const DESTACADO = "Caterpillar CS78B";
