@@ -105,6 +105,17 @@ a { color: var(--ama); }
 .boton.linea { background: transparent; color: var(--ama); box-shadow: inset 0 0 0 2px var(--ama); clip-path: none; }
 .boton svg { width: 20px; height: 20px; }
 
+/* Franja: trato directo con el propietario */
+.directo { background: linear-gradient(90deg, #1A1606, #14120A 60%, #0D0D0D); border-bottom: 1px solid var(--linea); }
+.directo .wrap { padding-block: 22px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px 40px; }
+.directo .titular { flex: 1 1 340px; min-width: 0; }
+.directo h2 { margin: 0; font-family: var(--rotulo); font-weight: 400; font-size: clamp(22px, 2.6vw, 30px); line-height: 1.1; color: #fff; }
+.directo h2 b { font-weight: 400; color: var(--ama); }
+.directo p { margin: 6px 0 0; color: var(--plata); font-size: 17px; max-width: 60ch; }
+.directo ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px 22px; flex: 1 1 420px; }
+.directo li { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 17px; color: var(--hueso); }
+.directo li svg { width: 22px; height: 22px; flex-shrink: 0; }
+
 /* Lote destacado */
 .destacado { padding-block: 36px 8px; }
 .rotulito { font-family: var(--mono); font-size: 13px; font-weight: 600; letter-spacing: 0.16em; color: var(--ama); text-transform: uppercase; display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
@@ -209,6 +220,20 @@ footer p { margin: 6px 0 0; max-width: 60ch; }
   </div>
 </section>
 
+<section class="directo" aria-label="Compra directa">
+  <div class="wrap">
+    <div class="titular">
+      <h2>Compra directa, <b>sin cadenas de intermediarios</b>.</h2>
+      <p>Negocias de tú a tú con el propietario del equipo: precio claro, sin sobrecostos y con un solo asesor que te acompaña de principio a fin.</p>
+    </div>
+    <ul>
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#FFC20E"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#0D0D0D" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Trato directo con el dueño</li>
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#FFC20E"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#0D0D0D" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Precios sin sobrecostos</li>
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#FFC20E"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#0D0D0D" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Equipos verificables en Barranquilla</li>
+    </ul>
+  </div>
+</section>
+
 <main class="wrap">
   <section class="destacado" aria-label="Lotes destacados de la semana">
     <div class="rotulito"><span>Lotes destacados · <span id="semana"></span></span></div>
@@ -249,7 +274,7 @@ footer p { margin: 6px 0 0; max-width: 60ch; }
     <div>
       <div class="firma">Yellow <em>Yard</em></div>
       <div class="by" style="font-size: 22px">by Nestor Sierra</div>
-      <p>Tu próxima máquina está en el patio amarillo. Todos los equipos están en Barranquilla y se pueden inspeccionar antes de comprar.</p>
+      <p>Tu próxima máquina está en el patio amarillo. Compra directa al propietario, sin cadenas de intermediarios. Todos los equipos están en Barranquilla y se pueden inspeccionar antes de comprar.</p>
     </div>
     <div>
       <div>WhatsApp 301 795 9540 · Nestor Sierra</div>
