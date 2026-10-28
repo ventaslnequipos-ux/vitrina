@@ -3,11 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Maquinaria y vehículos usados en venta, verificables en Barranquilla. Fotos, datos técnicos y precios. WhatsApp 301 795 9540.">
+<meta name="description" content="Tu próxima máquina está en el patio amarillo. Maquinaria y vehículos usados en venta, verificables en Barranquilla. WhatsApp 301 795 9540.">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="La Vitrina de las Máquinas">
-<meta property="og:title" content="La Vitrina de las Máquinas · Maquinaria en venta en Barranquilla">
-<meta property="og:description" content="Maquinaria y vehículos usados en venta, verificables en Barranquilla. Fotos, datos técnicos y precios. WhatsApp 301 795 9540.">
+<meta property="og:site_name" content="Yellow Yard">
+<meta property="og:title" content="Yellow Yard · Tu próxima máquina está en el patio amarillo">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta property="og:description" content="Tu próxima máquina está en el patio amarillo. Maquinaria y vehículos usados en venta, verificables en Barranquilla. WhatsApp 301 795 9540.">
 <meta property="og:url" content="https://ventaslnequipos-ux.github.io/vitrina/">
 <meta property="og:image" content="https://ventaslnequipos-ux.github.io/vitrina/og.jpg">
 <meta property="og:image:width" content="1200">
@@ -16,15 +17,16 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://ventaslnequipos-ux.github.io/vitrina/og.jpg">
 <link rel="canonical" href="https://ventaslnequipos-ux.github.io/vitrina/">
-<title>La Vitrina de las Máquinas</title>
+<title>Yellow Yard · Maquinaria</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap">
 <style>
-/* Layout: banda azul noche con marca y contacto, franja de confianza (Barranquilla), barra de filtros y orden, grilla de fichas. Un solo tema de marca (claro). */
+/* Marca Yellow Yard: encabezado negro con placa (borde oro, Y amarilla, césped), franja de confianza, filtros, grilla de fichas claras con precio sobre negro. Un solo tema de marca. */
 :root {
-  --noche: #021F4D; --azul: #053683; --ama: #F0AD13; --graf: #1C1F24;
-  --muted: #5E6672; --linea: #D5D9E0; --hueso: #F6F5F1; --blanco: #FFFFFF; --soft: #C9D4E6; --ama-claro: #FDF3DC;
+  --noche: #0E0E0E; --azul: #7A5C00; --ama: #FFC20E; --oro: #C9A227; --graf: #1A1A1A;
+  --muted: #5B5F66; --linea: #DDD9CF; --hueso: #F2F0EA; --blanco: #FFFFFF; --soft: #BFC5CC; --ama-claro: #FFF6DA;
+  --anton: 'Anton', Impact, 'Arial Narrow', sans-serif;
   --display: 'Barlow Condensed', 'Arial Narrow', sans-serif;
   --body: 'Barlow', 'Helvetica Neue', Arial, sans-serif;
   color-scheme: light;
@@ -35,9 +37,13 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .wrap { max-width: 1180px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
 header { background: var(--noche); color: var(--blanco); border-top: 6px solid var(--ama); }
 header .wrap { padding-block: 36px 32px; display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-end; justify-content: space-between; }
-.eyebrow { font-family: var(--display); font-weight: 600; letter-spacing: 0.18em; font-size: 15px; color: var(--ama); text-transform: uppercase; }
-h1 { margin: 6px 0 0; font-family: var(--display); font-weight: 700; font-size: clamp(44px, 9vw, 84px); line-height: 0.92; text-transform: uppercase; text-wrap: balance; }
-.by { font-family: var(--display); font-weight: 600; font-size: 24px; color: var(--ama); margin-top: 6px; }
+.brand { display: flex; align-items: center; gap: clamp(16px, 3vw, 32px); min-width: 0; }
+.brand .placa { width: clamp(92px, 16vw, 150px); height: auto; flex-shrink: 0; }
+h1 { margin: 0; font-family: var(--anton); font-weight: 400; font-size: clamp(52px, 10vw, 96px); line-height: 0.88; letter-spacing: 0.01em; text-transform: uppercase; }
+h1 span { color: var(--ama); }
+.tag { font-family: var(--display); font-weight: 700; font-size: clamp(14px, 2.2vw, 20px); letter-spacing: 0.26em; color: var(--soft); margin-top: 10px; }
+.slogan { font-family: var(--display); font-weight: 600; font-size: clamp(19px, 2.6vw, 26px); color: #E9E9E9; margin-top: 6px; }
+.slogan strong { color: var(--ama); font-weight: 800; }
 .contact { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
 .contact .label { font-size: 13px; letter-spacing: 0.12em; font-weight: 600; color: var(--soft); }
 .contact .num { font-family: var(--display); font-weight: 700; font-size: 32px; line-height: 1; user-select: all; }
@@ -45,11 +51,11 @@ h1 { margin: 6px 0 0; font-family: var(--display); font-weight: 700; font-size: 
 .btn:hover { background: #F7C04A; }
 .btn:focus-visible, .chip:focus-visible, select:focus-visible { outline: 3px solid var(--azul); outline-offset: 2px; }
 .btn svg { width: 20px; height: 20px; }
-.trust { background: var(--ama-claro); border-bottom: 1px solid #EBD9A8; }
+.trust { background: #1A1A1A; border-top: 1px solid #2B2B2B; border-bottom: 4px solid var(--oro); }
 .trust .wrap { padding-block: 18px; display: flex; gap: 16px; align-items: flex-start; }
-.trust svg { flex-shrink: 0; width: 36px; height: 36px; color: var(--azul); margin-top: 2px; }
-.trust strong { display: block; font-family: var(--display); font-weight: 700; font-size: 22px; color: var(--noche); line-height: 1.15; }
-.trust p { margin: 2px 0 0; color: var(--graf); max-width: 80ch; }
+.trust svg { flex-shrink: 0; width: 36px; height: 36px; color: var(--oro); margin-top: 2px; }
+.trust strong { display: block; font-family: var(--display); font-weight: 700; font-size: 22px; color: var(--blanco); line-height: 1.15; }
+.trust p { margin: 2px 0 0; color: #D2D2D2; max-width: 80ch; }
 .toolbar { display: flex; flex-direction: column; gap: 14px; padding-block: 24px 8px; }
 .sort { align-self: flex-start; }
 .filters { display: flex; flex-wrap: wrap; gap: 8px; min-width: 0; }
@@ -66,12 +72,12 @@ h1 { margin: 6px 0 0; font-family: var(--display); font-weight: 700; font-size: 
 .nophoto svg { width: 44px; height: 44px; color: var(--ama); }
 .card .body { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 12px; flex: 1; }
 .cat { font-size: 13px; font-weight: 600; letter-spacing: 0.1em; color: var(--azul); text-transform: uppercase; }
-.card h2 { margin: 0; font-family: var(--display); font-weight: 700; font-size: 32px; line-height: 1; color: var(--noche); }
+.card h2 { margin: 0; font-family: var(--anton); font-weight: 400; font-size: 30px; line-height: 1.05; letter-spacing: 0.01em; color: var(--noche); }
 .facts { display: flex; gap: 8px; flex-wrap: wrap; }
 .fact { background: var(--hueso); border: 1px solid var(--linea); padding: 3px 10px; font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; }
-.price { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px; background: var(--azul); color: var(--blanco); padding: 10px 14px; }
+.price { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px; background: var(--noche); color: var(--blanco); padding: 10px 14px; border-left: 4px solid var(--oro); }
 .price span { font-size: 12px; letter-spacing: 0.12em; font-weight: 600; color: var(--soft); }
-.price strong { font-family: var(--display); font-weight: 700; font-size: 30px; color: var(--ama); font-variant-numeric: tabular-nums; }
+.price strong { font-family: var(--anton); font-weight: 400; font-size: 30px; color: var(--ama); font-variant-numeric: tabular-nums; }
 dl { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 16px; }
 dl div { border-top: 1px solid var(--linea); padding: 6px 0; min-width: 0; }
 dt { font-size: 12px; font-weight: 600; letter-spacing: 0.06em; color: var(--muted); text-transform: uppercase; }
@@ -89,11 +95,13 @@ dd { margin: 0; font-family: var(--display); font-weight: 600; font-size: 19px; 
 .feat .media { aspect-ratio: 4 / 3; min-height: 100%; }
 .feat .media img, .feat .media .nophoto { position: absolute; inset: 0; width: 100%; height: 100%; aspect-ratio: auto; object-fit: cover; object-position: 50% 62%; display: block; }
 .feat .body { padding: 24px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
-.feat h2 { margin: 0; font-family: var(--display); font-weight: 700; font-size: clamp(34px, 5vw, 48px); line-height: 1; color: var(--noche); }
+.feat h2 { margin: 0; font-family: var(--anton); font-weight: 400; font-size: clamp(34px, 5vw, 48px); line-height: 1; color: var(--noche); }
 .feat .price strong { font-size: 38px; }
 footer { background: var(--noche); color: var(--soft); }
 footer .wrap { padding-block: 28px; display: flex; flex-direction: column; gap: 6px; font-size: 14px; }
-footer strong { color: var(--blanco); font-family: var(--display); font-size: 20px; }
+footer strong { color: var(--blanco); font-family: var(--anton); font-weight: 400; font-size: 24px; letter-spacing: 0.02em; }
+footer strong span { color: var(--ama); }
+footer .slogan { margin: 0; font-size: 18px; }
 @media (prefers-reduced-motion: no-preference) { .btn, .chip { transition: background-color .15s; } }
 </style>
 </head>
@@ -101,19 +109,29 @@ footer strong { color: var(--blanco); font-family: var(--display); font-size: 20
 
 <header>
   <div class="wrap">
-    <div>
-      <div class="eyebrow">Catálogo de venta de maquinaria</div>
-      <h1>La Vitrina de las Máquinas</h1>
-      <div class="by">by Nestor Sierra</div>
+    <div class="brand">
+      <svg class="placa" viewBox="0 0 200 250" role="img" aria-label="Logo Yellow Yard: placa negra con borde de oro, Y amarilla y césped amarillo">
+        <defs><linearGradient id="oroL" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F3DC8A"/><stop offset="0.5" stop-color="#B88A2A"/><stop offset="1" stop-color="#E9C766"/></linearGradient></defs>
+        <path d="M24 4 H176 L196 24 V226 L176 246 H24 L4 226 V24 Z" fill="#0E0E0E" stroke="url(#oroL)" stroke-width="6"/>
+        <path d="M40 30 H82 L100 74 L118 30 H160 L118 122 V170 H82 V122 Z" fill="#FFC20E"/>
+        <text x="100" y="196" text-anchor="middle" font-family="Anton, Impact, sans-serif" font-size="17" letter-spacing="3" fill="url(#oroL)">YELLOW YARD</text>
+        <path transform="translate(0 -4)" fill="#FFC20E" d="M14.0 236 L20.0 218.2 L20.1 236 Z M18.4 236 L22.1 218.9 L24.6 236 Z M22.9 236 L26.5 218.8 L28.3 236 Z M26.8 236 L28.9 224.7 L33.8 236 Z M31.8 236 L35.8 214.7 L37.0 236 Z M35.6 236 L41.4 212.2 L40.7 236 Z M39.3 236 L40.2 217.4 L45.9 236 Z M44.0 236 L43.5 218.6 L49.1 236 Z M47.7 236 L47.1 222.6 L53.1 236 Z M51.6 236 L57.1 219.8 L57.8 236 Z M56.0 236 L59.2 217.0 L62.3 236 Z M60.6 236 L62.3 219.6 L67.2 236 Z M65.4 236 L71.5 212.1 L72.9 236 Z M70.8 236 L72.2 221.6 L77.5 236 Z M75.6 236 L80.4 225.0 L81.4 236 Z M79.7 236 L82.0 214.1 L85.8 236 Z M84.1 236 L84.3 214.1 L91.5 236 Z M89.4 236 L91.9 213.3 L94.9 236 Z M93.4 236 L94.1 220.4 L100.8 236 Z M98.7 236 L100.4 215.1 L105.3 236 Z M103.5 236 L109.3 221.3 L108.7 236 Z M107.2 236 L108.9 224.3 L114.1 236 Z M112.2 236 L116.9 225.2 L117.4 236 Z M116.0 236 L118.3 218.2 L121.4 236 Z M119.9 236 L120.0 215.8 L125.4 236 Z M123.8 236 L126.6 224.4 L130.4 236 Z M128.6 236 L134.7 222.2 L134.1 236 Z M132.6 236 L138.8 221.7 L139.6 236 Z M137.6 236 L142.9 220.5 L143.2 236 Z M141.6 236 L148.3 224.6 L148.2 236 Z M146.4 236 L151.0 222.4 L151.9 236 Z M150.3 236 L150.3 221.9 L156.2 236 Z M154.5 236 L155.3 217.8 L159.8 236 Z M158.3 236 L161.2 220.8 L164.8 236 Z M163.0 236 L167.2 219.2 L170.4 236 Z M168.3 236 L169.5 223.4 L175.5 236 Z M173.5 236 L175.3 214.6 L180.7 236 Z M178.7 236 L184.5 215.6 L184.2 236 Z"/>
+        <rect x="12" y="232" width="176" height="4" fill="#FFC20E"/>
+      </svg>
+      <div style="min-width: 0">
+        <h1>Yellow <span>Yard</span></h1>
+        <div class="tag">MAQUINARIA · BARRANQUILLA</div>
+        <div class="slogan">Tu próxima máquina está en el <strong>patio amarillo</strong>.</div>
+      </div>
     </div>
     <div class="contact">
-      <div class="label">WHATSAPP</div>
+      <div class="label">WHATSAPP · NESTOR SIERRA</div>
       <div class="num">301 795 9540</div>
-      <a class="btn" href="https://wa.me/573017959540?text=Hola%20Nestor%2C%20vi%20el%20cat%C3%A1logo%20de%20La%20Vitrina%20de%20las%20M%C3%A1quinas%20y%20quiero%20m%C3%A1s%20informaci%C3%B3n." target="_blank" rel="noopener">
+      <a class="btn" href="https://wa.me/573017959540?text=Hola%20Nestor%2C%20vi%20el%20cat%C3%A1logo%20de%20Yellow%20Yard%20y%20quiero%20m%C3%A1s%20informaci%C3%B3n." target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 21l2.1-5.5A8.4 8.4 0 1 1 21 11.5z"/></svg>
         Escribir por WhatsApp
       </a>
-      <a class="btn ghost" href="https://wa.me/?text=Mira%20el%20cat%C3%A1logo%20de%20maquinaria%20en%20venta%20de%20La%20Vitrina%20de%20las%20M%C3%A1quinas%20(equipos%20verificables%20en%20Barranquilla)%3A%20https%3A%2F%2Fventaslnequipos-ux.github.io%2Fvitrina%2F" target="_blank" rel="noopener">
+      <a class="btn ghost" href="https://wa.me/?text=Mira%20el%20cat%C3%A1logo%20de%20maquinaria%20en%20venta%20de%20Yellow%20Yard%20(equipos%20verificables%20en%20Barranquilla)%3A%20https%3A%2F%2Fventaslnequipos-ux.github.io%2Fvitrina%2F" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
         Compartir catálogo
       </a>
@@ -152,7 +170,9 @@ footer strong { color: var(--blanco); font-family: var(--display); font-size: 20
 
 <footer>
   <div class="wrap">
-    <strong>La Vitrina de las Máquinas by Nestor Sierra</strong>
+    <strong>YELLOW <span>YARD</span> · MAQUINARIA · BARRANQUILLA</strong>
+    <div class="slogan">Tu próxima máquina está en el <strong style="font-family: inherit; font-size: inherit; letter-spacing: 0">patio amarillo</strong>.</div>
+    <div>Asesor comercial: Nestor Sierra</div>
     <div>WhatsApp 301 795 9540 · Barranquilla, Atlántico</div>
     <div>Precios en pesos colombianos, sujetos a disponibilidad y a cambio sin previo aviso. Los datos técnicos son de referencia; todos los equipos pueden inspeccionarse antes de la compra.</div>
   </div>
@@ -251,7 +271,7 @@ function ordenar(lista) {
   if (v === "anio-asc") return lista.sort((a, b) => !a.anio - !b.anio || a.anio - b.anio);
   return lista;
 }
-const msgDe = e => encodeURIComponent(`Hola Nestor, me interesa el equipo ${e.nombre}${e.anio ? " (" + e.anio + ")" : ""}${e.precio ? " por " + cop(e.precio) : ""} que vi en La Vitrina de las Máquinas.`);
+const msgDe = e => encodeURIComponent(`Hola Nestor, me interesa el equipo ${e.nombre}${e.anio ? " (" + e.anio + ")" : ""}${e.precio ? " por " + cop(e.precio) : ""} que vi en Yellow Yard.`);
 const fotoDe = (e, lazy) => `<div class="media">${e.img ? `<img src="${esc(e.img)}" alt="${esc(e.cat)} ${esc(e.nombre)}"${lazy ? ' loading="lazy"' : ""}>`
   : `<div class="nophoto">${camara}Fotos disponibles por WhatsApp</div>`}${esNuevo(e) ? '<span class="badge">Nuevo ingreso</span>' : ""}</div>`;
 const estrella = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5l2.9 6 6.6.8-4.9 4.5 1.3 6.5L12 17l-5.9 3.3 1.3-6.5-4.9-4.5 6.6-.8z"/></svg>';
