@@ -1,7 +1,7 @@
 const EQUIPOS = [
   { img: "img/dieci2.jpg", tipo: "Elevación", cat: "Manipulador telescópico rotativo", nombre: "Dieci Pegasus 38.16", anio: 2018, uso: "6.000 h", precio: 200000000,
     specs: [["Capacidad máx.", "3.800 kg"], ["Altura de elevación", "15,7 m"], ["Giro de torreta", "400°"], ["Tracción", "4x4"]] },
-  { img: "img/mg120_a.jpg", tipo: "Motoniveladoras", cat: "Motoniveladora", nombre: "Caterpillar 120G", anio: 2007, uso: "12.000 h", precio: 270000000,
+  { img: "img/mg120_a.jpg", tipo: "Motoniveladoras", cat: "Motoniveladora", nombre: "Caterpillar 120G (2007)", anio: 2007, uso: "12.000 h", precio: 270000000,
     specs: [["Motor", "Caterpillar 3304"], ["Potencia", "125 hp"], ["Peso operativo", "11.500 kg aprox."], ["Transmisión", "6 avance / 6 reversa"]] },
   { img: "img/mg140.jpg", tipo: "Motoniveladoras", cat: "Motoniveladora", nombre: "Caterpillar 12G (140G)", anio: 1989, uso: "30.000 h", precio: 250000000,
     specs: [["Motor", "Caterpillar 3306"], ["Potencia", "135 hp"], ["Hoja", "12 pies (3,66 m)"], ["Eje trasero", "Tándem"]] },
@@ -61,6 +61,26 @@ const EQUIPOS = [
     specs: [["Peso operativo", "12,7 t aprox."], ["Hoja", "2,7 m³ aprox."], ["Protección", "Techo ROPS"]] },
   { img: "img/grua.jpg", tipo: "Vehículos", cat: "Camión grúa con tanque", nombre: "Camión grúa + tanque 9 m³", anio: 0, uso: "Listo para traspaso", precio: 95000000,
     specs: [["Capacidad de carga", "Hasta 13 t"], ["Tanque", "9 m³"], ["Documentos", "Listo para traspaso"], ["Eje trasero", "Doble llanta"]] },
+  { img: "img/mg120_91.jpg", tipo: "Motoniveladoras", cat: "Motoniveladora", nombre: "Caterpillar 120G (1991)", anio: 1991, uso: "Horas por confirmar", precio: 230000000,
+    specs: [["Motor", "Caterpillar 3304"], ["Potencia", "125 hp"], ["Cabina", "Cerrada"]] },
+  { img: "img/mg_cat86.jpg", tipo: "Motoniveladoras", cat: "Motoniveladora", nombre: "Caterpillar motoniveladora (1986)", anio: 1986, uso: "Horómetro nuevo", precio: 140000000,
+    specs: [["Modelo", "Por confirmar"], ["Cabina", "Cerrada"], ["Horómetro", "Nuevo"]] },
+  { img: "img/galion.jpg", tipo: "Motoniveladoras", cat: "Motoniveladora", nombre: "Galion motoniveladora (1994)", anio: 1994, uso: "Horómetro nuevo", precio: 120000000,
+    specs: [["Modelo", "Por confirmar"], ["Cabina", "Cerrada"], ["Eje trasero", "Tándem"], ["Horómetro", "Nuevo"]] },
+  { img: "img/dynapac.jpg", tipo: "Compactación", cat: "Vibrocompactador", nombre: "Dynapac CA250", anio: 2009, uso: "153 h (horómetro nuevo)", precio: 140000000,
+    specs: [["Tambor", "Liso"], ["Ancho de tambor", "2,13 m"], ["Peso operativo", "10.000 kg aprox."], ["Puesto", "Con techo"]] },
+  { img: "img/cp433e.jpg", tipo: "Compactación", cat: "Vibrocompactador", nombre: "Caterpillar CP-433E", anio: 2004, uso: "Horas por confirmar", precio: 150000000,
+    specs: [["Tambor", "Pata de cabra"], ["Peso operativo", "7.000 kg aprox."], ["Ancho de tambor", "1,68 m"], ["Puesto", "Con techo"]] },
+  { img: "img/cat_vib03.jpg", tipo: "Compactación", cat: "Vibrocompactador", nombre: "Caterpillar vibrocompactador (2003)", anio: 2003, uso: "Horómetro nuevo", precio: 140000000,
+    specs: [["Modelo", "Por confirmar"], ["Tambor", "Liso"], ["Cabina", "Cerrada"], ["Horómetro", "Nuevo"]] },
+  { img: "img/jd310g.jpg", tipo: "Excavación", cat: "Retroexcavadora cargadora", nombre: "John Deere 310G", anio: 2006, uso: "8.776 h", precio: 190000000,
+    specs: [["Configuración", "Pala + retro"], ["Cabina", "Cerrada"]] },
+  { img: "img/jd320d.jpg", tipo: "Minicargadores", cat: "Minicargador", nombre: "John Deere 320D", anio: 2013, uso: "Horas por confirmar", precio: 85000000,
+    specs: [["Capacidad operativa", "794 kg (1.750 lb)"], ["Potencia", "66 hp"], ["Rodaje", "Llantas"]] },
+  { img: "img/volq_isuzu.jpg", tipo: "Vehículos", cat: "Volqueta doble troque", nombre: "Chevrolet FVZ (Isuzu)", anio: 2013, uso: "447.000 km", precio: 280000000,
+    specs: [["Línea", "FVZ tecnología Isuzu"], ["Configuración", "Doble troque"], ["Carrocería", "Volco"]] },
+  { img: "img/volq_kodiak.jpg", tipo: "Vehículos", cat: "Volqueta doble troque", nombre: "Chevrolet volqueta doble troque (2008)", anio: 2008, uso: "Odómetro no funciona", precio: 120000000,
+    specs: [["Configuración", "Doble troque"], ["Carrocería", "Volco"], ["Kilometraje", "Odómetro no funciona"]] },
 ];
 // Fecha de ingreso al catálogo: la etiqueta "Nuevo ingreso" se muestra 15 días y luego se quita sola.
 const INGRESOS = {
@@ -69,6 +89,9 @@ const INGRESOS = {
   "SDLG RS7120H (12 t)": "2026-10-26", "Caterpillar D6N (2017)": "2026-10-26", "Caterpillar D5K2 LGP": "2026-10-26",
   "Kobelco SK210LC-9": "2026-10-26", "Caterpillar D6N (2007)": "2026-10-26", "Caterpillar D5N (2007)": "2026-10-26",
   "Camión grúa + tanque 9 m³": "2026-10-26",
+  "Caterpillar 120G (1991)": "2026-10-28", "Caterpillar motoniveladora (1986)": "2026-10-28", "Galion motoniveladora (1994)": "2026-10-28",
+  "Dynapac CA250": "2026-10-28", "Caterpillar CP-433E": "2026-10-28", "Caterpillar vibrocompactador (2003)": "2026-10-28", "John Deere 310G": "2026-10-28",
+  "John Deere 320D": "2026-10-28", "Chevrolet FVZ (Isuzu)": "2026-10-28", "Chevrolet volqueta doble troque (2008)": "2026-10-28",
 };
 // Carrusel de destacados: rota solo cada lunes (mínimo 3 o el 10 % del total). Si un equipo debe quedar fijo, poner su nombre aquí.
 const FIJOS = [];
