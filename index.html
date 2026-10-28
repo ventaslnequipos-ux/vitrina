@@ -131,7 +131,10 @@ a { color: var(--ama); }
 .lote.grande { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); border-color: var(--oro); }
 @media (max-width: 760px) { .lote.grande { grid-template-columns: minmax(0, 1fr); } }
 .foto { position: relative; min-height: 240px; background: #111; }
-.foto img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.foto { overflow: hidden; }
+.foto img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; display: block; }
+/* La foto se ve completa (con su marca de agua); el espacio sobrante se rellena con la misma foto desenfocada */
+.foto img.relleno { object-fit: cover; filter: blur(18px) brightness(.55); transform: scale(1.15); }
 @media (max-width: 760px) { .foto { min-height: 0; aspect-ratio: 4 / 3; } }
 .sinfoto { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: var(--rotulo); font-weight: 400; font-size: 22px; color: var(--plata); text-transform: uppercase; }
 .nuevo { position: absolute; top: 0; left: 0; background: var(--ama); color: var(--negro); font-family: var(--mono); font-weight: 600; font-size: 12px; letter-spacing: 0.12em; padding: 6px 10px; text-transform: uppercase; }
@@ -258,6 +261,7 @@ footer p { margin: 6px 0 0; max-width: 60ch; }
 <script src="equipos.js"></script>
 <script>
 const WA = "https://wa.me/573017959540?text=";
+const VER = "20261028c"; // cambia cuando se actualizan las fotos, para que nadie vea fotos viejas guardadas
 const DEST = typeof DESTACADO !== "undefined" ? DESTACADO : "";
 const ING = typeof INGRESOS !== "undefined" ? INGRESOS : {};
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -279,7 +283,7 @@ const msg = e => encodeURIComponent(`Hola Nestor, me interesa el lote ${e.lote}:
 function lote(e, grande) {
   const ficha = [["Año", e.anio || "Por confirmar"], ["Uso", e.uso]].concat(e.specs);
   return `<article class="lote${grande ? " grande" : ""}">
-    <div class="foto">${e.img ? `<img src="${esc(e.img)}" alt="${esc(e.cat)} ${esc(e.nombre)}"${grande ? "" : ' loading="lazy"'}>` : `<div class="sinfoto">Fotos por WhatsApp</div>`}${esNuevo(e) ? '<span class="nuevo">Nuevo ingreso</span>' : ""}</div>
+    <div class="foto">${e.img ? `<img class="relleno" src="${esc(e.img)}?v=${VER}" alt=""${grande ? "" : ' loading="lazy"'}><img src="${esc(e.img)}?v=${VER}" alt="${esc(e.cat)} ${esc(e.nombre)}"${grande ? "" : ' loading="lazy"'}>` : `<div class="sinfoto">Fotos por WhatsApp</div>`}${esNuevo(e) ? '<span class="nuevo">Nuevo ingreso</span>' : ""}</div>
     <div class="info">
       <div class="cabeza">
         <div style="min-width: 0"><div class="num">Lote ${e.lote}</div><div class="tipo">${esc(e.cat)}</div><h2>${esc(e.nombre)}</h2></div>
