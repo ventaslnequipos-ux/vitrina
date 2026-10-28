@@ -53,27 +53,20 @@ a { color: var(--ama); }
 .by { font-family: var(--texto); font-weight: 700; font-size: clamp(22px, 2.9vw, 34px); letter-spacing: 0.02em; color: var(--oro); margin-top: 8px; }
 .by::before { content: ""; display: inline-block; width: 28px; height: 2px; background: var(--oro); vertical-align: middle; margin-right: 10px; }
 
-/* Escena: el buldócer pasa empujando tierra y detrás sale la placa */
-.rotulo { overflow-x: clip; }
-.escena { position: relative; width: clamp(84px, 13vw, 132px); }
-.escena .placa { display: block; width: 100%; height: auto; animation: surge 3.6s cubic-bezier(.2,.8,.2,1) both; }
-.escena .tren { position: absolute; left: 0; bottom: -2px; width: 210%; display: flex; align-items: flex-end; z-index: 3; animation: tren 3.6s cubic-bezier(.3,.1,.6,1) both; pointer-events: none; }
-.escena .tren svg { display: block; height: auto; }
-.escena .tren .dz { width: 56%; }
-.escena .tren .mt { width: 44%; margin-left: -4%; }
-.escena .oruga { animation: oruga .5s linear 7; }
-@keyframes oruga { to { stroke-dashoffset: -26; } }
-@keyframes tren {
-  0% { transform: translateX(-110%); opacity: 1; }
-  72% { transform: translateX(105%); opacity: 1; }
-  80%, 100% { transform: translateX(120%); opacity: 0; }
-}
-@keyframes surge {
-  0%, 46% { transform: translateY(55%) scale(0.55); opacity: 0; }
-  68% { transform: translateY(-7%) scale(1.05); opacity: 1; }
-  80%, 100% { transform: translateY(0) scale(1); opacity: 1; }
-}
-@media (prefers-reduced-motion: reduce) { .escena .placa { animation: none; } .escena .tren { display: none; } }
+/* Rótulo con foto real: la cámara se acerca a la máquina, el polvo se asienta y aparece la placa */
+.rotulo { position: relative; overflow: hidden; isolation: isolate; }
+.rotulo .fondo { position: absolute; inset: -4%; z-index: -2; background: url(img/d6n07.jpg) 70% 62% / cover no-repeat; filter: brightness(.44) contrast(1.1) saturate(1.05); animation: acerca 7s cubic-bezier(.2,.7,.3,1) both; }
+.rotulo .velo { position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgba(13,13,13,.94) 0%, rgba(13,13,13,.7) 50%, rgba(13,13,13,.35) 100%), linear-gradient(0deg, rgba(13,13,13,.9) 0%, rgba(13,13,13,0) 40%); }
+.rotulo .polvo { position: absolute; inset: -20% -10%; z-index: 0; pointer-events: none;
+  background: radial-gradient(40% 35% at 30% 80%, rgba(176,150,112,.95), rgba(176,150,112,0) 70%), radial-gradient(45% 40% at 70% 85%, rgba(150,122,88,.9), rgba(150,122,88,0) 70%), radial-gradient(60% 50% at 50% 50%, rgba(140,114,82,.85), rgba(140,114,82,0) 75%);
+  animation: polvo 2.8s ease-out both; }
+.escena { position: relative; z-index: 1; width: clamp(84px, 13vw, 132px); }
+.escena .placa { display: block; width: 100%; height: auto; filter: drop-shadow(0 10px 24px rgba(0,0,0,.7)); animation: surge 2.8s cubic-bezier(.2,.8,.2,1) both; }
+.rotulo .wrap > * { position: relative; z-index: 1; }
+@keyframes acerca { from { transform: scale(1.18) translateX(2%); } to { transform: scale(1) translateX(0); } }
+@keyframes polvo { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-12%) scale(1.25); } }
+@keyframes surge { 0%, 35% { opacity: 0; transform: scale(1.2); filter: blur(10px); } 100% { opacity: 1; transform: scale(1); filter: blur(0) drop-shadow(0 10px 24px rgba(0,0,0,.7)); } }
+@media (prefers-reduced-motion: reduce) { .rotulo .fondo, .escena .placa { animation: none; } .rotulo .polvo { display: none; } }
 
 /* Carrusel de destacados */
 .carrusel { position: relative; }
@@ -180,26 +173,10 @@ footer p { margin: 6px 0 0; max-width: 60ch; }
 <div class="cinta" aria-label="Últimos ingresos"><div class="pista" id="cinta"></div></div>
 
 <header class="rotulo">
+  <div class="fondo" aria-hidden="true"></div><div class="velo" aria-hidden="true"></div><div class="polvo" aria-hidden="true"></div>
   <div class="wrap">
     <div class="escena">
       <img class="placa" src="logo.svg" alt="Logo Yellow Yard by Nestor Sierra">
-      <div class="tren">
-        <svg class="dz" viewBox="0 0 240 140" aria-hidden="true">
-          <path d="M22 92 H8 V124 L2 132 H12 V102 H22 Z" fill="#222"/><rect x="20" y="70" width="34" height="32" fill="#E0A800"/>
-          <path d="M50 102 V26 H104 L112 62 V102 Z" fill="#FFC20E"/><rect x="44" y="16" width="74" height="10" fill="#1A1A1A"/>
-          <path d="M58 34 H100 L106 60 H58 Z" fill="#202428"/><path d="M62 38 H74 L66 56 H62 Z" fill="#3A4048"/>
-          <rect x="62" y="68" width="22" height="22" fill="#161616"/><path d="M65 71 H70 L73 77 L76 71 H81 L75 81 V87 H71 V81 Z" fill="#FFC20E"/>
-          <path d="M108 102 V58 H170 L180 68 V102 Z" fill="#FFC20E"/><rect x="108" y="76" width="72" height="5" fill="#161616"/>
-          <rect x="138" y="34" width="8" height="24" fill="#222"/><rect x="135" y="30" width="14" height="6" fill="#222"/>
-          <path d="M150 64 L200 76" stroke="#555" stroke-width="7" stroke-linecap="round"/><path d="M118 100 L198 94" stroke="#1A1A1A" stroke-width="9" stroke-linecap="round"/>
-          <path d="M194 34 Q214 82 198 134 H210 Q228 82 206 34 Z" fill="#C9A227"/>
-          <rect x="18" y="102" width="168" height="34" rx="17" fill="#1A1A1A"/>
-          <rect class="oruga" x="20" y="104" width="164" height="30" rx="15" fill="none" stroke="#3A3A3A" stroke-width="5" stroke-dasharray="7 6"/>
-          <circle cx="36" cy="119" r="13" fill="#4A4A4A"/><circle cx="168" cy="119" r="13" fill="#4A4A4A"/>
-          <circle cx="66" cy="124" r="7" fill="#5A5A5A"/><circle cx="91" cy="124" r="7" fill="#5A5A5A"/><circle cx="116" cy="124" r="7" fill="#5A5A5A"/><circle cx="141" cy="124" r="7" fill="#5A5A5A"/>
-        </svg>
-        <svg class="mt" viewBox="0 0 230 130" aria-hidden="true"><path d="M0 130 C14 112 22 70 58 52 C80 40 92 18 122 16 C150 14 166 40 184 62 C204 86 214 112 230 130 Z" fill="#6B4A22"/><path d="M24 130 C40 104 62 80 90 72 C112 66 136 70 158 88 C176 102 192 118 204 130 Z" fill="#8A6230"/><circle cx="70" cy="70" r="6" fill="#4E3418"/><circle cx="150" cy="56" r="5" fill="#4E3418"/><circle cx="96" cy="100" r="7" fill="#4E3418"/></svg>
-      </div>
     </div>
     <div style="min-width: 0">
       <h1 class="marca">Yellow <em>Yard</em></h1>
