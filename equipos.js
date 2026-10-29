@@ -63,9 +63,9 @@ const EQUIPOS = [
     specs: [["Capacidad de carga", "Hasta 13 t"], ["Tanque", "9 m³"], ["Documentos", "Listo para traspaso"], ["Eje trasero", "Doble llanta"]] },
   { img: "img/mg120_91.jpg", tipo: "Motoniveladoras", cat: "Motoniveladora", nombre: "Caterpillar 120G (1991)", anio: 1991, uso: "Horas por confirmar", precio: 230000000,
     specs: [["Motor", "Caterpillar 3304"], ["Potencia", "125 hp"], ["Cabina", "Cerrada"]] },
-  { img: "img/mg_cat86.jpg", tipo: "Motoniveladoras", cat: "Motoniveladora", nombre: "Caterpillar motoniveladora (1986)", anio: 1986, uso: "Horómetro nuevo", precio: 140000000,
+  { img: "img/mg_cat86.jpg", tipo: "Motoniveladoras", cat: "Motoniveladora", nombre: "Caterpillar motoniveladora (1986)", anio: 1986, uso: "Horómetro nuevo", precio: 160000000,
     specs: [["Modelo", "Por confirmar"], ["Cabina", "Cerrada"], ["Horómetro", "Nuevo"]] },
-  { img: "img/galion.jpg", tipo: "Motoniveladoras", cat: "Motoniveladora", nombre: "Galion motoniveladora (1994)", anio: 1994, uso: "Horómetro nuevo", precio: 120000000,
+  { img: "img/galion.jpg", tipo: "Motoniveladoras", cat: "Motoniveladora", nombre: "Galion motoniveladora (1994)", anio: 1994, uso: "Horómetro nuevo", precio: 130000000,
     specs: [["Modelo", "Por confirmar"], ["Cabina", "Cerrada"], ["Eje trasero", "Tándem"], ["Horómetro", "Nuevo"]] },
   { img: "img/dynapac.jpg", tipo: "Compactación", cat: "Vibrocompactador", nombre: "Dynapac CA250", anio: 2009, uso: "153 h (horómetro nuevo)", precio: 140000000,
     specs: [["Tambor", "Liso"], ["Ancho de tambor", "2,13 m"], ["Peso operativo", "10.000 kg aprox."], ["Puesto", "Con techo"]] },
@@ -79,7 +79,7 @@ const EQUIPOS = [
     specs: [["Capacidad operativa", "794 kg (1.750 lb)"], ["Potencia", "66 hp"], ["Rodaje", "Llantas"]] },
   { img: "img/volq_isuzu.jpg", tipo: "Vehículos", cat: "Volqueta doble troque", nombre: "Chevrolet FVZ (Isuzu)", anio: 2013, uso: "447.000 km", precio: 280000000,
     specs: [["Línea", "FVZ tecnología Isuzu"], ["Configuración", "Doble troque"], ["Carrocería", "Volco"]] },
-  { img: "img/volq_kodiak.jpg", tipo: "Vehículos", cat: "Volqueta doble troque", nombre: "Chevrolet volqueta doble troque (2008)", anio: 2008, uso: "Odómetro no funciona", precio: 120000000,
+  { img: "img/volq_kodiak.jpg", tipo: "Vehículos", cat: "Volqueta doble troque", nombre: "Chevrolet volqueta doble troque (2008)", anio: 2008, uso: "Odómetro no funciona", precio: 140000000,
     specs: [["Configuración", "Doble troque"], ["Carrocería", "Volco"], ["Kilometraje", "Odómetro no funciona"]] },
 ];
 // Fecha de ingreso al catálogo: la etiqueta "Nuevo ingreso" se muestra 15 días y luego se quita sola.

@@ -176,6 +176,10 @@ a { color: var(--ama); }
 .ficha dt { color: var(--gris); text-transform: uppercase; letter-spacing: 0.04em; }
 .ficha dd { margin: 0; color: var(--hueso); text-align: right; overflow-wrap: anywhere; }
 @media (max-width: 480px) { .ficha { grid-template-columns: minmax(0, 1fr); } }
+/* Sello "Verificado en patio" como marca de agua detrás de la ficha técnica */
+.ficha { position: relative; isolation: isolate; }
+.ficha::before { content: ""; position: absolute; z-index: -1; left: 50%; top: 50%; width: min(210px, 80%); aspect-ratio: 1; transform: translate(-50%, -50%) rotate(-14deg); background: url(sello.svg) center / contain no-repeat; opacity: .16; pointer-events: none;
+  -webkit-mask-image: radial-gradient(circle, #000 35%, rgba(0,0,0,.35) 62%, transparent 72%); mask-image: radial-gradient(circle, #000 35%, rgba(0,0,0,.35) 62%, transparent 72%); }
 .info .boton { align-self: flex-start; margin-top: auto; }
 /* Botón de WhatsApp de cada lote: brillo que pasa y el ícono que timbra */
 .wpp { position: relative; overflow: hidden; transition: transform .15s ease; }

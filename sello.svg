@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
+  <defs><path id="giro" d="M80 80 m-58 0 a58 58 0 1 1 116 0 a58 58 0 1 1 -116 0"/></defs>
+  <circle cx="80" cy="80" r="76" fill="none" stroke="#C9A227" stroke-width="3"/>
+  <circle cx="80" cy="80" r="44" fill="none" stroke="#C9A227" stroke-width="1.5" stroke-dasharray="3 4"/>
+  <text font-family="IBM Plex Mono, Courier New, monospace" font-size="12.5" font-weight="700" letter-spacing="2.4" fill="#C9A227"><textPath href="#giro">VERIFICADO EN PATIO · BARRANQUILLA ·</textPath></text>
+  <path d="M62 82 l12 12 l26 -28" fill="none" stroke="#FFC20E" stroke-width="8" stroke-linecap="square"/>
+</svg>
