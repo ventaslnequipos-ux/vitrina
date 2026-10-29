@@ -181,6 +181,13 @@ a { color: var(--ama); }
 .ficha::before { content: ""; position: absolute; z-index: -1; left: 50%; top: 50%; width: min(210px, 80%); aspect-ratio: 1; transform: translate(-50%, -50%) rotate(-14deg); background: url(sello.svg) center / contain no-repeat; opacity: .16; pointer-events: none;
   -webkit-mask-image: radial-gradient(circle, #000 35%, rgba(0,0,0,.35) 62%, transparent 72%); mask-image: radial-gradient(circle, #000 35%, rgba(0,0,0,.35) 62%, transparent 72%); }
 .info .boton { align-self: flex-start; margin-top: auto; }
+.info .botones { margin-top: auto; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.info .botones .boton { margin-top: 0; }
+button.boton { border: 0; cursor: pointer; }
+.boton.compartir { font-size: 17px; padding: 10px 16px; }
+.boton.compartir[aria-busy="true"] { opacity: .6; pointer-events: none; }
+.lote.resaltado { outline: 3px solid var(--ama); outline-offset: 4px; transition: outline-color 1.5s; }
+.aviso { position: fixed; left: 50%; bottom: max(20px, env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 50; max-width: min(92vw, 520px); background: #1C1C1C; color: var(--hueso); border: 1px solid var(--ama); padding: 12px 18px; font-size: 16px; box-shadow: 0 10px 30px rgba(0,0,0,.6); }
 /* Botón de WhatsApp de cada lote: brillo que pasa y el ícono que timbra */
 .wpp { position: relative; overflow: hidden; transition: transform .15s ease; }
 .wpp svg { width: 24px; height: 24px; flex-shrink: 0; transform-origin: 50% 60%; animation: timbre 5s ease-in-out infinite; animation-delay: var(--d, 0s); }
@@ -323,7 +330,7 @@ const LOTES = EQUIPOS.map((e, i) => ({ ...e, lote: String(i + 1).padStart(2, "0"
 const msg = e => encodeURIComponent(`Hola Nestor, me interesa el lote ${e.lote}: ${e.nombre}${e.anio ? " (" + e.anio + ")" : ""}${e.precio ? " por " + cop(e.precio) : ""}, que vi en Yellow Yard.`);
 function lote(e, grande) {
   const ficha = [["Año", e.anio || "Por confirmar"], ["Uso", e.uso]].concat(e.specs);
-  return `<article class="lote${grande ? " grande" : ""}">
+  return `<article class="lote${grande ? " grande" : ""}"${grande ? "" : ` id="lote-${e.lote}"`}>
     <div class="foto">${e.img ? `<img class="relleno" src="${esc(e.img)}?v=${VER}" alt=""${grande ? "" : ' loading="lazy"'}><img src="${esc(e.img)}?v=${VER}" alt="${esc(e.cat)} ${esc(e.nombre)}"${grande ? "" : ' loading="lazy"'}>` : `<div class="sinfoto">Fotos por WhatsApp</div>`}${esNuevo(e) ? '<span class="nuevo">Nuevo ingreso</span>' : ""}</div>
     <div class="info">
       <div class="cabeza">
@@ -331,7 +338,7 @@ function lote(e, grande) {
         <div class="etiqueta"><small>PRECIO COP</small><strong>${cop(e.precio)}</strong></div>
       </div>
       <dl class="ficha">${ficha.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>
-      <a class="boton wpp" style="--d: ${(parseInt(e.lote, 10) % 5) * 0.9}s" href="${WA}${msg(e)}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>Consultar lote por WhatsApp</a>
+      <div class="botones"><a class="boton wpp" style="--d: ${(parseInt(e.lote, 10) % 5) * 0.9}s" href="${WA}${msg(e)}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>Consultar lote por WhatsApp</a><button type="button" class="boton linea compartir" data-lote="${e.lote}" aria-label="Compartir ${esc(e.nombre)} como imagen"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M16 6l-4-4-4 4M12 2v13"/></svg>Compartir</button></div>
     </div>
   </article>`;
 }
@@ -395,6 +402,70 @@ function pintar() {
   document.getElementById("lista").innerHTML = l.map(e => lote(e, false)).join("");
 }
 pintar();
+
+// Enlace directo a un lote (…/#lote-06): lleva la vista al equipo y lo resalta
+(function () {
+  const m = location.hash.match(/^#lote-(\d+)$/); if (!m) return;
+  const el = document.getElementById("lote-" + m[1]); if (!el) return;
+  setTimeout(() => { el.scrollIntoView({ behavior: "smooth", block: "start" }); el.classList.add("resaltado"); setTimeout(() => el.classList.remove("resaltado"), 4000); }, 400);
+})();
+
+// Compartir cada equipo como imagen (estados de WhatsApp, redes) con el enlace al catálogo
+const SITIO = location.protocol.startsWith("http") ? location.origin + location.pathname : "https://ventaslnequipos-ux.github.io/vitrina/";
+function aviso(t) { let a = document.querySelector(".aviso"); if (!a) { a = document.createElement("div"); a.className = "aviso"; a.setAttribute("role", "status"); document.body.appendChild(a); } a.textContent = t; clearTimeout(a._t); a._t = setTimeout(() => a.remove(), 5000); }
+const cargarImg = src => new Promise((ok, mal) => { const i = new Image(); i.onload = () => ok(i); i.onerror = mal; i.src = src; });
+function lineas(ctx, txt, ancho) { const w = txt.split(" "), out = []; let l = ""; for (const p of w) { const t = l ? l + " " + p : p; if (ctx.measureText(t).width > ancho && l) { out.push(l); l = p; } else l = t; } if (l) out.push(l); return out; }
+async function tarjeta(e) {
+  const W = 1080, H = 1350, c = document.createElement("canvas"); c.width = W; c.height = H; const x = c.getContext("2d");
+  try { await Promise.all(['64px "Alfa Slab One"', '700 40px "Zilla Slab"', '600 40px "Zilla Slab"'].map(f => document.fonts.load(f))); } catch (err) {}
+  const AL = '"Alfa Slab One", Rockwell, Georgia, serif', ZI = '"Zilla Slab", Rockwell, Georgia, serif';
+  x.fillStyle = "#0E0E0E"; x.fillRect(0, 0, W, H);
+  const FH = 800;
+  if (e.img) { try { const im = await cargarImg(e.img + "?v=" + VER);
+    const kc = Math.max(W / im.width, FH / im.height); x.save(); x.beginPath(); x.rect(0, 0, W, FH); x.clip(); x.filter = "blur(28px) brightness(.45)"; x.drawImage(im, (W - im.width * kc) / 2, (FH - im.height * kc) / 2, im.width * kc, im.height * kc); x.restore();
+    const k = Math.min(W / im.width, FH / im.height); x.drawImage(im, (W - im.width * k) / 2, (FH - im.height * k) / 2, im.width * k, im.height * k);
+  } catch (err) {} }
+  x.fillStyle = "#FFC20E"; x.fillRect(0, FH, W, 8);
+  let y = FH + 62;
+  x.fillStyle = "#FFC20E"; x.font = `700 30px ${ZI}`; x.fillText(`LOTE ${e.lote} · ${e.cat.toUpperCase()}`, 56, y);
+  let fs = 70; x.font = `${fs}px ${AL}`; let ls = lineas(x, e.nombre.toUpperCase(), W - 112);
+  while (ls.length > 2 && fs > 44) { fs -= 6; x.font = `${fs}px ${AL}`; ls = lineas(x, e.nombre.toUpperCase(), W - 112); }
+  x.fillStyle = "#FFFFFF"; ls.slice(0, 2).forEach(l => { y += fs * 1.08; x.fillText(l, 56, y); });
+  y += 52; x.fillStyle = "#BFC5CC"; x.font = `600 36px ${ZI}`; x.fillText([e.anio || "", e.uso].filter(Boolean).join(" · "), 56, y);
+  // precio
+  const pr = cop(e.precio); x.font = `56px ${AL}`; const pw = x.measureText(pr).width + 64; y += 30;
+  x.fillStyle = "#FFC20E"; x.beginPath(); x.roundRect ? x.roundRect(56, y, pw, 86, 43) : x.rect(56, y, pw, 86); x.fill();
+  x.fillStyle = "#0E0E0E"; x.fillText(pr, 88, y + 63);
+  // pie con la marca y el enlace
+  const by = H - 150; x.fillStyle = "#161616"; x.fillRect(0, by - 20, W, 170);
+  try { const lg = await cargarImg("logo.svg"); x.drawImage(lg, 50, by - 4, 82, 102); } catch (err) {}
+  x.fillStyle = "#FFFFFF"; x.font = `40px ${AL}`; x.fillText("YELLOW", 150, by + 42); const yw = x.measureText("YELLOW ").width; x.fillStyle = "#FFC20E"; x.fillText("YARD", 150 + yw, by + 42);
+  x.fillStyle = "#D9B23A"; x.font = `700 28px ${ZI}`; x.fillText("by Nestor Sierra", 150, by + 80);
+  x.textAlign = "right"; x.fillStyle = "#ECE8DE"; x.font = `700 28px ${ZI}`; x.fillText("Mira el catálogo completo:", W - 50, by + 36);
+  x.fillStyle = "#FFC20E"; x.font = `700 27px ${ZI}`; x.fillText(SITIO.replace(/^https?:\/\//, "").replace(/\/$/, ""), W - 50, by + 74); x.textAlign = "left";
+  // césped
+  x.fillStyle = "#FFC20E"; let gx = 0, sd = 9; while (gx < W) { sd = (sd * 9301 + 49297) % 233280; const h = 12 + (sd / 233280) * 22, w = 9 + (sd % 6); x.beginPath(); x.moveTo(gx, H); x.lineTo(gx + w / 2 + ((sd % 7) - 3), H - h); x.lineTo(gx + w, H); x.fill(); gx += w * .65; } x.fillRect(0, H - 5, W, 5);
+  return await new Promise(ok => c.toBlob(ok, "image/jpeg", .9));
+}
+document.addEventListener("click", async ev => {
+  const b = ev.target.closest(".compartir"); if (!b) return;
+  const e = LOTES.find(z => z.lote === b.dataset.lote); if (!e) return;
+  const link = `${SITIO}#lote-${e.lote}`;
+  const texto = `🚜 ${e.nombre}${e.anio ? " " + e.anio : ""} · ${cop(e.precio)}\nMira este y más equipos en venta en Yellow Yard by Nestor Sierra 👉 ${link}`;
+  b.setAttribute("aria-busy", "true");
+  try {
+    const blob = await tarjeta(e);
+    const archivo = new File([blob], `Yellow-Yard-lote-${e.lote}.jpg`, { type: "image/jpeg" });
+    try { await navigator.clipboard.writeText(texto); } catch (err) {}
+    if (navigator.canShare && navigator.canShare({ files: [archivo] })) {
+      try { await navigator.share({ files: [archivo], text: texto, title: `${e.nombre} · Yellow Yard` }); } catch (err) { if (err.name !== "AbortError") throw err; }
+    } else {
+      const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = archivo.name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+      aviso("Imagen descargada. El texto con el enlace quedó copiado: pégalo al publicarla.");
+    }
+  } catch (err) { aviso("No se pudo compartir desde este navegador. Intenta de nuevo o usa el botón de WhatsApp."); }
+  finally { b.removeAttribute("aria-busy"); }
+});
 </script>
 </body>
 </html>
