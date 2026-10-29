@@ -9,7 +9,7 @@ const EQUIPOS = [
     specs: [["Motor", "Caterpillar 3054T"], ["Potencia", "105 hp"], ["Peso operativo", "6.900 kg aprox."], ["Ancho de tambor", "1,68 m"]] },
   { img: "img/jcb.jpg", tipo: "Excavación", cat: "Retroexcavadora cargadora", nombre: "JCB 3CX", anio: 2020, uso: "7.000 h", precio: 300000000,
     specs: [["Configuración", "Pala + retro"], ["Cabina", "Cerrada"]] },
-  { img: "img/doosan.jpg", tipo: "Excavación", cat: "Miniexcavadora", nombre: "Doosan DX35Z", anio: 2021, uso: "3.800 h", precio: 155000000,
+  { img: "img/doosan.jpg", tipo: "Excavación", cat: "Miniexcavadora", nombre: "Doosan DX35Z", anio: 2021, uso: "3.800 h", precio: 149900000,
     specs: [["Motor", "Yanmar 3TNV88"], ["Peso operativo", "3.660 kg aprox."], ["Prof. de excavación", "3,0 m"], ["Giro de cola", "Cero"]] },
   { img: "img/hitachi.jpg", tipo: "Excavación", cat: "Excavadora sobre orugas", nombre: "Hitachi Zaxis 130LC", anio: 2013, uso: "12.000 h", precio: 290000000,
     specs: [["Peso operativo", "13 t aprox."], ["Prof. de excavación", "5,5 m aprox."], ["Cucharón", "0,5 m³ aprox."], ["Tren de rodaje", "Largo (LC)"]] },
