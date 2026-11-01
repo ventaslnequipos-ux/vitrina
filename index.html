@@ -148,6 +148,37 @@ a { color: var(--ama); }
 .orden select { min-height: 44px; padding: 8px 12px; background: var(--panel); color: var(--hueso); border: 1px solid var(--linea); font-family: var(--texto); font-size: 15px; font-weight: 600; max-width: 100%; }
 .conteo { font-family: var(--mono); font-size: 13px; color: var(--gris); letter-spacing: 0.08em; text-transform: uppercase; }
 
+
+/* Celular: filtros arriba de los destacados, en una sola fila deslizable, y destacados más compactos */
+@media (max-width: 899px) {
+  main.wrap { display: flex; flex-direction: column; }
+  main.wrap > .patio { display: contents; }
+  .patio aside { order: 1; padding-top: 18px; flex: none; }
+  .patio .lotes { flex: none; }
+  main.wrap > .destacado { order: 2; padding-block: 18px 4px; }
+  .patio .lotes { order: 3; padding-block: 20px 48px; scroll-margin-top: 12px; }
+  main.wrap > .faq { order: 4; }
+  .filtros { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px))); padding-inline: max(16px, env(safe-area-inset-left, 0px)); scroll-snap-type: x proximity; scroll-padding-inline: max(16px, env(safe-area-inset-left, 0px)); }
+  .filtros::-webkit-scrollbar { display: none; }
+  .filtros li { flex-shrink: 0; scroll-snap-align: start; }
+  .filtros button { white-space: nowrap; }
+  .orden { flex-direction: row; align-items: center; gap: 10px; margin-top: 12px; }
+  .orden select { flex: 1; min-width: 0; }
+}
+@media (max-width: 760px) {
+  .lote.grande .foto { aspect-ratio: 16 / 9; }
+  .lote.grande .info { padding: 12px 14px 14px; gap: 10px; }
+  .lote.grande .ficha, .lote.grande .botones .interesa, .lote.grande .botones .compartir { display: none; }
+  .lote.grande h2 { font-size: 21px; overflow-wrap: normal; hyphens: auto; -webkit-hyphens: auto; }
+  .lote.grande .cabeza { flex-direction: row; align-items: center; }
+  .lote.grande .etiqueta { padding: 6px 12px 6px 22px; }
+  .lote.grande .etiqueta strong { font-size: 17px; }
+  .lote.grande .etiqueta small { font-size: 9px; }
+  .lote.grande .boton { min-height: 42px; padding: 8px 16px; font-size: 17px; }
+  .destacado .rotulito { margin-bottom: 10px; }
+  .mando { margin-top: 8px; }
+}
+
 /* Lote */
 .lote { display: grid; grid-template-columns: minmax(0, 360px) minmax(0, 1fr); background: var(--panel); border: 1px solid var(--linea); }
 @media (max-width: 760px) { .lote { grid-template-columns: minmax(0, 1fr); } }
@@ -511,6 +542,7 @@ filtros.addEventListener("click", ev => {
   actual = b.dataset.t;
   filtros.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
   pintar();
+  if (matchMedia("(max-width: 899px)").matches) document.querySelector(".lotes").scrollIntoView({ behavior: "smooth", block: "start" });
 });
 orden.addEventListener("change", pintar);
 function pintar() {
