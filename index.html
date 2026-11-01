@@ -198,19 +198,6 @@ button.boton { border: 0; cursor: pointer; }
 @media (prefers-reduced-motion: reduce) { .wpp svg, .wpp::after { animation: none; } .wpp::after { display: none; } }
 
 
-/* Botón flotante de WhatsApp: siempre visible mientras se recorre la página */
-.flotante { position: fixed; z-index: 45; right: calc(14px + env(safe-area-inset-right, 0px)); bottom: calc(18px + env(safe-area-inset-bottom, 0px)); display: flex; align-items: center; gap: 10px; text-decoration: none; }
-.flotante .circulo { position: relative; width: 62px; height: 62px; border-radius: 50%; background: #25D366; color: #fff; display: grid; place-items: center; box-shadow: 0 8px 24px rgba(0,0,0,.45); }
-.flotante .circulo svg { width: 34px; height: 34px; animation: timbre 4s ease-in-out infinite; transform-origin: 50% 60%; }
-.flotante .circulo::before, .flotante .circulo::after { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 3px solid #25D366; animation: onda 2.2s ease-out infinite; }
-.flotante .circulo::after { animation-delay: 1.1s; }
-.flotante .globo { background: #FFFFFF; color: #0D0D0D; font-family: var(--texto); font-weight: 700; font-size: 16px; padding: 8px 14px; border-radius: 999px; box-shadow: 0 6px 18px rgba(0,0,0,.35); white-space: nowrap; animation: globo 9s ease-in-out infinite; transform-origin: right center; }
-.flotante:hover .globo, .flotante:focus-visible .globo { animation: none; opacity: 1; transform: none; }
-@keyframes onda { from { transform: scale(1); opacity: .8; } to { transform: scale(1.75); opacity: 0; } }
-@keyframes globo { 0%, 8% { opacity: 0; transform: translateX(10px) scale(.9); } 14%, 60% { opacity: 1; transform: none; } 68%, 100% { opacity: 0; transform: translateX(10px) scale(.9); } }
-@media (max-width: 560px) { .flotante .circulo { width: 56px; height: 56px; } .flotante .globo { font-size: 14px; } }
-@media (prefers-reduced-motion: reduce) { .flotante .circulo svg, .flotante .circulo::before, .flotante .circulo::after { animation: none; } .flotante .circulo::before, .flotante .circulo::after { display: none; } .flotante .globo { animation: none; } }
-footer { padding-bottom: 90px; }
 
 /* Preguntas frecuentes */
 .faq { padding-block: 10px 56px; }
@@ -241,6 +228,44 @@ dialog.interes::backdrop { background: rgba(0,0,0,.7); }
 .interes .trampa { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 .interes .listo { padding: 24px 20px; display: flex; flex-direction: column; gap: 14px; align-items: flex-start; }
 .interes .listo p { margin: 0; font-size: 18px; }
+
+/* Consulta de uno o varios equipos */
+dialog.consulta { width: min(560px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); overflow-y: auto; padding: 0; border: 1px solid var(--ama); background: var(--carbon); color: var(--hueso); }
+dialog.consulta::backdrop { background: rgba(0,0,0,.72); }
+.consulta .cab { padding: 18px 20px 14px; border-bottom: 1px solid var(--linea); display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
+.consulta .cab small { display: block; color: var(--ama); font-family: var(--mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 4px; }
+.consulta h2 { margin: 0; font-family: var(--rotulo); font-weight: 400; font-size: 24px; line-height: 1.1; color: #fff; }
+.consulta .cerrar { background: none; border: 1px solid var(--linea); color: var(--hueso); width: 40px; height: 40px; font-size: 22px; cursor: pointer; flex-shrink: 0; }
+.consulta .cuerpo { padding: 16px 20px 20px; display: flex; flex-direction: column; gap: 12px; }
+.consulta .cuerpo > p { margin: 0; color: var(--plata); }
+.opcion { text-decoration: none; display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 14px; align-items: center; width: 100%; text-align: left; padding: 14px 16px; background: var(--panel); border: 1px solid var(--linea); color: var(--hueso); cursor: pointer; font: inherit; }
+.opcion:hover, .opcion:focus-visible { border-color: var(--ama); }
+.opcion.principal { background: #25D366; border-color: #25D366; color: #0D0D0D; }
+.opcion .ico { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 50%; background: rgba(0,0,0,.12); font-family: var(--rotulo); font-size: 22px; }
+.opcion .ico svg { width: 26px; height: 26px; }
+.opcion b { display: block; font-size: 18px; }
+.opcion span.txt { display: block; font-size: 15px; opacity: .85; }
+.milista { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.milista li { display: grid; grid-template-columns: 64px minmax(0, 1fr) auto; gap: 12px; align-items: center; background: var(--panel); border: 1px solid var(--linea); padding: 8px; }
+.milista img { width: 64px; height: 48px; object-fit: cover; display: block; background: #111; }
+.milista .n { font-weight: 700; overflow-wrap: anywhere; }
+.milista .d { font-family: var(--mono); font-size: 12px; color: var(--gris); }
+.milista button { background: none; border: 1px solid var(--linea); color: var(--hueso); min-height: 36px; padding: 4px 10px; cursor: pointer; font: inherit; font-size: 14px; }
+.acciones-consulta { display: flex; flex-wrap: wrap; gap: 10px; }
+.acciones-consulta .boton { flex: 1 1 200px; justify-content: center; }
+.boton.verde { background: #25D366; color: #0D0D0D; clip-path: none; }
+.boton.verde:hover { background: #1EBE5A; }
+.barra-consulta[hidden], dialog:not([open]) { display: none; }
+/* Barra discreta que aparece solo cuando hay equipos en la consulta */
+.barra-consulta { position: fixed; z-index: 40; left: 50%; transform: translateX(-50%); bottom: calc(14px + env(safe-area-inset-bottom, 0px)); width: min(560px, calc(100vw - 24px)); display: flex; align-items: center; gap: 12px; padding: 10px 10px 10px 16px; background: var(--carbon); border: 1px solid var(--ama); box-shadow: 0 10px 30px rgba(0,0,0,.55); }
+.barra-consulta .t { flex: 1; min-width: 0; font-weight: 700; }
+.barra-consulta .t small { display: block; font-weight: 400; color: var(--gris); font-size: 13px; }
+.barra-consulta button { min-height: 42px; padding: 8px 14px; border: 0; cursor: pointer; font: inherit; font-weight: 700; }
+.barra-consulta .ver { background: transparent; color: var(--ama); box-shadow: inset 0 0 0 1.5px var(--ama); }
+.barra-consulta .env { background: #25D366; color: #0D0D0D; }
+@media (max-width: 480px) { .barra-consulta .ver { display: none; } }
+body.con-consulta footer { padding-bottom: 96px; }
+body.con-consulta .aviso { bottom: calc(92px + env(safe-area-inset-bottom, 0px)); }
 
 /* Pie */
 footer { background: var(--negro); }
@@ -361,7 +386,16 @@ footer p { margin: 6px 0 0; max-width: 60ch; }
   </section>
 </main>
 
-<a class="flotante" href="https://wa.me/573017959540?text=Hola%20Nestor%2C%20vi%20el%20cat%C3%A1logo%20de%20Yellow%20Yard%20y%20quiero%20m%C3%A1s%20informaci%C3%B3n." target="_blank" rel="noopener" aria-label="Escribir a Nestor por WhatsApp"><span class="globo">¿Hablamos? Escríbeme</span><span class="circulo"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></span></a>
+
+<dialog class="consulta" id="consulta" aria-labelledby="con-titulo">
+  <div class="cab"><div><small id="con-sub">Consulta por WhatsApp</small><h2 id="con-titulo">¿Cómo prefieres consultar?</h2></div><button type="button" class="cerrar" data-cerrar-consulta aria-label="Cerrar">×</button></div>
+  <div class="cuerpo" id="con-cuerpo"></div>
+</dialog>
+<div class="barra-consulta" id="barra-consulta" hidden>
+  <div class="t" id="barra-texto"></div>
+  <button type="button" class="ver" id="barra-ver">Revisar</button>
+  <button type="button" class="env" id="barra-enviar">Enviar consulta</button>
+</div>
 
 <dialog class="interes" id="interes" aria-labelledby="int-titulo">
   <div class="cab"><div><small id="int-lote">Lote</small><h2 id="int-titulo">Me interesa este equipo</h2></div><button type="button" class="cerrar" id="int-cerrar" aria-label="Cerrar">×</button></div>
@@ -414,7 +448,8 @@ const LOTES = EQUIPOS.map((e, i) => ({ ...e, lote: String(i + 1).padStart(2, "0"
   document.getElementById("cinta").innerHTML = items + items;
 })();
 
-const msg = e => encodeURIComponent(`Hola Nestor, me interesa el lote ${e.lote}: ${e.nombre}${e.anio ? " (" + e.anio + ")" : ""}${e.precio ? " por " + cop(e.precio) : ""}, que vi en Yellow Yard.`);
+const linea = e => `Lote ${e.lote} · ${e.nombre}${e.anio ? " (" + e.anio + ")" : ""} · ${cop(e.precio)}`;
+const msg = e => encodeURIComponent(`Hola Nestor, vi en Yellow Yard el lote ${e.lote}: ${e.nombre}${e.anio ? " (" + e.anio + ")" : ""}${e.precio ? ", publicado en " + cop(e.precio) : ""}.\nMe gustaría recibir información sobre su disponibilidad, condiciones de venta y cuándo podría verlo.\nQuedo atento, gracias.`);
 function lote(e, grande) {
   const ficha = [["Año", e.anio || "Por confirmar"], ["Uso", e.uso]].concat(e.specs);
   return `<article class="lote${grande ? " grande" : ""}"${grande ? "" : ` id="lote-${e.lote}"`}>
@@ -425,7 +460,7 @@ function lote(e, grande) {
         <div class="etiqueta"><small>PRECIO COP</small><strong>${cop(e.precio)}</strong></div>
       </div>
       <dl class="ficha">${ficha.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>
-      <div class="botones"><a class="boton wpp" style="--d: ${(parseInt(e.lote, 10) % 5) * 0.9}s" href="${WA}${msg(e)}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>Consultar lote por WhatsApp</a><button type="button" class="boton linea interesa" data-lote="${e.lote}">Me interesa</button><button type="button" class="boton linea compartir" data-lote="${e.lote}" aria-label="Compartir ${esc(e.nombre)} como imagen"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M16 6l-4-4-4 4M12 2v13"/></svg>Compartir</button></div>
+      <div class="botones"><a class="boton wpp" data-consulta="${e.lote}" style="--d: ${(parseInt(e.lote, 10) % 5) * 0.9}s" href="${WA}${msg(e)}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>Consultar lote por WhatsApp</a><button type="button" class="boton linea interesa" data-lote="${e.lote}">Me interesa</button><button type="button" class="boton linea compartir" data-lote="${e.lote}" aria-label="Compartir ${esc(e.nombre)} como imagen"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M16 6l-4-4-4 4M12 2v13"/></svg>Compartir</button></div>
     </div>
   </article>`;
 }
@@ -526,6 +561,61 @@ const FORMULARIO = "";
       ? `<p>¡Gracias, ${esc(datos.nombre.split(" ")[0])}! Recibí tus datos y te contacto pronto.</p><a class="boton" href="${urlWA}" target="_blank" rel="noopener">Escribir ya por WhatsApp</a>`
       : `<p>Se abrió WhatsApp con tu mensaje listo. Solo toca <b>Enviar</b> y te respondo.</p><a class="boton" href="${urlWA}" target="_blank" rel="noopener">Abrir WhatsApp de nuevo</a>`;
   });
+})();
+
+// Consulta por WhatsApp: un equipo ahora o varios en un solo mensaje
+const ICO_WA = `<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>`;
+(function () {
+  const dlg = document.getElementById("consulta"), cuerpo = document.getElementById("con-cuerpo"), barra = document.getElementById("barra-consulta");
+  let lista = [];
+  try { lista = JSON.parse(localStorage.getItem("yy_consulta") || "[]").filter(l => LOTES.some(e => e.lote === l)); } catch (x) {}
+  const guardar = () => { try { localStorage.setItem("yy_consulta", JSON.stringify(lista)); } catch (x) {} };
+  const equipos = () => lista.map(l => LOTES.find(e => e.lote === l)).filter(Boolean);
+  const abrir = () => { if (!dlg.open) { dlg.showModal ? dlg.showModal() : dlg.setAttribute("open", ""); } };
+  const cerrar = () => dlg.close ? dlg.close() : dlg.removeAttribute("open");
+  function mensajeVarios(es) {
+    return `Hola Nestor, vi el catálogo de Yellow Yard y me interesan estos equipos:\n\n${es.map(e => "• " + linea(e)).join("\n")}\n\nMe gustaría recibir información sobre su disponibilidad, condiciones de venta y cuándo podría verlos.\nQuedo atento, gracias.`;
+  }
+  function pintarBarra() {
+    const n = lista.length; barra.hidden = n === 0; document.body.classList.toggle("con-consulta", n > 0);
+    document.getElementById("barra-texto").innerHTML = `Mi consulta: ${n} ${n === 1 ? "equipo" : "equipos"}<small>Envíalos todos en un solo mensaje</small>`;
+  }
+  function elegir(e) {
+    const ya = lista.includes(e.lote), otros = equipos().filter(z => z.lote !== e.lote);
+    document.getElementById("con-sub").textContent = `Lote ${e.lote} · ${e.nombre}`;
+    document.getElementById("con-titulo").textContent = "¿Cómo prefieres consultar?";
+    cuerpo.innerHTML = `<p>Pregunta ahora por este equipo o arma una sola consulta con todos los que te interesan. Te respondo con disponibilidad, fotos adicionales y condiciones de cada uno.</p>
+      <a class="opcion principal" href="${WA + msg(e)}" target="_blank" rel="noopener" data-solo><span class="ico">${ICO_WA}</span><span><b>Consultar solo este equipo</b><span class="txt">Te llevo a WhatsApp con el mensaje listo.</span></span></a>
+      ${otros.length ? `<button type="button" class="opcion" data-enviar-con="${e.lote}"><span class="ico">${otros.length + 1}</span><span><b>Enviar consulta con ${otros.length + 1} equipos</b><span class="txt">Este equipo junto con los ${otros.length} que ya agregaste.</span></span></button>` : ""}
+      <button type="button" class="opcion" data-agregar="${e.lote}" ${ya ? "disabled" : ""}><span class="ico">+</span><span><b>${ya ? "Ya está en tu consulta" : "Agregar a mi consulta"}</b><span class="txt">${ya ? "Puedes enviarla cuando termines de recorrer el patio." : "Sigue viendo el patio y envíame todos los equipos en un solo mensaje."}</span></span></button>`;
+    abrir();
+  }
+  function revisar() {
+    const es = equipos();
+    document.getElementById("con-sub").textContent = "Consulta por WhatsApp";
+    document.getElementById("con-titulo").textContent = es.length ? `Mi consulta: ${es.length} ${es.length === 1 ? "equipo" : "equipos"}` : "Tu consulta está vacía";
+    cuerpo.innerHTML = es.length ? `<ul class="milista">${es.map(e => `<li>${e.img ? `<img src="${esc(e.img)}?v=${VER}" alt="">` : "<span></span>"}<div><div class="n">${esc(e.nombre)}</div><div class="d">Lote ${e.lote} · ${cop(e.precio)}</div></div><button type="button" data-quitar="${e.lote}" aria-label="Quitar ${esc(e.nombre)}">Quitar</button></li>`).join("")}</ul>
+      <div class="acciones-consulta"><a class="boton verde" href="${WA + encodeURIComponent(mensajeVarios(es))}" target="_blank" rel="noopener" data-enviada>${ICO_WA}Enviar consulta por WhatsApp</a><button type="button" class="boton linea" data-cerrar-consulta>Seguir viendo equipos</button></div>`
+      : `<p>Agrega equipos desde el botón "Consultar lote por WhatsApp" de cada uno.</p><button type="button" class="boton linea" data-cerrar-consulta>Ver equipos</button>`;
+    abrir();
+  }
+  document.addEventListener("click", ev => {
+    const b = ev.target.closest("[data-consulta]");
+    if (b) { const e = LOTES.find(z => z.lote === b.dataset.consulta); if (e) { ev.preventDefault(); elegir(e); } return; }
+    if (ev.target.closest("[data-cerrar-consulta]")) { cerrar(); return; }
+    const ag = ev.target.closest("[data-agregar]");
+    if (ag) { if (!lista.includes(ag.dataset.agregar)) lista.push(ag.dataset.agregar); guardar(); pintarBarra(); cerrar(); aviso(`Agregado a tu consulta (${lista.length}). Cuando termines, toca "Enviar consulta".`); return; }
+    const en = ev.target.closest("[data-enviar-con]");
+    if (en) { if (!lista.includes(en.dataset.enviarCon)) lista.push(en.dataset.enviarCon); guardar(); pintarBarra(); revisar(); return; }
+    const q = ev.target.closest("[data-quitar]");
+    if (q) { lista = lista.filter(l => l !== q.dataset.quitar); guardar(); pintarBarra(); revisar(); return; }
+    if (ev.target.closest("[data-enviada]")) { setTimeout(() => { lista = []; guardar(); pintarBarra(); cerrar(); }, 400); return; }
+    if (ev.target.closest("[data-solo]")) { setTimeout(cerrar, 300); }
+  });
+  dlg.addEventListener("click", ev => { if (ev.target === dlg) cerrar(); });
+  document.getElementById("barra-ver").onclick = revisar;
+  document.getElementById("barra-enviar").onclick = revisar;
+  pintarBarra();
 })();
 
 // Enlace directo a un lote (…/#lote-06): lleva la vista al equipo y lo resalta
