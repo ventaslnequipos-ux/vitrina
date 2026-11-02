@@ -1,0 +1,369 @@
+<title>Patio Yellow Yard · Control</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Zilla+Slab:wght@500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: libro de inventario del patio. Franja de resumen arriba, lista de lotes, ficha del lote en panel lateral (pantalla completa en el celular). */
+:root {
+  --bg: #F3F1EA; --panel: #FFFFFF; --tinta: #1A1813; --suave: #6B665A; --linea: #DDD8CB; --ama: #FFC20E; --ama-texto: #8A6400; --oro: #A9851C;
+  --ok: #1E7A43; --ok-bg: #E2F3E8; --warn: #9A5B00; --warn-bg: #FFF1D6; --mal: #A3261B; --mal-bg: #FBE3E0; --gris-bg: #ECEAE3;
+  --display: 'Alfa Slab One', Rockwell, Georgia, serif; --texto: 'Zilla Slab', Rockwell, Georgia, serif; --mono: 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #121210; --panel: #1C1B18; --tinta: #EDE9DE; --suave: #A6A08F; --linea: #34322C; --ama: #FFC20E; --ama-texto: #FFC20E; --oro: #D9B23A;
+  --ok: #6FD39A; --ok-bg: #173323; --warn: #FFC56B; --warn-bg: #3A2C10; --mal: #FF8F84; --mal-bg: #3C1A16; --gris-bg: #26251F; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #121210; --panel: #1C1B18; --tinta: #EDE9DE; --suave: #A6A08F; --linea: #34322C; --ama: #FFC20E; --ama-texto: #FFC20E; --oro: #D9B23A;
+  --ok: #6FD39A; --ok-bg: #173323; --warn: #FFC56B; --warn-bg: #3A2C10; --mal: #FF8F84; --mal-bg: #3C1A16; --gris-bg: #26251F; color-scheme: dark; }
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--tinta); font-family: var(--texto); font-size: 16px; line-height: 1.45; }
+.wrap { max-width: 1280px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+:focus-visible { outline: 3px solid var(--ama); outline-offset: 2px; }
+button, input, select, textarea { font: inherit; color: inherit; }
+h1, h2, h3 { text-wrap: balance; }
+
+/* Cabecera */
+.cab { border-bottom: 6px solid var(--ama); background: var(--panel); }
+.cab .wrap { padding-block: 18px 14px; display: flex; flex-wrap: wrap; gap: 10px 24px; align-items: flex-end; justify-content: space-between; }
+.cab h1 { margin: 0; font-family: var(--display); font-weight: 400; font-size: clamp(26px, 4vw, 38px); line-height: 1; }
+.cab h1 span { color: var(--ama-texto); }
+.cab p { margin: 4px 0 0; color: var(--suave); }
+.privado { font-family: var(--mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--suave); border: 1px solid var(--linea); padding: 6px 10px; }
+
+/* Resumen */
+.resumen { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1px; background: var(--linea); border: 1px solid var(--linea); margin-block: 18px; }
+.cifra { background: var(--panel); padding: 12px 14px; min-width: 0; }
+.cifra b { display: block; font-family: var(--mono); font-size: 22px; font-weight: 600; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.cifra small { color: var(--suave); font-size: 14px; }
+.cifra.alerta b { color: var(--warn); }
+
+/* Herramientas */
+.herr { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 14px; }
+.herr input[type=search] { flex: 1 1 240px; min-width: 0; min-height: 44px; padding: 8px 12px; border: 1px solid var(--linea); background: var(--panel); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { min-height: 38px; padding: 6px 12px; border: 1px solid var(--linea); background: var(--panel); cursor: pointer; font-weight: 600; font-size: 15px; }
+.chip[aria-pressed="true"] { background: var(--tinta); color: var(--bg); border-color: var(--tinta); }
+.btn { min-height: 44px; padding: 8px 16px; border: 0; background: var(--ama); color: #14120A; font-weight: 700; cursor: pointer; }
+.btn.sec { background: transparent; color: var(--tinta); box-shadow: inset 0 0 0 1.5px var(--linea); }
+.btn.peligro { background: var(--mal); color: #fff; }
+.btn:disabled { opacity: .5; cursor: default; }
+
+/* Lista */
+.tabla { overflow-x: auto; border: 1px solid var(--linea); background: var(--panel); }
+table { width: 100%; border-collapse: collapse; min-width: 860px; }
+th { text-align: left; font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--suave); padding: 10px 12px; border-bottom: 1px solid var(--linea); white-space: nowrap; }
+td { padding: 8px 12px; border-bottom: 1px solid var(--linea); vertical-align: middle; }
+tbody tr { cursor: pointer; }
+tbody tr:hover { background: var(--gris-bg); }
+td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; text-align: right; }
+.mini { width: 64px; height: 48px; object-fit: cover; display: block; background: var(--gris-bg); }
+.nom { font-weight: 700; }
+.sub { color: var(--suave); font-size: 14px; }
+.falta { color: var(--warn); font-style: italic; }
+.pill { display: inline-block; padding: 3px 10px; font-size: 13px; font-weight: 700; white-space: nowrap; border-radius: 999px; }
+.e-Disponible { background: var(--ok-bg); color: var(--ok); }
+.e-Reservado, .e-En-negociación { background: var(--warn-bg); color: var(--warn); }
+.e-Vendido { background: var(--gris-bg); color: var(--suave); text-decoration: line-through; }
+.e-Retirado { background: var(--mal-bg); color: var(--mal); }
+.vacio { padding: 28px; text-align: center; color: var(--suave); }
+
+/* Tarjetas en el celular */
+.tarjetas { display: none; flex-direction: column; gap: 10px; }
+.tar { display: grid; grid-template-columns: 84px minmax(0, 1fr); gap: 12px; padding: 10px; background: var(--panel); border: 1px solid var(--linea); cursor: pointer; text-align: left; width: 100%; }
+.tar .mini { width: 84px; height: 64px; }
+.tar .fila { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; margin-top: 4px; }
+@media (max-width: 760px) { .tabla { display: none; } .tarjetas { display: flex; } }
+
+/* Ficha del lote */
+.velo { position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 20; }
+.ficha { position: fixed; top: 0; right: 0; bottom: 0; width: min(760px, 100%); background: var(--bg); z-index: 21; overflow-y: auto; box-shadow: -10px 0 40px rgba(0,0,0,.3);
+  padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+.ficha .barra { position: sticky; top: 0; z-index: 2; background: var(--panel); border-bottom: 1px solid var(--linea); padding: 12px max(16px, env(safe-area-inset-right, 0px)) 12px 16px; display: flex; gap: 12px; align-items: center; justify-content: space-between; }
+.ficha .barra h2 { margin: 0; font-family: var(--display); font-weight: 400; font-size: 22px; line-height: 1.1; min-width: 0; overflow-wrap: anywhere; }
+.guardado { font-family: var(--mono); font-size: 12px; color: var(--suave); white-space: nowrap; }
+.cuerpo { padding: 16px; display: flex; flex-direction: column; gap: 18px; }
+fieldset { margin: 0; border: 1px solid var(--linea); background: var(--panel); padding: 14px; min-width: 0; }
+legend { font-family: var(--mono); font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--ama-texto); padding: 0 6px; }
+.campos { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.campo { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.campo.ancho { grid-column: 1 / -1; }
+.campo label { font-size: 14px; color: var(--suave); font-weight: 600; }
+.campo input, .campo select, .campo textarea { min-height: 42px; padding: 8px 10px; border: 1px solid var(--linea); background: var(--bg); width: 100%; min-width: 0; }
+.campo textarea { min-height: 84px; resize: vertical; }
+.campo .ayuda { font-size: 13px; color: var(--suave); }
+.check { flex-direction: row; align-items: center; gap: 10px; }
+.check input { width: 22px; height: 22px; min-height: 0; }
+.calculo { font-family: var(--mono); font-size: 14px; background: var(--gris-bg); padding: 10px 12px; }
+.calculo b { color: var(--ok); }
+
+/* Banco de fotos y videos */
+.banco { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.medio { position: relative; background: var(--gris-bg); border: 1px solid var(--linea); display: flex; flex-direction: column; min-width: 0; }
+.medio img, .medio video { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; background: #000; }
+.medio .pie { display: flex; flex-wrap: wrap; gap: 4px; padding: 6px; align-items: center; }
+.medio .pie span { font-size: 12px; color: var(--suave); flex: 1 1 100%; overflow-wrap: anywhere; }
+.medio .pie button { font-size: 13px; padding: 4px 8px; min-height: 32px; border: 1px solid var(--linea); background: var(--panel); cursor: pointer; }
+.medio .estrella { position: absolute; top: 6px; left: 6px; background: var(--ama); color: #14120A; font-size: 12px; font-weight: 700; padding: 2px 8px; }
+.subir { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 12px; }
+.subir label.btn { display: inline-flex; align-items: center; }
+.subir input[type=file] { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.aviso { position: fixed; left: 50%; transform: translateX(-50%); bottom: max(18px, env(safe-area-inset-bottom, 0px)); z-index: 40; background: var(--tinta); color: var(--bg); padding: 10px 16px; max-width: min(92vw, 520px); }
+.confirmar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; padding: 12px; background: var(--mal-bg); color: var(--mal); }
+.estado-pagina { padding: 40px 0; color: var(--suave); }
+@media (prefers-reduced-motion: no-preference) { .ficha { animation: entra .2s ease-out; } @keyframes entra { from { transform: translateX(30px); opacity: 0; } } }
+</style>
+
+<header class="cab"><div class="wrap">
+  <div>
+    <h1>Patio <span>Yellow Yard</span></h1>
+    <p>Control interno de equipos: propietarios, disponibilidad, precios y banco de fotos.</p>
+  </div>
+  <div class="privado">Uso privado · no compartir</div>
+</div></header>
+
+<main class="wrap">
+  <section class="resumen" id="resumen" aria-label="Resumen del inventario"></section>
+  <div class="herr">
+    <input type="search" id="buscar" placeholder="Buscar por equipo, lote, propietario o placa" aria-label="Buscar equipo">
+    <div class="chips" id="filtros" role="group" aria-label="Filtrar por estado"></div>
+    <button type="button" class="btn" id="nuevo">Agregar equipo</button>
+  </div>
+  <div id="contenido"><p class="estado-pagina">Cargando el inventario…</p></div>
+</main>
+
+<div id="capa"></div>
+
+<script>
+const ESTADOS = ["Disponible", "En negociación", "Reservado", "Vendido", "Retirado"];
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const cop = n => n > 0 ? "$" + Math.round(n).toLocaleString("es-CO").replace(/,/g, ".") : "—";
+const num = v => { const n = Number(String(v ?? "").replace(/[^\d]/g, "")); return isFinite(n) ? n : 0; };
+const clase = e => "e-" + String(e || "").replace(/ /g, "-");
+let DB = null, ASSETS = null, filas = [], filtro = "Todos", abierto = null;
+
+function aviso(t) { let a = $(".aviso"); if (!a) { a = document.createElement("div"); a.className = "aviso"; a.setAttribute("role", "status"); document.body.appendChild(a); } a.textContent = t; clearTimeout(a._t); a._t = setTimeout(() => a.remove(), 4500); }
+function comision(r) {
+  const pub = num(r.precio_publicado), prop = num(r.precio_propietario), pct = Number(r.comision_pct) || 0;
+  if (pub && prop) return pub - prop;
+  if (pub && pct) return pub * pct / 100;
+  return 0;
+}
+function portada(r) { const m = (r.media || []).find(x => x.tipo === "foto"); return m ? "/_blob/" + m.id : ""; }
+function faltantes(r) { const f = []; if (!r.prop_nombre) f.push("propietario"); if (!num(r.precio_propietario) && !r.comision_pct) f.push("precio del dueño"); if (!(r.media || []).length) f.push("fotos"); return f; }
+
+// ---------- Lista y resumen ----------
+function pintarResumen() {
+  const act = filas.filter(r => r.estado !== "Vendido" && r.estado !== "Retirado");
+  const disp = filas.filter(r => r.estado === "Disponible");
+  const neg = filas.filter(r => r.estado === "En negociación" || r.estado === "Reservado");
+  const vend = filas.filter(r => r.estado === "Vendido");
+  const valor = disp.reduce((s, r) => s + num(r.precio_publicado), 0);
+  const com = act.reduce((s, r) => s + comision(r), 0);
+  const sinDueno = filas.filter(r => !r.prop_nombre).length;
+  $("#resumen").innerHTML = [
+    [filas.length, "equipos registrados"], [disp.length, "disponibles"], [neg.length, "reservados o en negociación"], [vend.length, "vendidos"],
+    [cop(valor), "valor publicado disponible"], [cop(com), "comisión estimada (activos)"], [sinDueno, "sin propietario registrado", sinDueno > 0]
+  ].map(([v, t, al]) => `<div class="cifra${al ? " alerta" : ""}"><b>${esc(v)}</b><small>${esc(t)}</small></div>`).join("");
+}
+function pintarFiltros() {
+  const ops = ["Todos", ...ESTADOS, "Falta información"];
+  const n = o => o === "Todos" ? filas.length : o === "Falta información" ? filas.filter(r => faltantes(r).length).length : filas.filter(r => r.estado === o).length;
+  $("#filtros").innerHTML = ops.map(o => `<button type="button" class="chip" aria-pressed="${o === filtro}" data-f="${esc(o)}">${esc(o)} · ${n(o)}</button>`).join("");
+}
+function visibles() {
+  const q = $("#buscar").value.trim().toLowerCase();
+  return filas.filter(r => (filtro === "Todos" || (filtro === "Falta información" ? faltantes(r).length : r.estado === filtro)) &&
+    (!q || [r.lote, r.nombre, r.cat, r.prop_nombre, r.placa, r.serie, r.ubicacion].join(" ").toLowerCase().includes(q)))
+    .sort((a, b) => num(a.lote) - num(b.lote));
+}
+function pintarLista() {
+  pintarResumen(); pintarFiltros();
+  const l = visibles();
+  if (!filas.length) { $("#contenido").innerHTML = `<div class="vacio">Todavía no hay equipos. Usa <b>Agregar equipo</b> para registrar el primero.</div>`; return; }
+  if (!l.length) { $("#contenido").innerHTML = `<div class="vacio">Ningún equipo coincide con el filtro.</div>`; return; }
+  const img = r => portada(r) ? `<img class="mini" src="${portada(r)}" alt="" loading="lazy">` : `<div class="mini"></div>`;
+  const prop = r => r.prop_nombre ? esc(r.prop_nombre) : `<span class="falta">Sin registrar</span>`;
+  $("#contenido").innerHTML = `
+    <div class="tabla"><table><thead><tr><th>Lote</th><th></th><th>Equipo</th><th>Propietario</th><th>Estado</th><th style="text-align:right">Precio publicado</th><th style="text-align:right">Comisión est.</th><th style="text-align:right">Fotos</th></tr></thead><tbody>
+    ${l.map(r => `<tr data-id="${esc(r._id)}" tabindex="0"><td class="num" style="text-align:left">${esc(r.lote)}</td><td>${img(r)}</td>
+      <td><div class="nom">${esc(r.nombre)}</div><div class="sub">${esc(r.cat)}${r.anio ? " · " + esc(r.anio) : ""}</div></td>
+      <td>${prop(r)}${r.prop_tipo ? `<div class="sub">${esc(r.prop_tipo)}</div>` : ""}</td>
+      <td><span class="pill ${clase(r.estado)}">${esc(r.estado || "Sin estado")}</span></td>
+      <td class="num">${cop(num(r.precio_publicado))}</td><td class="num">${cop(comision(r))}</td><td class="num">${(r.media || []).length}</td></tr>`).join("")}
+    </tbody></table></div>
+    <div class="tarjetas">${l.map(r => `<button type="button" class="tar" data-id="${esc(r._id)}">${img(r)}<div style="min-width:0">
+      <div class="sub">Lote ${esc(r.lote)} · ${esc(r.cat)}</div><div class="nom">${esc(r.nombre)}</div>
+      <div class="fila"><span class="pill ${clase(r.estado)}">${esc(r.estado || "Sin estado")}</span><span class="sub">${cop(num(r.precio_publicado))}</span></div>
+      <div class="sub">${prop(r)}</div></div></button>`).join("")}</div>`;
+}
+document.addEventListener("click", ev => {
+  const f = ev.target.closest(".chip"); if (f) { filtro = f.dataset.f; pintarLista(); return; }
+  const r = ev.target.closest("[data-id]"); if (r && !ev.target.closest(".ficha")) abrir(r.dataset.id);
+});
+document.addEventListener("keydown", ev => {
+  if (ev.key === "Enter" && ev.target.matches("tr[data-id]")) abrir(ev.target.dataset.id);
+  if (ev.key === "Escape" && abierto) cerrar();
+});
+$("#buscar").addEventListener("input", pintarLista);
+
+// ---------- Ficha ----------
+const SECCIONES = [
+  ["Identificación", [["lote", "Lote", "text"], ["nombre", "Equipo (como sale en la web)", "text"], ["cat", "Tipo de equipo", "text"], ["anio", "Año", "number"],
+    ["uso", "Horas o kilometraje", "text"], ["serie", "Número de serie / VIN", "text"], ["placa", "Placa o matrícula (MC…)", "text"], ["ubicacion", "Ubicación del equipo", "text"]]],
+  ["Propietario", [["prop_nombre", "Nombre del propietario", "text"], ["prop_telefono", "Teléfono o WhatsApp", "tel"],
+    ["prop_tipo", "Tipo de propiedad", "select", ["", "Propio", "Tercero"]], ["prop_acuerdo", "Acuerdo de corretaje firmado", "select", ["", "Sí", "No", "En trámite"]]]],
+  ["Precios y comisión", [["precio_publicado", "Precio publicado", "money"], ["precio_propietario", "Precio que pide el propietario (neto)", "money"],
+    ["precio_minimo", "Precio mínimo aceptado", "money"], ["comision_pct", "Comisión pactada (%)", "number"]]],
+  ["Disponibilidad", [["estado", "Estado", "select", ["", ...ESTADOS]], ["fecha_ingreso", "Fecha de ingreso", "date"],
+    ["ultima_verificacion", "Última verificación en patio", "date"], ["comprador", "Comprador (si se vendió o reservó)", "text"], ["fecha_venta", "Fecha de venta", "date"],
+    ["web", "Publicado en la web", "check"], ["marketplace", "Publicado en Marketplace", "check"]]],
+  ["Documentos y estado mecánico", [["docs_estado", "Documentos", "select", ["", "Completos", "Pendientes", "Por revisar"]],
+    ["docs_notas", "Detalle de documentos (tarjeta de propiedad, manifiesto, factura, traspaso)", "textarea"], ["condicion", "Estado mecánico y observaciones de la inspección", "textarea"]]],
+  ["Seguimiento comercial", [["interesados", "Interesados y ofertas recibidas", "textarea"], ["notas", "Notas internas", "textarea"],
+    ["enlace_drive", "Carpeta de fotos y videos en Drive (enlace)", "url"]]],
+];
+let pendiente = {}, timer = null, cola = Promise.resolve();
+function campoHTML(r, [k, lab, tipo, ops]) {
+  const v = r[k] ?? "", id = "f-" + k;
+  if (tipo === "check") return `<div class="campo check"><input type="checkbox" id="${id}" data-k="${k}" ${v ? "checked" : ""}><label for="${id}">${esc(lab)}</label></div>`;
+  if (tipo === "select") return `<div class="campo"><label for="${id}">${esc(lab)}</label><select id="${id}" data-k="${k}">${ops.map(o => `<option ${o === v ? "selected" : ""} value="${esc(o)}">${esc(o || "Sin definir")}</option>`).join("")}</select></div>`;
+  if (tipo === "textarea") return `<div class="campo ancho"><label for="${id}">${esc(lab)}</label><textarea id="${id}" data-k="${k}">${esc(v)}</textarea></div>`;
+  if (tipo === "money") return `<div class="campo"><label for="${id}">${esc(lab)}</label><input id="${id}" data-k="${k}" data-tipo="money" inputmode="numeric" value="${num(v) ? cop(num(v)) : ""}"></div>`;
+  const extra = k === "enlace_drive" && v ? `<a class="ayuda" href="${esc(v)}" target="_blank" rel="noopener">Abrir carpeta</a>` : "";
+  return `<div class="campo${k === "enlace_drive" ? " ancho" : ""}"><label for="${id}">${esc(lab)}</label><input id="${id}" data-k="${k}" type="${tipo === "number" ? "text" : tipo}" ${tipo === "number" ? 'inputmode="decimal"' : ""} value="${esc(v)}">${extra}</div>`;
+}
+function calculoHTML(r) {
+  const pub = num(r.precio_publicado), prop = num(r.precio_propietario), min = num(r.precio_minimo), pct = Number(r.comision_pct) || 0;
+  const l = [];
+  if (pub && prop) l.push(`Diferencia publicado − propietario: <b>${cop(pub - prop)}</b>`);
+  if (pub && pct) l.push(`Comisión del ${pct}% sobre el precio publicado: <b>${cop(pub * pct / 100)}</b>`);
+  if (min && prop) l.push(`Si se vende al mínimo: <b>${cop(min - prop)}</b> de margen`);
+  return l.length ? l.join("<br>") : "Escribe el precio del propietario o el % de comisión para ver tu ganancia.";
+}
+function bancoHTML(r) {
+  const m = r.media || [];
+  const lista = m.length ? m.map((x, i) => `<div class="medio">${i === 0 && x.tipo === "foto" ? '<span class="estrella">Principal</span>' : ""}
+      ${x.tipo === "video" ? `<video src="/_blob/${esc(x.id)}" controls preload="metadata"></video>` : `<a href="/_blob/${esc(x.id)}" target="_blank" rel="noopener"><img src="/_blob/${esc(x.id)}" alt="${esc(x.nombre)}" loading="lazy"></a>`}
+      <div class="pie"><span>${esc(x.nombre || x.tipo)}${x.fecha ? " · " + esc(x.fecha) : ""}</span>
+      ${i > 0 && x.tipo === "foto" ? `<button type="button" data-principal="${i}">Hacer principal</button>` : ""}
+      <button type="button" data-borrar="${i}">Eliminar</button></div></div>`).join("")
+    : `<p class="sub">Aún no hay fotos ni videos de este equipo.</p>`;
+  const subir = ASSETS ? `<div class="subir"><label class="btn" for="f-subir">Subir fotos o videos</label><input type="file" id="f-subir" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm" multiple>
+      <span class="sub">Fotos JPG/PNG y videos MP4 de hasta 20 MB cada uno. Para videos más largos usa la carpeta de Drive.</span></div>` : `<p class="sub">Solo quien puede editar esta página puede subir archivos.</p>`;
+  return subir + `<div class="banco">${lista}</div>`;
+}
+function abrir(id) {
+  const r = filas.find(x => x._id === id); if (!r) return;
+  abierto = id; pendiente = {};
+  $("#capa").innerHTML = `<div class="velo" data-cerrar></div><aside class="ficha" role="dialog" aria-modal="true" aria-labelledby="f-titulo">
+    <div class="barra"><div style="min-width:0"><div class="sub">Lote ${esc(r.lote)}</div><h2 id="f-titulo">${esc(r.nombre || "Equipo nuevo")}</h2></div>
+      <div style="display:flex;gap:10px;align-items:center"><span class="guardado" id="guardado">Guardado</span><button type="button" class="btn sec" data-cerrar>Cerrar</button></div></div>
+    <div class="cuerpo">
+      ${SECCIONES.map(([t, cs]) => `<fieldset><legend>${esc(t)}</legend><div class="campos">${cs.map(c => campoHTML(r, c)).join("")}</div>
+        ${t === "Precios y comisión" ? `<p class="calculo" id="calculo">${calculoHTML(r)}</p>` : ""}</fieldset>`).join("")}
+      <fieldset><legend>Banco de fotos y videos</legend><div id="banco">${bancoHTML(r)}</div></fieldset>
+      <div id="zona-borrar"><button type="button" class="btn sec" id="pedir-borrar">Eliminar este equipo del control</button></div>
+    </div></aside>`;
+  document.body.style.overflow = "hidden";
+  $(".ficha .btn.sec[data-cerrar]").focus();
+}
+async function cerrar() { await guardarYa(); abierto = null; $("#capa").innerHTML = ""; document.body.style.overflow = ""; pintarLista(); }
+$("#capa").addEventListener("click", ev => { if (ev.target.closest("[data-cerrar]")) cerrar(); });
+
+function valorDe(el) {
+  if (el.type === "checkbox") return el.checked;
+  if (el.dataset.tipo === "money") return num(el.value);
+  if (el.dataset.k === "anio" || el.dataset.k === "comision_pct") { const n = Number(String(el.value).replace(",", ".")); return el.value.trim() === "" ? "" : (isFinite(n) ? n : el.value); }
+  return el.value;
+}
+$("#capa").addEventListener("input", ev => { const el = ev.target.closest("[data-k]"); if (!el || !abierto) return; programar(el); });
+$("#capa").addEventListener("change", ev => {
+  const el = ev.target.closest("[data-k]"); if (el && abierto) { programar(el); if (el.dataset.tipo === "money" && num(el.value)) el.value = cop(num(el.value)); }
+  if (ev.target.id === "f-subir") subirArchivos(ev.target.files);
+});
+function programar(el) {
+  pendiente[el.dataset.k] = valorDe(el);
+  $("#guardado").textContent = "Guardando…";
+  const r = filas.find(x => x._id === abierto); if (r) { Object.assign(r, pendiente); const c = $("#calculo"); if (c) c.innerHTML = calculoHTML(r); }
+  clearTimeout(timer); timer = setTimeout(guardarYa, 800);
+}
+function guardarYa() {
+  clearTimeout(timer);
+  const id = abierto, cambios = pendiente; pendiente = {};
+  if (!id || !Object.keys(cambios).length) return cola;
+  cola = cola.then(() => DB.doc("equipos/" + id).update({ ...cambios, actualizado: new Date().toISOString() }))
+    .then(() => { const g = $("#guardado"); if (g && abierto === id) g.textContent = "Guardado"; })
+    .catch(e => { const g = $("#guardado"); if (g) g.textContent = "No se guardó"; aviso(e && e.code === "invalid_argument" ? "No tienes permiso para editar esta base." : "No se pudo guardar. Revisa la conexión e intenta de nuevo."); });
+  return cola;
+}
+async function guardarMedia(id, media) {
+  await guardarYa();
+  cola = cola.then(() => DB.doc("equipos/" + id).update({ media, actualizado: new Date().toISOString() }));
+  return cola;
+}
+async function subirArchivos(lista) {
+  const id = abierto, r = filas.find(x => x._id === id); if (!r || !ASSETS || !lista || !lista.length) return;
+  const media = [...(r.media || [])]; let ok = 0;
+  for (const f of lista) {
+    aviso(`Subiendo ${f.name}…`);
+    try {
+      const res = await ASSETS.upload(f);
+      media.push({ id: res.id, tipo: f.type.startsWith("video") ? "video" : "foto", nombre: f.name, fecha: new Date().toISOString().slice(0, 10) });
+      ok++;
+    } catch (e) {
+      aviso(e && e.code === "too_large" ? `${f.name} pesa más de 20 MB. Súbelo a la carpeta de Drive y pega el enlace.` : e && e.code === "unsupported_type" ? `${f.name}: formato no admitido. Usa JPG, PNG, MP4 o WEBM.` : `No se pudo subir ${f.name}.`);
+    }
+  }
+  if (ok) { try { await guardarMedia(id, media); r.media = media; $("#banco").innerHTML = bancoHTML(r); aviso(`${ok} archivo(s) guardado(s) en el banco.`); } catch (e) { aviso("Se subieron los archivos pero no se pudieron enlazar al equipo."); } }
+}
+$("#capa").addEventListener("click", async ev => {
+  const r = filas.find(x => x._id === abierto); if (!r) return;
+  const p = ev.target.closest("[data-principal]");
+  if (p) { const m = [...r.media]; const [x] = m.splice(+p.dataset.principal, 1); m.unshift(x); r.media = m; $("#banco").innerHTML = bancoHTML(r); try { await guardarMedia(r._id, m); } catch (e) { aviso("No se pudo cambiar la foto principal."); } return; }
+  const b = ev.target.closest("[data-borrar]");
+  if (b) {
+    const i = +b.dataset.borrar, pie = b.parentElement;
+    if (!b.dataset.seguro) { b.dataset.seguro = "1"; b.textContent = "¿Seguro? Eliminar"; b.style.color = "var(--mal)"; return; }
+    const x = r.media[i], m = r.media.filter((_, k) => k !== i);
+    try { await guardarMedia(r._id, m); r.media = m; if (ASSETS) ASSETS.delete(x.id).catch(() => {}); $("#banco").innerHTML = bancoHTML(r); aviso("Archivo eliminado."); } catch (e) { aviso("No se pudo eliminar el archivo."); }
+    return;
+  }
+  if (ev.target.id === "pedir-borrar") {
+    $("#zona-borrar").innerHTML = `<div class="confirmar"><span>Se borrará el registro de <b>${esc(r.nombre)}</b> y sus fotos y videos del banco. No se puede deshacer.</span>
+      <button type="button" class="btn peligro" id="si-borrar">Sí, eliminar</button><button type="button" class="btn sec" id="no-borrar">Cancelar</button></div>`; return;
+  }
+  if (ev.target.id === "no-borrar") { $("#zona-borrar").innerHTML = `<button type="button" class="btn sec" id="pedir-borrar">Eliminar este equipo del control</button>`; return; }
+  if (ev.target.id === "si-borrar") {
+    const id = r._id, med = r.media || [];
+    pendiente = {}; clearTimeout(timer);
+    try { await cola; await DB.doc("equipos/" + id).delete(); if (ASSETS) for (const x of med) await ASSETS.delete(x.id).catch(() => {}); abierto = null; $("#capa").innerHTML = ""; document.body.style.overflow = ""; aviso("Equipo eliminado del control."); }
+    catch (e) { aviso("No se pudo eliminar el equipo."); }
+  }
+});
+
+// ---------- Agregar ----------
+$("#nuevo").addEventListener("click", async () => {
+  if (!DB) return;
+  const sig = String(filas.reduce((m, r) => Math.max(m, num(r.lote)), 0) + 1).padStart(2, "0");
+  const id = "eq-" + Date.now().toString(36);
+  const r = { lote: sig, nombre: "", cat: "", estado: "Disponible", fecha_ingreso: new Date().toISOString().slice(0, 10), web: false, marketplace: false, media: [], actualizado: new Date().toISOString() };
+  try { await DB.doc("equipos/" + id).set(r); filas.push({ ...r, _id: id }); pintarLista(); abrir(id); $("#f-nombre").focus(); }
+  catch (e) { aviso("No se pudo crear el equipo."); }
+});
+
+// ---------- Arranque ----------
+(async () => {
+  try { [DB, ASSETS] = await Promise.all([claude.use("db"), claude.use("assets")]); } catch (e) {}
+  if (!DB) { $("#contenido").innerHTML = `<div class="vacio">Esta base solo se puede ver abierta en Claude con la cuenta del propietario.</div>`; $("#nuevo").disabled = true; return; }
+  DB.collection("equipos").onSnapshot(snap => {
+    filas = snap.docs.map(d => ({ ...d.data(), _id: d.id }));
+    if (abierto) {
+      const r = filas.find(x => x._id === abierto);
+      if (!r) { abierto = null; $("#capa").innerHTML = ""; document.body.style.overflow = ""; }
+      else { Object.assign(r, pendiente); const ban = $("#banco"); if (ban && !ban.contains(document.activeElement)) ban.innerHTML = bancoHTML(r); }
+    }
+    pintarLista();
+  }, e => { $("#contenido").innerHTML = `<div class="vacio">No se pudo leer el inventario (${esc(e.code)}). Recarga la página.</div>`; });
+})();
+</script>

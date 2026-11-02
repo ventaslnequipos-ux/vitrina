@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<style>
+@font-face { font-family: 'Alfa Slab One'; src: url('../fonts/gf/ofl/alfaslabone/AlfaSlabOne-Regular.ttf'); }
+@font-face { font-family: 'Zilla Slab'; src: url('../fonts/gf/ofl/zillaslab/ZillaSlab-SemiBold.ttf'); font-weight: 600; }
+@font-face { font-family: 'Zilla Slab'; src: url('../fonts/gf/ofl/zillaslab/ZillaSlab-Bold.ttf'); font-weight: 700; }
+html, body { margin: 0; background: #0E0E0E; }
+#esc { position: relative; overflow: hidden; background: radial-gradient(ellipse at 50% 35%, #1D1D1D 0%, #0E0E0E 70%); }
+#esc > * { position: absolute; }
+.humo, .chispa { position: absolute; }
+#pasto { transform-box: fill-box; transform-origin: 50% 100%; }
+.suelo { left: 0; right: 0; bottom: 0; background: #2A1E12; z-index: 5; }
+.suelo svg { position: absolute; left: 0; top: -38px; width: 100%; height: 40px; }
+.placa { z-index: 3; }
+.monte { z-index: 6; }
+.dozer { z-index: 7; }
+.chispa { width: 14px; height: 14px; border-radius: 50%; background: #6B4A22; z-index: 6; opacity: 0; }
+.humo { width: 26px; height: 26px; border-radius: 50%; background: #9A9A9A; opacity: 0; z-index: 7; }
+.titulo { left: 0; right: 0; text-align: center; font-family: 'Alfa Slab One'; color: #fff; white-space: nowrap; z-index: 4; }
+.titulo em { font-style: normal; color: #FFC20E; }
+.by { left: 0; right: 0; text-align: center; font-family: 'Zilla Slab'; font-weight: 700; color: #C9A227; z-index: 4; display: flex; align-items: center; justify-content: center; gap: 22px; }
+.by::before, .by::after { content: ""; position: static; display: block; width: 70px; height: 4px; background: #C9A227; }
+.lema { left: 0; right: 0; text-align: center; font-family: 'Zilla Slab'; font-weight: 600; color: #ECE8DE; z-index: 4; }
+.lema b { color: #FFC20E; }
+.wa { left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 18px; background: #FFC20E; color: #0E0E0E; font-family: 'Alfa Slab One'; padding: 16px 34px 16px 26px; border-radius: 999px; z-index: 4; white-space: nowrap; }
+.wa svg { position: static; }
+.url { left: 0; right: 0; text-align: center; font-family: 'Zilla Slab'; font-weight: 600; color: #BFC5CC; letter-spacing: 0.06em; z-index: 4; }
+.brillo { inset: 0; background: linear-gradient(110deg, transparent 38%, rgba(255,255,255,.55) 50%, transparent 62%); mix-blend-mode: overlay; }
+</style></head>
+<body>
+<div id="esc">
+  <div class="placa" id="placa"><img src="../site/logo.svg" style="position:static;display:block;width:100%;height:auto"><div class="brillo" id="brillo"></div></div>
+  <div class="suelo" id="suelo"><svg viewBox="0 0 1200 40" preserveAspectRatio="none"><path id="pasto" fill="#FFC20E"/></svg></div>
+  <svg class="monte" id="monte" viewBox="0 0 230 130"><path d="M0 130 C14 112 22 70 58 52 C80 40 92 18 122 16 C150 14 166 40 184 62 C204 86 214 112 230 130 Z" fill="#6B4A22"/><path d="M24 130 C40 104 62 80 90 72 C112 66 136 70 158 88 C176 102 192 118 204 130 Z" fill="#8A6230"/><circle cx="70" cy="70" r="6" fill="#4E3418"/><circle cx="150" cy="56" r="5" fill="#4E3418"/><circle cx="118" cy="40" r="4" fill="#A27742"/><circle cx="96" cy="100" r="7" fill="#4E3418"/></svg>
+  <div class="dozer" id="dozer"><svg id="dz" viewBox="0 0 240 140" style="position:static;display:block;width:100%;height:auto">
+    <g id="cuerpo">
+      <path d="M22 92 H8 V124 L2 132 H12 V102 H22 Z" fill="#222"/>
+      <rect x="20" y="70" width="34" height="32" fill="#E0A800"/>
+      <path d="M50 102 V26 H104 L112 62 V102 Z" fill="#FFC20E"/>
+      <rect x="44" y="16" width="74" height="10" fill="#1A1A1A"/>
+      <path d="M58 34 H100 L106 60 H58 Z" fill="#202428"/><path d="M62 38 H74 L66 56 H62 Z" fill="#3A4048"/>
+      <rect x="62" y="68" width="22" height="22" fill="#161616"/><path d="M65 71 H70 L73 77 L76 71 H81 L75 81 V87 H71 V81 Z" fill="#FFC20E"/>
+      <path d="M108 102 V58 H170 L180 68 V102 Z" fill="#FFC20E"/>
+      <rect x="108" y="76" width="72" height="5" fill="#161616"/>
+      <rect x="166" y="62" width="4" height="12" fill="#222"/><rect x="172" y="66" width="4" height="9" fill="#222"/>
+      <rect x="138" y="34" width="8" height="24" fill="#222"/><rect x="135" y="30" width="14" height="6" fill="#222"/>
+      <path d="M150 64 L200 76" stroke="#555" stroke-width="7" stroke-linecap="round"/>
+      <path d="M150 64 L176 70" stroke="#C9C9C9" stroke-width="4" stroke-linecap="round"/>
+      <path d="M118 100 L198 94" stroke="#1A1A1A" stroke-width="9" stroke-linecap="round"/>
+      <path d="M194 34 Q214 82 198 134 H210 Q228 82 206 34 Z" fill="#C9A227"/>
+      <path d="M196 132 H212 L214 136 H194 Z" fill="#8F969F"/>
+    </g>
+    <rect x="18" y="102" width="168" height="34" rx="17" fill="#1A1A1A"/>
+    <rect id="oruga" x="20" y="104" width="164" height="30" rx="15" fill="none" stroke="#3A3A3A" stroke-width="5" stroke-dasharray="7 6"/>
+    <circle cx="36" cy="119" r="13" fill="#4A4A4A"/><circle cx="36" cy="119" r="5" fill="#222"/>
+    <circle cx="168" cy="119" r="13" fill="#4A4A4A"/><circle cx="168" cy="119" r="5" fill="#222"/>
+    <circle cx="66" cy="124" r="7" fill="#5A5A5A"/><circle cx="91" cy="124" r="7" fill="#5A5A5A"/><circle cx="116" cy="124" r="7" fill="#5A5A5A"/><circle cx="141" cy="124" r="7" fill="#5A5A5A"/>
+  </svg></div>
+  <div class="titulo" id="titulo">YELLOW <em>YARD</em></div>
+  <div class="by" id="by">by Nestor Sierra</div>
+  <div class="lema" id="lema">Tu próxima máquina está en el <b>patio amarillo</b>.</div>
+  <div class="wa" id="wa"><svg viewBox="0 0 24 24" id="waic"><path fill="#0E0E0E" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg><span id="watxt">301 795 9540</span></div>
+  <div class="url" id="url">ventaslnequipos-ux.github.io/vitrina</div>
+</div>
+<script>
+const V = new URLSearchParams(location.search).get("f") === "v";
+const W = 1080, H = V ? 1920 : 1080, T = 8000;
+const C = V ? { suelo: 1620, dz: 560, placaW: 330, placaTop: 400, tit: 880, titF: 118, by: 1040, byF: 54, lema: 1130, lemaF: 46, wa: 1300, waF: 50, url: 1430, urlF: 32, monteW: 520 }
+            : { suelo: 960, dz: 500, placaW: 230, placaTop: 120, tit: 445, titF: 104, by: 585, byF: 46, lema: 660, lemaF: 38, wa: 750, waF: 44, url: 862, urlF: 28, monteW: 440 };
+const $ = id => document.getElementById(id);
+const esc = $("esc"); esc.style.width = W + "px"; esc.style.height = H + "px";
+const suelo = $("suelo"); suelo.style.top = C.suelo + "px";
+// pasto
+(function () { let d = "", x = 0, s = 11; while (x < 1200) { s = (s * 9301 + 49297) % 233280; const h = 14 + (s / 233280) * 24, w = 9 + (s % 6); d += `M${x} 40 L${x + w / 2 + ((s % 7) - 3)} ${40 - h} L${x + w} 40 Z `; x += w * 0.65; } $("pasto").setAttribute("d", d + "M0 36 H1200 V40 H0 Z"); })();
+const placa = $("placa"), ph = C.placaW * 1.25;
+Object.assign(placa.style, { width: C.placaW + "px", left: (W - C.placaW) / 2 + "px", top: C.placaTop + "px" });
+const dozer = $("dozer"), dzH = C.dz * 140 / 240; Object.assign(dozer.style, { width: C.dz + "px", left: "0px", top: (C.suelo - dzH + 6) + "px" });
+const monte = $("monte"), mH = C.monteW * 130 / 230, monteLeft = W / 2 - C.monteW / 2 - 20;
+Object.assign(monte.style, { width: C.monteW + "px", height: mH + "px", left: monteLeft + "px", top: (C.suelo - mH + 10) + "px" });
+[["titulo", C.tit, C.titF], ["by", C.by, C.byF], ["lema", C.lema, C.lemaF], ["url", C.url, C.urlF]].forEach(([id, t, f]) => Object.assign($(id).style, { top: t + "px", fontSize: f + "px" }));
+Object.assign($("wa").style, { top: C.wa + "px", fontSize: C.waF + "px" }); const ic = $("waic"); ic.setAttribute("width", C.waF * 1.1); ic.setAttribute("height", C.waF * 1.1);
+if (V) $("lema").innerHTML = "Tu próxima máquina está<br>en el <b>patio amarillo</b>.";
+
+// Línea de tiempo (ms)
+const A = [];
+function K(el, frames, opts = {}) { // frames: [[ms, props], ...]
+  const kf = frames.map(([t, p]) => ({ ...p, offset: t / T }));
+  if (kf[0].offset > 0) kf.unshift({ ...frames[0][1], offset: 0 });
+  if (kf[kf.length - 1].offset < 1) kf.push({ ...frames[frames.length - 1][1], offset: 1 });
+  const a = el.animate(kf, { duration: T, fill: "both", easing: "linear", ...opts }); A.push(a); return a;
+}
+const bladeFront = C.dz * 212 / 240;           // borde de la cuchilla
+const contacto = monteLeft + 26 - bladeFront;  // x del dozer al tocar el monte
+const salida = W + 80;                         // dozer fuera por la derecha
+const e1 = "cubic-bezier(.25,.7,.35,1)", e2 = "cubic-bezier(.4,0,.9,.6)";
+K(dozer, [[0, { transform: `translateX(${-C.dz - 40}px)`, easing: e1 }], [1500, { transform: `translateX(${contacto}px)` }],
+  [1620, { transform: `translateX(${contacto - 10}px) rotate(-1.5deg)` }], [1760, { transform: `translateX(${contacto}px)`, easing: e2 }], [3200, { transform: `translateX(${salida}px)` }]]);
+K($("cuerpo"), [0, 200, 400, 600, 800, 1000, 1200, 1400, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400].map((t, i) => [t, { transform: `translateY(${i % 2 ? -1.6 : 0}px)` }]));
+K($("oruga"), [[0, { strokeDashoffset: 0 }], [3500, { strokeDashoffset: -260 }]]);
+const empuje = salida - contacto;
+monte.style.transformOrigin = "0 100%";
+K(monte, [[1500, { transform: "translateX(0) scale(1)" }], [1620, { transform: "translateX(0) scale(1.03, .97)" }], [1760, { transform: "translateX(0) scale(1)", easing: e2 }], [3200, { transform: `translateX(${empuje}px) scale(1.18)` }]]);
+// placa sube desde la tierra
+const enterrada = C.suelo - C.placaTop + 30;
+K(placa, [[V ? 2980 : 2750, { transform: `translateY(${enterrada}px) scale(.75)`, opacity: 1, easing: "cubic-bezier(.2,.9,.3,1.25)" }], [V ? 3700 : 3500, { transform: "translateY(0) scale(1)" }]]);
+K($("brillo"), [[3500, { transform: "translateX(-110%)" }], [4300, { transform: "translateX(110%)" }]]);
+// pasto crece cuando pasa la máquina
+K($("pasto"), [[0, { transform: "scaleY(0)" }], [2300, { transform: "scaleY(0)", easing: "cubic-bezier(.2,.9,.3,1.3)" }], [3000, { transform: "scaleY(1)" }]]);
+// tierra que salta
+for (let i = 0; i < 18; i++) {
+  const c = document.createElement("div"); c.className = "chispa"; esc.appendChild(c);
+  const sz = 12 + (i * 7) % 18, x0 = W / 2 + ((i * 53) % 120) - 60, y0 = C.suelo - 10;
+  Object.assign(c.style, { width: sz + "px", height: sz + "px", left: x0 + "px", top: y0 + "px", background: i % 3 ? "#6B4A22" : "#8A6230" });
+  const vx = ((i * 97) % 420) - 210, vy = 160 + (i * 41) % 220, t0 = (V ? 2980 : 2750) + (i % 6) * 40;
+  const pts = [0, .25, .5, .75, 1].map(f => [t0 + f * 800, { transform: `translate(${vx * f}px, ${-vy * f * 2 + vy * f * f * 2.4}px)`, opacity: f < .9 ? 1 : 0 }]);
+  K(c, [[t0 - 1, { opacity: 0 }], ...pts]);
+}
+// humo del exosto
+for (let i = 0; i < 6; i++) {
+  const h = document.createElement("div"); h.className = "humo"; dozer.appendChild(h);
+  const sx = C.dz / 240; Object.assign(h.style, { left: (138 * sx) + "px", top: (26 * sx) + "px", width: 12 * sx + "px", height: 12 * sx + "px" });
+  const t0 = 150 + i * 520;
+  K(h, [[t0 - 1, { opacity: 0, transform: "translate(0,0) scale(.6)" }], [t0, { opacity: .7, transform: "translate(0,0) scale(.6)" }], [t0 + 900, { opacity: 0, transform: `translate(${-40 * sx}px, ${-60 * sx}px) scale(2.4)` }]]);
+}
+// textos
+K($("titulo"), [[3300, { clipPath: "inset(0 100% 0 0)", transform: "translateY(20px)", easing: "cubic-bezier(.2,.8,.2,1)" }], [4000, { clipPath: "inset(0 0% 0 0)", transform: "translateY(0)" }]]);
+K($("by"), [[3900, { opacity: 0, transform: "translateY(24px)", letterSpacing: ".3em", easing: "cubic-bezier(.2,.8,.2,1)" }], [4600, { opacity: 1, transform: "translateY(0)", letterSpacing: "0em" }]]);
+K($("lema"), [[4600, { opacity: 0, transform: "translateY(20px)", easing: "ease-out" }], [5200, { opacity: 1, transform: "translateY(0)" }]]);
+K($("wa"), [[5100, { opacity: 0, transform: "translateX(-50%) scale(.6)", easing: "cubic-bezier(.2,.9,.3,1.4)" }], [5600, { opacity: 1, transform: "translateX(-50%) scale(1)" }],
+  [6400, { transform: "translateX(-50%) scale(1)" }], [6600, { transform: "translateX(-50%) scale(1.06)" }], [6800, { transform: "translateX(-50%) scale(1)" }]]);
+K($("waic"), [[6900, { transform: "rotate(0)" }], [7000, { transform: "rotate(-16deg)" }], [7100, { transform: "rotate(14deg)" }], [7200, { transform: "rotate(-8deg)" }], [7300, { transform: "rotate(0)" }]]);
+K($("url"), [[5600, { opacity: 0 }], [6100, { opacity: 1 }]]);
+window.ponerTiempo = ms => A.forEach(a => { a.pause(); a.currentTime = ms; });
+if (new URLSearchParams(location.search).get("grabar")) ponerTiempo(0);
+</script>
+</body></html>

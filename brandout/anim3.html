@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<style>
+@font-face { font-family: 'Alfa Slab One'; src: url('../fonts/gf/ofl/alfaslabone/AlfaSlabOne-Regular.ttf'); }
+@font-face { font-family: 'Zilla Slab'; src: url('../fonts/gf/ofl/zillaslab/ZillaSlab-SemiBold.ttf'); font-weight: 600; }
+@font-face { font-family: 'Zilla Slab'; src: url('../fonts/gf/ofl/zillaslab/ZillaSlab-Bold.ttf'); font-weight: 700; }
+html, body { margin: 0; background: #000; }
+#esc { position: relative; overflow: hidden; background: #000; }
+#esc > * { position: absolute; }
+canvas { left: 0; top: 0; }
+.placa { z-index: 3; filter: drop-shadow(0 18px 40px rgba(0,0,0,.8)); }
+.placa img { display: block; width: 100%; height: auto; }
+.brillo { position: absolute; inset: 0; background: linear-gradient(110deg, transparent 40%, rgba(255,240,200,.75) 50%, transparent 60%); mix-blend-mode: overlay; -webkit-mask: url(../site/logo.svg) center / 100% 100% no-repeat; mask: url(../site/logo.svg) center / 100% 100% no-repeat; }
+.titulo { left: 0; right: 0; text-align: center; font-family: 'Alfa Slab One'; color: #fff; white-space: nowrap; z-index: 4; text-shadow: 0 6px 24px rgba(0,0,0,.8); }
+.titulo em { font-style: normal; color: #FFC20E; }
+.by { left: 0; right: 0; text-align: center; font-family: 'Zilla Slab'; font-weight: 700; color: #D9B23A; z-index: 4; display: flex; align-items: center; justify-content: center; gap: 22px; text-shadow: 0 4px 16px rgba(0,0,0,.9); }
+.by::before, .by::after { content: ""; display: block; width: 70px; height: 4px; background: #C9A227; }
+.lema { left: 0; right: 0; text-align: center; font-family: 'Zilla Slab'; font-weight: 600; color: #ECE8DE; z-index: 4; text-shadow: 0 4px 16px rgba(0,0,0,.9); }
+.lema b { color: #FFC20E; }
+.wa { left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 18px; background: #FFC20E; color: #0E0E0E; font-family: 'Alfa Slab One'; padding: 16px 34px 16px 26px; border-radius: 999px; z-index: 4; white-space: nowrap; box-shadow: 0 10px 30px rgba(0,0,0,.6); }
+.url { left: 0; right: 0; text-align: center; font-family: 'Zilla Slab'; font-weight: 600; color: #C9CDD3; letter-spacing: 0.06em; z-index: 4; }
+</style></head>
+<body>
+<div id="esc">
+  <canvas id="cv"></canvas>
+  <div class="placa" id="placa"><img src="../site/logo.svg"><div class="brillo" id="brillo"></div></div>
+  <div class="titulo" id="titulo">YELLOW <em>YARD</em></div>
+  <div class="by" id="by">by Nestor Sierra</div>
+  <div class="lema" id="lema">Tu próxima máquina está en el <b>patio amarillo</b>.</div>
+  <div class="wa" id="wa"><svg viewBox="0 0 24 24" id="waic"><path fill="#0E0E0E" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg><span>301 795 9540</span></div>
+  <div class="url" id="url">ventaslnequipos-ux.github.io/vitrina</div>
+</div>
+<script>
+const Q = new URLSearchParams(location.search);
+const V = Q.get("f") === "v";
+const FOTO = Q.get("foto") || "d6n17_limpia.jpg";
+const W = 1080, H = V ? 1920 : 1080, T = 9000;
+const C = V ? { placaW: 330, placaTop: 430, tit: 900, titF: 118, by: 1060, byF: 54, lema: 1150, lemaF: 46, wa: 1320, waF: 50, url: 1450, urlF: 32 }
+            : { placaW: 240, placaTop: 110, tit: 445, titF: 104, by: 585, byF: 46, lema: 660, lemaF: 38, wa: 750, waF: 44, url: 862, urlF: 28 };
+// punto de la foto hacia donde se acerca la cámara (la cuchilla) y su posición en pantalla
+const F0 = { x: +(Q.get("ax") || 0.43), y: +(Q.get("ay") || 0.5) }, F1 = { x: +(Q.get("fx") || 0.17), y: +(Q.get("fy") || 0.74) }; let FOCO = { ...F0 };
+const BANDA = V ? { cy: 860, h: 1250 } : null;
+const $ = id => document.getElementById(id);
+const esc = $("esc"); esc.style.width = W + "px"; esc.style.height = H + "px";
+const cv = $("cv"); cv.width = W; cv.height = H; const ctx = cv.getContext("2d");
+const placa = $("placa"); Object.assign(placa.style, { width: C.placaW + "px", left: (W - C.placaW) / 2 + "px", top: C.placaTop + "px" });
+[["titulo", C.tit, C.titF], ["by", C.by, C.byF], ["lema", C.lema, C.lemaF], ["url", C.url, C.urlF]].forEach(([id, t, f]) => Object.assign($(id).style, { top: t + "px", fontSize: f + "px" }));
+Object.assign($("wa").style, { top: C.wa + "px", fontSize: C.waF + "px" }); $("waic").setAttribute("width", C.waF * 1.1); $("waic").setAttribute("height", C.waF * 1.1);
+if (V) $("lema").innerHTML = "Tu próxima máquina está<br>en el <b>patio amarillo</b>.";
+
+const foto = new Image(); foto.src = FOTO;
+const cl = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const ease = x => x < .5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2;
+const sm = (a, b, t) => { const x = cl((t - a) / (b - a)); return x * x * (3 - 2 * x); };
+let seed = 12345; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+
+// Partículas de polvo (deterministas)
+const P = [];
+const sx = W / 1080, sy = H / 1080;
+// A: polvo que levanta la cuchilla
+for (let i = 0; i < 140; i++) P.push({ t0: 300 + rnd() * 2700, x: W * (0.02 + rnd() * 0.7), y: V ? 1150 + rnd() * 180 : H * (0.72 + rnd() * 0.18), vx: (rnd() - .5) * 120 * sx, vy: -(20 + rnd() * 70) * sy, r0: (30 + rnd() * 60) * sx, g: (60 + rnd() * 120) * sx, a: .16 + rnd() * .2, vida: 2600 + rnd() * 2000, c: rnd() });
+// B: ola de tierra que tapa la pantalla
+for (let i = 0; i < 120; i++) P.push({ t0: 2300 + rnd() * 1000, x: W * rnd(), y: H * (0.85 + rnd() * 0.35), vx: (rnd() - .5) * 200 * sx, vy: -(260 + rnd() * 420) * sy, r0: (120 + rnd() * 160) * sx, g: (220 + rnd() * 320) * sx, a: .35 + rnd() * .3, vida: 1700 + rnd() * 600, c: rnd() });
+// C: polvo suave que queda flotando al final
+for (let i = 0; i < 40; i++) P.push({ t0: 4200 + rnd() * 4000, x: W * (rnd() * 1.2 - .1), y: H * (0.7 + rnd() * 0.3), vx: (40 + rnd() * 80) * sx, vy: -(10 + rnd() * 30) * sy, r0: (80 + rnd() * 80) * sx, g: (40 + rnd() * 60) * sx, a: .06 + rnd() * .07, vida: 3500, c: rnd() });
+const COL = [[176, 150, 112], [150, 122, 88], [196, 174, 140], [122, 98, 70]];
+
+function dibujarFoto(t, k, oscuro, blur, shake) {
+  if (!foto.complete || !foto.naturalWidth) return;
+  const iw = foto.naturalWidth, ih = foto.naturalHeight;
+  if (BANDA && blur === 0) {
+    // vertical: fondo desenfocado de la misma foto y franja nítida en el centro
+    const kb = Math.max(W / iw, H / ih) * 1.05, bw = iw * kb, bh = ih * kb;
+    ctx.save(); ctx.filter = `brightness(.32) saturate(1.1) blur(${18 * sx}px)`; ctx.drawImage(foto, (W - bw) * FOCO.x * 1.6, (H - bh) / 2, bw, bh); ctx.restore();
+    const cov = BANDA.h / ih * k, dw = iw * cov, dh = ih * cov, top = BANDA.cy - BANDA.h / 2, bot = BANDA.cy + BANDA.h / 2;
+    let ox = W / 2 - FOCO.x * dw, oy = BANDA.cy - FOCO.y * dh + (FOCO.y - .5) * BANDA.h * .0;
+    ox = cl(ox, W - dw, 0); oy = cl(oy, bot - dh, top);
+    ctx.save(); ctx.beginPath(); ctx.rect(0, top, W, BANDA.h); ctx.clip();
+    ctx.filter = `contrast(1.15) saturate(1.12) brightness(${oscuro})`; ctx.drawImage(foto, ox + shake[0], oy + shake[1], dw, dh); ctx.restore();
+    for (const [y0, y1] of [[top, top + 120], [bot, bot - 120]]) { const g = ctx.createLinearGradient(0, y0, 0, y1); g.addColorStop(0, "rgba(0,0,0,.85)"); g.addColorStop(1, "rgba(0,0,0,0)"); ctx.fillStyle = g; ctx.fillRect(0, Math.min(y0, y1), W, 120); }
+    return;
+  }
+  const cov = Math.max(W / iw, H / ih) * k;
+  const dw = iw * cov, dh = ih * cov;
+  let ox = W / 2 - FOCO.x * dw, oy = H * 0.55 - FOCO.y * dh;
+  ox = cl(ox, W - dw, 0); oy = cl(oy, H - dh, 0);
+  ctx.save();
+  ctx.filter = `contrast(1.15) saturate(1.12) brightness(${oscuro}) blur(${blur}px)`;
+  ctx.drawImage(foto, ox + shake[0], oy + shake[1], dw, dh);
+  ctx.restore();
+}
+// Césped amarillo (distintivo de la marca)
+const PASTO = []; { let x = -10 * sx; while (x < W + 10) { const w = (7 + rnd() * 9) * sx; PASTO.push({ x, w, h: (34 + rnd() * 58) * sx * (V ? 1.25 : 1), f: rnd() * 6.28, c: ["#FFC20E", "#F2B300", "#FFD13F", "#E8A900"][Math.floor(rnd() * 4)], l: (rnd() - .5) * 10 * sx }); x += w * 0.55; } }
+function pasto(t) {
+  const crece = sm(0, 900, t), base = H - 1, viento = Math.sin(t * 0.0011) * 4 * sx;
+  ctx.save(); ctx.globalAlpha = 1;
+  for (const p of PASTO) {
+    const h = p.h * (0.15 + 0.85 * crece), tip = p.x + p.w / 2 + p.l + Math.sin(t * 0.0021 + p.f) * 5 * sx + viento;
+    ctx.fillStyle = p.c; ctx.beginPath(); ctx.moveTo(p.x, base); ctx.quadraticCurveTo(p.x + p.w * .3, base - h * .55, tip, base - h); ctx.quadraticCurveTo(p.x + p.w * .8, base - h * .5, p.x + p.w, base); ctx.closePath(); ctx.fill();
+  }
+  ctx.fillStyle = "#FFC20E"; ctx.fillRect(0, H - 8 * sx, W, 8 * sx);
+  ctx.restore();
+}
+function render(t) {
+  ctx.globalCompositeOperation = "source-over"; ctx.filter = "none";
+  ctx.fillStyle = "#000"; ctx.fillRect(0, 0, W, H);
+  // 1) La máquina avanza: acercamiento + vibración del motor
+  const avance = ease(cl(t / 3400));
+  const amp = (1.5 + 5 * avance) * (t < 3600 ? 1 : 0);
+  const shake = [Math.sin(t * 0.09) * amp + Math.sin(t * 0.031) * amp * .6, Math.cos(t * 0.11) * amp * .7];
+  FOCO = { x: F0.x + (F1.x - F0.x) * avance, y: F0.y + (F1.y - F0.y) * avance };
+  if (t < 3700) dibujarFoto(t, 1.0 + 0.5 * avance, 0.95 - 0.1 * avance, 0, shake);
+  // 2) Fondo final: la misma máquina, oscura y desenfocada
+  const fin = sm(3500, 5200, t);
+  if (t >= 3500) { FOCO = { x: 0.3, y: 0.5 }; ctx.globalAlpha = fin; dibujarFoto(t, 1.25 + 0.06 * (t - 3500) / 5500, 0.22, 10 * sx, [0, 0]); ctx.globalAlpha = 1; }
+  // viñeta
+  const vg = ctx.createRadialGradient(W / 2, H * 0.45, Math.min(W, H) * 0.25, W / 2, H * 0.5, Math.max(W, H) * 0.75);
+  vg.addColorStop(0, "rgba(0,0,0,0)"); vg.addColorStop(1, `rgba(0,0,0,${0.55 + 0.25 * fin})`);
+  ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
+  // 3) Polvo
+  for (const p of P) {
+    const a = t - p.t0; if (a < 0 || a > p.vida) continue;
+    const u = a / p.vida, s = a / 1000;
+    const x = p.x + p.vx * s + Math.sin(s * 1.7 + p.c * 9) * 18 * sx, y = p.y + p.vy * s - 8 * s * s * sy;
+    const r = p.r0 + p.g * s;
+    const al = p.a * sm(0, .15, u) * (1 - sm(.55, 1, u));
+    const c = COL[Math.floor(p.c * COL.length)];
+    const gr = ctx.createRadialGradient(x, y, 0, x, y, r);
+    gr.addColorStop(0, `rgba(${c[0]},${c[1]},${c[2]},${al})`); gr.addColorStop(.55, `rgba(${c[0]},${c[1]},${c[2]},${al * .45})`); gr.addColorStop(1, `rgba(${c[0]},${c[1]},${c[2]},0)`);
+    ctx.fillStyle = gr; ctx.fillRect(x - r, y - r, 2 * r, 2 * r);
+  }
+  // 4) Bruma total en el momento en que la tierra tapa la cámara
+  const bruma = sm(2700, 3400, t) * (1 - sm(3700, 4600, t));
+  if (bruma > 0) { ctx.fillStyle = `rgba(92,74,52,${0.92 * bruma})`; ctx.fillRect(0, 0, W, H); }
+  pasto(t);
+  // grano de película
+  ctx.globalAlpha = 0.05; for (let i = 0; i < 900; i++) { const gx = ((i * 7919 + t * 13) % W), gy = ((i * 104729 + t * 7) % H); ctx.fillStyle = i % 2 ? "#fff" : "#000"; ctx.fillRect(gx, gy, 2, 2); } ctx.globalAlpha = 1;
+}
+
+// Textos (Web Animations, controlados por el mismo reloj)
+const A = [];
+function K(el, frames, opts = {}) {
+  const kf = frames.map(([t, p]) => ({ ...p, offset: t / T }));
+  if (kf[0].offset > 0) kf.unshift({ ...frames[0][1], offset: 0 });
+  if (kf[kf.length - 1].offset < 1) kf.push({ ...frames[frames.length - 1][1], offset: 1 });
+  A.push(el.animate(kf, { duration: T, fill: "both", easing: "linear", ...opts }));
+}
+const eo = "cubic-bezier(.2,.8,.2,1)";
+K(placa, [[3900, { opacity: 0, transform: "scale(1.25)", filter: "blur(14px) drop-shadow(0 18px 40px rgba(0,0,0,.8))", easing: eo }], [5000, { opacity: 1, transform: "scale(1)", filter: "blur(0px) drop-shadow(0 18px 40px rgba(0,0,0,.8))" }]]);
+K($("brillo"), [[5100, { transform: "translateX(-120%)" }], [6000, { transform: "translateX(120%)" }]]);
+K($("titulo"), [[5000, { opacity: 0, transform: "translateY(26px)", letterSpacing: ".08em", easing: eo }], [5700, { opacity: 1, transform: "translateY(0)", letterSpacing: "0em" }]]);
+K($("by"), [[5600, { opacity: 0, transform: "translateY(20px)", easing: eo }], [6200, { opacity: 1, transform: "translateY(0)" }]]);
+K($("lema"), [[6100, { opacity: 0, transform: "translateY(18px)", easing: eo }], [6700, { opacity: 1, transform: "translateY(0)" }]]);
+K($("wa"), [[6700, { opacity: 0, transform: "translateX(-50%) translateY(16px)", easing: eo }], [7200, { opacity: 1, transform: "translateX(-50%) translateY(0)" }]]);
+K($("url"), [[7100, { opacity: 0 }], [7600, { opacity: 1 }]]);
+
+window.ponerTiempo = ms => { A.forEach(a => { a.pause(); a.currentTime = ms; }); render(ms); };
+window.listo = () => foto.decode();
+if (!Q.get("grabar")) { foto.onload = () => { const t0 = performance.now(); (function f() { const t = (performance.now() - t0) % T; ponerTiempo(t); requestAnimationFrame(f); })(); }; }
+</script>
+</body></html>
