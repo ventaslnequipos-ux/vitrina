@@ -110,6 +110,14 @@ legend { font-family: var(--mono); font-size: 12px; font-weight: 600; letter-spa
 .aviso { position: fixed; left: 50%; transform: translateX(-50%); bottom: max(18px, env(safe-area-inset-bottom, 0px)); z-index: 40; background: var(--tinta); color: var(--bg); padding: 10px 16px; max-width: min(92vw, 520px); }
 .confirmar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; padding: 12px; background: var(--mal-bg); color: var(--mal); }
 .estado-pagina { padding: 40px 0; color: var(--suave); }
+/* Venta */
+.venta { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center; justify-content: space-between; padding: 14px; background: var(--panel); border: 1px solid var(--linea); }
+.venta p { margin: 0; flex: 1 1 260px; }
+.venta .acciones { display: flex; flex-wrap: wrap; gap: 10px; }
+.btn.vender { background: #161616; color: #FFC20E; box-shadow: inset 0 0 0 2px #C9A227; }
+.venta.vendido { border-color: var(--oro); }
+.pendientes { margin: -6px 0 16px; padding: 10px 14px; background: var(--warn-bg); color: var(--warn); font-size: 15px; }
+.pendientes b { font-weight: 700; }
 @media (prefers-reduced-motion: no-preference) { .ficha { animation: entra .2s ease-out; } @keyframes entra { from { transform: translateX(30px); opacity: 0; } } }
 </style>
 
@@ -123,6 +131,7 @@ legend { font-family: var(--mono); font-size: 12px; font-weight: 600; letter-spa
 
 <main class="wrap">
   <section class="resumen" id="resumen" aria-label="Resumen del inventario"></section>
+  <div class="pendientes" id="pendientes" role="status" hidden></div>
   <div class="herr">
     <input type="search" id="buscar" placeholder="Buscar por equipo, lote, propietario o placa" aria-label="Buscar equipo">
     <div class="chips" id="filtros" role="group" aria-label="Filtrar por estado"></div>
@@ -166,6 +175,11 @@ function pintarResumen() {
     [cop(valor), "valor publicado disponible"], [cop(com), "comisión estimada (activos)"], [sinDueno, "sin propietario registrado", sinDueno > 0]
   ].map(([v, t, al]) => `<div class="cifra${al ? " alerta" : ""}"><b>${esc(v)}</b><small>${esc(t)}</small></div>`).join("");
 }
+function pintarPendientes() {
+  const p = filas.filter(r => (r.estado === "Vendido") !== !!r.web_vendido).sort((a, b) => num(a.lote) - num(b.lote));
+  const el = $("#pendientes"); el.hidden = !p.length;
+  el.innerHTML = p.length ? `<b>Por publicar en la página:</b> ${p.map(r => `lote ${esc(r.lote)} ${esc(r.nombre)} (${r.estado === "Vendido" ? "vendido" : "volver a disponible"})`).join(" · ")}. Pídele a Claude «publica los vendidos».` : "";
+}
 function pintarFiltros() {
   const ops = ["Todos", ...ESTADOS, "Falta información"];
   const n = o => o === "Todos" ? filas.length : o === "Falta información" ? filas.filter(r => faltantes(r).length).length : filas.filter(r => r.estado === o).length;
@@ -178,7 +192,7 @@ function visibles() {
     .sort((a, b) => num(a.lote) - num(b.lote));
 }
 function pintarLista() {
-  pintarResumen(); pintarFiltros();
+  pintarResumen(); pintarPendientes(); pintarFiltros();
   const l = visibles();
   if (!filas.length) { $("#contenido").innerHTML = `<div class="vacio">Todavía no hay equipos. Usa <b>Agregar equipo</b> para registrar el primero.</div>`; return; }
   if (!l.length) { $("#contenido").innerHTML = `<div class="vacio">Ningún equipo coincide con el filtro.</div>`; return; }
@@ -253,6 +267,12 @@ function bancoHTML(r) {
       <span class="sub">Fotos JPG/PNG y videos MP4 de hasta 20 MB cada uno. Para videos más largos usa la carpeta de Drive.</span></div>` : `<p class="sub">Solo quien puede editar esta página puede subir archivos.</p>`;
   return subir + `<div class="banco">${lista}</div>`;
 }
+function ventaHTML(r) {
+  if (r.estado === "Vendido") return `<div class="venta vendido"><p><span class="pill e-Vendido">Vendido</span> ${r.fecha_venta ? "el " + esc(r.fecha_venta) : ""}${r.comprador ? " · " + esc(r.comprador) : ""}<br><span class="sub">${r.web_vendido ? "Ya sale con el sello «Equipo vendido» en la página." : "Pendiente de publicar el sello en la página."}</span></p>
+    <div class="acciones"><button type="button" class="btn sec" id="pedir-deshacer">Deshacer venta</button></div></div>`;
+  return `<div class="venta"><p>¿Se cerró la venta? En la página saldrá con el sello «Equipo vendido», sin precio y fuera de destacados.</p>
+    <div class="acciones"><button type="button" class="btn vender" id="pedir-venta">Marcar como vendido</button></div></div>`;
+}
 function abrir(id) {
   const r = filas.find(x => x._id === id); if (!r) return;
   abierto = id; pendiente = {};
@@ -260,6 +280,7 @@ function abrir(id) {
     <div class="barra"><div style="min-width:0"><div class="sub">Lote ${esc(r.lote)}</div><h2 id="f-titulo">${esc(r.nombre || "Equipo nuevo")}</h2></div>
       <div style="display:flex;gap:10px;align-items:center"><span class="guardado" id="guardado">Guardado</span><button type="button" class="btn sec" data-cerrar>Cerrar</button></div></div>
     <div class="cuerpo">
+      <div id="zona-venta">${ventaHTML(r)}</div>
       ${SECCIONES.map(([t, cs]) => `<fieldset><legend>${esc(t)}</legend><div class="campos">${cs.map(c => campoHTML(r, c)).join("")}</div>
         ${t === "Precios y comisión" ? `<p class="calculo" id="calculo">${calculoHTML(r)}</p>` : ""}</fieldset>`).join("")}
       <fieldset><legend>Banco de fotos y videos</legend><div id="banco">${bancoHTML(r)}</div></fieldset>
@@ -270,6 +291,26 @@ function abrir(id) {
 }
 async function cerrar() { await guardarYa(); abierto = null; $("#capa").innerHTML = ""; document.body.style.overflow = ""; pintarLista(); }
 $("#capa").addEventListener("click", ev => { if (ev.target.closest("[data-cerrar]")) cerrar(); });
+$("#capa").addEventListener("click", async ev => {
+  const r = filas.find(x => x._id === abierto); if (!r) return;
+  const z = $("#zona-venta"), t = ev.target.closest("button"); if (!t || !z.contains(t)) return;
+  if (t.id === "pedir-venta") { z.innerHTML = `<div class="venta vendido"><p><b>¿Confirmas que el lote ${esc(r.lote)} · ${esc(r.nombre)} se vendió?</b><br><span class="sub">Puedes anotar el comprador más abajo, en Disponibilidad.</span></p>
+      <div class="acciones"><button type="button" class="btn" id="si-venta">Sí, se vendió</button><button type="button" class="btn sec" id="no-venta">Cancelar</button></div></div>`; $("#si-venta").focus(); return; }
+  if (t.id === "pedir-deshacer") { z.innerHTML = `<div class="venta"><p><b>¿Volver el lote ${esc(r.lote)} a disponible?</b><br><span class="sub">Se quita el sello de la página y vuelve a mostrar el precio.</span></p>
+      <div class="acciones"><button type="button" class="btn" id="si-deshacer">Sí, volver a disponible</button><button type="button" class="btn sec" id="no-venta">Cancelar</button></div></div>`; return; }
+  if (t.id === "no-venta") { z.innerHTML = ventaHTML(r); return; }
+  if (t.id === "si-venta" || t.id === "si-deshacer") {
+    const vende = t.id === "si-venta";
+    const cambios = vende ? { estado: "Vendido", fecha_venta: r.fecha_venta || new Date().toLocaleDateString("en-CA", { timeZone: "America/Bogota" }) } : { estado: "Disponible", fecha_venta: "" };
+    t.disabled = true;
+    try {
+      await guardarYa();
+      cola = cola.then(() => DB.doc("equipos/" + r._id).update({ ...cambios, actualizado: new Date().toISOString() })); await cola;
+      Object.assign(r, cambios); abrir(r._id); pintarResumen(); pintarPendientes();
+      aviso(vende ? "Marcado como vendido. Pídele a Claude «publica los vendidos» para ponerle el sello en la página." : "Volvió a disponible. Pídele a Claude «publica los vendidos» para quitar el sello de la página.");
+    } catch (e) { t.disabled = false; aviso("No se pudo guardar. Revisa la conexión e intenta de nuevo."); }
+  }
+});
 
 function valorDe(el) {
   if (el.type === "checkbox") return el.checked;
@@ -286,6 +327,7 @@ function programar(el) {
   pendiente[el.dataset.k] = valorDe(el);
   $("#guardado").textContent = "Guardando…";
   const r = filas.find(x => x._id === abierto); if (r) { Object.assign(r, pendiente); const c = $("#calculo"); if (c) c.innerHTML = calculoHTML(r); }
+  if (el.dataset.k === "estado" && r) { const z = $("#zona-venta"); if (z) z.innerHTML = ventaHTML(r); }
   clearTimeout(timer); timer = setTimeout(guardarYa, 800);
 }
 function guardarYa() {

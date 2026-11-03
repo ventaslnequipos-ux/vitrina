@@ -25,6 +25,13 @@ Las rutas de los scripts apuntan a una carpeta de trabajo (`S=...`). En una sesi
 3. Agregar el objeto en `EQUIPOS` de `web/vitrina.html` y su fecha en `INGRESOS`.
 4. `bash tools/build_site.sh`, copiar `site/index.html`, `site/equipos.js` y la foto a la rama `main`, commit y push.
 
+## Marcar un equipo como vendido
+
+1. Nestor abre la ficha del equipo en el control privado y toca **Marcar como vendido** (queda `estado: "Vendido"` y `fecha_venta`). "Deshacer venta" lo devuelve a Disponible.
+2. El control muestra arriba los cambios "Por publicar en la página": son los equipos cuyo `estado` no coincide con `web_vendido`.
+3. Al pedir «publica los vendidos», Claude lee la colección `equipos` del control, actualiza `VENDIDOS` en `web/vitrina.html` (nombre exacto del equipo: fecha de venta), corre `tools/build_site.sh`, copia `equipos.js` a `main`, hace commit y push, pone `web_vendido` (fecha) en el control (o lo borra si se deshizo la venta) y cambia el estado en la hoja "Base de datos Yellow Yard".
+4. En la página el equipo queda con el sello "Equipo vendido · Yellow Yard by Nestor Sierra" en la esquina de la foto, sin precio, al final de la lista y fuera de destacados, cinta, "Nuevo ingreso" y "Mi consulta". La página de Marketplace avisa que hay que retirar esa publicación.
+
 ## Tipografía y colores
 
 - Títulos: Alfa Slab One. Texto: Zilla Slab. Datos: IBM Plex Mono.
