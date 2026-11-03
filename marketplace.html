@@ -96,9 +96,9 @@ function pintar() {
       <div class="head"><h2>${i + 1}. ${esc(e.nombre)}</h2>
         <label><input type="checkbox" data-n="${esc(e.nombre)}" ${hechos[e.nombre] ? "checked" : ""}> Publicado</label></div>
       ${e.img ? `<img class="photo" src="${esc(e.img)}" alt="${esc(e.nombre)}"><div class="tip">Mantén presionada la foto para guardarla.</div>` : ""}
-      ${campo("Título", titulo(e), "t" + i)}
+      ${typeof VENDIDOS !== "undefined" && VENDIDOS[e.nombre] ? `<div class="field"><div class="warn">Equipo vendido: retira o marca como vendida su publicación en Facebook Marketplace.</div></div>` : `${campo("Título", titulo(e), "t" + i)}
       ${e.precio ? campo("Precio", String(e.precio), "p" + i) : `<div class="field"><div class="k">Precio</div><div class="warn">Sin precio todavía: espera a tenerlo antes de publicar este equipo.</div></div>`}
-      ${campo("Descripción", descripcion(e), "d" + i)}
+      ${campo("Descripción", descripcion(e), "d" + i)}`}
     </article>`).join("");
   const n = Object.values(hechos).filter(Boolean).length;
   prog.textContent = `Publicados: ${n} de ${EQUIPOS.length}`;
