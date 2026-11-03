@@ -273,6 +273,12 @@ dialog.consulta::backdrop { background: rgba(0,0,0,.72); }
 .opcion .ico { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 50%; background: rgba(0,0,0,.12); font-family: var(--rotulo); font-size: 22px; }
 .opcion .ico svg { width: 26px; height: 26px; }
 .opcion b { display: block; font-size: 18px; }
+.btn-ig-yo { display: none; }
+body.modo-yo .btn-ig-yo { display: inline-grid; place-items: center; width: 44px; height: 44px; padding: 0; background: none; border: 1px dashed var(--linea); color: var(--hueso); opacity: .45; cursor: pointer; }
+body.modo-yo .btn-ig-yo:hover, body.modo-yo .btn-ig-yo:focus-visible { opacity: 1; border-color: var(--ama); color: var(--ama); }
+.btn-ig-yo svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; }
+.btn-ig-yo svg .punto { fill: currentColor; stroke: none; }
+.lote.grande .btn-ig-yo { display: none !important; }
 .opcion.insta { background: #FFC20E; border-color: #FFC20E; color: #0D0D0D; }
 .pasos-ig { margin: 0; padding-left: 22px; display: grid; gap: 6px; font-size: 16px; }
 .pasos-ig b { color: var(--ama); }
@@ -585,7 +591,7 @@ function lote(e, grande, sinId) {
         <div class="etiqueta"><small>PRECIO COP</small><strong>${cop(e.precio)}</strong></div>
       </div>
       <dl class="ficha">${ficha.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>
-      <div class="botones"><a class="boton wpp" data-consulta="${e.lote}" style="--d: ${(parseInt(e.lote, 10) % 5) * 0.9}s" href="${WA}${msg(e)}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>Consultar lote por WhatsApp</a><button type="button" class="boton linea interesa" data-lote="${e.lote}">Me interesa</button><button type="button" class="boton linea compartir" data-lote="${e.lote}" aria-label="Compartir ${esc(e.nombre)} como imagen"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M16 6l-4-4-4 4M12 2v13"/></svg>Compartir</button></div>
+      <div class="botones"><a class="boton wpp" data-consulta="${e.lote}" style="--d: ${(parseInt(e.lote, 10) % 5) * 0.9}s" href="${WA}${msg(e)}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>Consultar lote por WhatsApp</a><button type="button" class="boton linea interesa" data-lote="${e.lote}">Me interesa</button><button type="button" class="boton linea compartir" data-lote="${e.lote}" aria-label="Compartir ${esc(e.nombre)} como imagen"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M16 6l-4-4-4 4M12 2v13"/></svg>Compartir</button><button type="button" class="btn-ig-yo" data-ig-lote="${e.lote}" aria-label="Publicar ${esc(e.nombre)} en Instagram" title="Publicar en Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" class="punto"/></svg></button></div>
     </div>
   </article>`;
 }
@@ -814,6 +820,16 @@ const ICO_WA = `<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentC
 })();
 
 // Compartir cada equipo como imagen (estados de WhatsApp, redes) con el enlace al catálogo
+// Modo de Nestor: abre una vez el catálogo con ?yo=1 en tu celular y el botón de Instagram aparece solo ahí (?yo=0 lo quita)
+(function () {
+  try {
+    const q = new URLSearchParams(location.search).get("yo");
+    if (q === "1") localStorage.setItem("yy_yo", "1");
+    if (q === "0") localStorage.removeItem("yy_yo");
+    if (localStorage.getItem("yy_yo") === "1") document.body.classList.add("modo-yo");
+    if (q === "1" || q === "0") setTimeout(() => aviso(q === "1" ? "Modo Instagram activado en este dispositivo." : "Modo Instagram desactivado."), 600);
+  } catch (x) {}
+})();
 const SITIO = location.protocol.startsWith("http") ? location.origin + location.pathname : "https://ventaslnequipos-ux.github.io/vitrina/";
 function aviso(t) { let a = document.querySelector(".aviso"); if (!a) { a = document.createElement("div"); a.className = "aviso"; a.setAttribute("role", "status"); document.body.appendChild(a); } a.textContent = t; clearTimeout(a._t); a._t = setTimeout(() => a.remove(), 5000); }
 const cargarImg = src => new Promise((ok, mal) => { const i = new Image(); i.onload = () => ok(i); i.onerror = mal; i.src = src; });
@@ -903,14 +919,9 @@ const ICO_SH = `<svg viewBox="0 0 24 24" aria-hidden="true" style="fill:none;str
   const abrir = () => { if (!dlg.open) { dlg.showModal ? dlg.showModal() : dlg.setAttribute("open", ""); } };
   const cerrar = () => dlg.close ? dlg.close() : dlg.removeAttribute("open");
   let e = null, blob = null, archivo = null, desc = "";
-  function menu(lote) {
+  function preparar(lote) {
     e = lote; blob = null; archivo = null; desc = descripcionIG(e);
     document.getElementById("com-sub").textContent = `Lote ${e.lote} · ${e.nombre}`;
-    document.getElementById("com-titulo").textContent = "¿Dónde lo vas a compartir?";
-    cuerpo.innerHTML = `<button type="button" class="opcion insta" data-ig><span class="ico">${ICO_IG}</span><span><b>Publicación de Instagram</b><span class="txt">Copio la descripción con toda la ficha técnica y el enlace, y te doy la imagen lista.</span></span></button>
-      <button type="button" class="opcion" data-otras><span class="ico">${ICO_SH}</span><span><b>WhatsApp, Facebook y otras</b><span class="txt">Imagen del equipo con un mensaje corto y el enlace.</span></span></button>`;
-    abrir();
-    tarjeta(e).then(b => { blob = b; archivo = new File([b], `Yellow-Yard-lote-${e.lote}.jpg`, { type: "image/jpeg" }); }).catch(() => {});
   }
   async function imagen() { if (!blob) { blob = await tarjeta(e); archivo = new File([blob], `Yellow-Yard-lote-${e.lote}.jpg`, { type: "image/jpeg" }); } return archivo; }
   async function instagram() {
@@ -939,11 +950,17 @@ const ICO_SH = `<svg viewBox="0 0 24 24" aria-hidden="true" style="fill:none;str
   }
   document.addEventListener("click", async ev => {
     const b = ev.target.closest(".compartir");
-    if (b) { const l = LOTES.find(z => z.lote === b.dataset.lote); if (l) menu(l); return; }
+    if (b) { // predeterminado: WhatsApp, Facebook y demás apps del teléfono
+      const l = LOTES.find(z => z.lote === b.dataset.lote); if (!l) return;
+      preparar(l); b.setAttribute("aria-busy", "true"); try { await otras(); } finally { b.removeAttribute("aria-busy"); } return;
+    }
+    const ig = ev.target.closest("[data-ig-lote]");
+    if (ig) { // solo en el modo de Nestor
+      const l = LOTES.find(z => z.lote === ig.dataset.igLote); if (!l) return;
+      preparar(l); abrir(); instagram(); return;
+    }
     if (!e) return;
     if (ev.target.closest("[data-cerrar-compartir]")) { cerrar(); return; }
-    if (ev.target.closest("[data-ig]")) { instagram(); return; }
-    if (ev.target.closest("[data-otras]")) { otras(); return; }
     const actual = () => (document.getElementById("desc-ig") || {}).value || desc;
     if (ev.target.closest("[data-ig-copiar]")) { aviso((await copiar(actual())) ? "Descripción copiada. Pégala en el pie de foto." : "No se pudo copiar: selecciona el texto y cópialo."); return; }
     if (ev.target.closest("[data-ig-bajar]")) { try { const f = await imagen(); bajar(f, f.name); } catch (err) {} return; }
