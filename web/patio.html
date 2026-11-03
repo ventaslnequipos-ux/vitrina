@@ -196,6 +196,14 @@ a { color: var(--ama); }
 .tipo { font-family: var(--mono); font-size: 12px; letter-spacing: 0.12em; color: var(--ama); text-transform: uppercase; }
 .lote h2 { margin: 4px 0 0; font-family: var(--rotulo); font-weight: 400; font-size: clamp(22px, 2.5vw, 30px); line-height: 1.08; text-transform: uppercase; color: #FFFFFF; overflow-wrap: break-word; hyphens: auto; -webkit-hyphens: auto; }
 .etiqueta { position: relative; flex-shrink: 0; background: var(--ama); color: var(--negro); padding: 10px 16px 10px 26px; clip-path: polygon(14px 0, 100% 0, 100% 100%, 14px 100%, 0 50%); text-align: right; }
+/* Equipo vendido: sello en la esquina, sin tapar la máquina */
+.sello-v { position: absolute; top: 10px; right: 10px; z-index: 2; width: 108px; height: 108px; transform: rotate(-10deg); filter: drop-shadow(0 3px 10px rgba(0,0,0,.55)); pointer-events: none; }
+.lote.grande .sello-v { width: 136px; height: 136px; }
+.mini .sello-v { width: 46px; height: 46px; top: 3px; right: 3px; }
+.tesela .sello-v { width: 78px; height: 78px; }
+.etiqueta.vend { background: #161616; color: var(--ama); box-shadow: inset 0 0 0 2px var(--oro); }
+.etiqueta.vend::before { background: var(--oro); }
+.precio.vend, .pr.vend { color: var(--oro); }
 .etiqueta::before { content: ""; position: absolute; left: 12px; top: 50%; width: 7px; height: 7px; margin-top: -3.5px; border-radius: 50%; background: var(--panel); }
 .etiqueta small { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; }
 .etiqueta strong { display: block; font-family: var(--rotulo); font-weight: 400; font-size: 21px; line-height: 1.1; white-space: nowrap; }
@@ -550,15 +558,19 @@ const DEST = typeof DESTACADO !== "undefined" ? DESTACADO : "";
 const ING = typeof INGRESOS !== "undefined" ? INGRESOS : {};
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const cop = n => n > 0 ? "$" + n.toLocaleString("es-CO").replace(/,/g, ".") : "A consultar";
-const esNuevo = e => ING[e.nombre] && (Date.now() - Date.parse(ING[e.nombre] + "T00:00:00-05:00")) < 15 * 864e5;
+const VEND = typeof VENDIDOS !== "undefined" ? VENDIDOS : {};
+const esVendido = e => !!VEND[e.nombre];
+const esNuevo = e => !esVendido(e) && ING[e.nombre] && (Date.now() - Date.parse(ING[e.nombre] + "T00:00:00-05:00")) < 15 * 864e5;
 const LOTES = EQUIPOS.map((e, i) => ({ ...e, lote: String(i + 1).padStart(2, "0") }));
+const DISPONIBLES = LOTES.filter(e => !esVendido(e));
+const SELLO_V = `<svg class="sello-v" viewBox="0 0 160 160" role="img" aria-label="Equipo vendido"><defs><path id="giro-v" d="M80 80 m-59 0 a59 59 0 1 1 118 0 a59 59 0 1 1 -118 0"/></defs><circle cx="80" cy="80" r="76" fill="rgba(13,13,13,.92)" stroke="#C9A227" stroke-width="4"/><circle cx="80" cy="80" r="46" fill="none" stroke="#C9A227" stroke-width="1.5" stroke-dasharray="3 4"/><text font-family="Zilla Slab, Georgia, serif" font-size="12.5" font-weight="700" letter-spacing="1.6" fill="#C9A227"><textPath href="#giro-v">YELLOW YARD · BY NESTOR SIERRA ·</textPath></text><text x="80" y="76" text-anchor="middle" font-family="Alfa Slab One, Georgia, serif" font-size="13" letter-spacing="1" fill="#FFC20E">EQUIPO</text><text x="80" y="97" text-anchor="middle" font-family="Alfa Slab One, Georgia, serif" font-size="17.5" fill="#FFC20E">VENDIDO</text></svg>`;
 
 // Césped de la franja
 (function () { let d = "", x = 0, s = 7; while (x < 1200) { s = (s * 9301 + 49297) % 233280; const h = 8 + (s / 233280) * 18, w = 7 + (s % 5); d += `M${x} 26 L${x + w / 2 + ((s % 7) - 3)} ${26 - h} L${x + w} 26 Z `; x += w * 0.7; } document.getElementById("pasto").setAttribute("d", d); })();
 
 // Cinta con los últimos ingresos
 (function () {
-  const items = LOTES.filter(esNuevo).concat(LOTES.filter(e => !esNuevo(e)).slice(0, 4))
+  const items = DISPONIBLES.filter(esNuevo).concat(DISPONIBLES.filter(e => !esNuevo(e)).slice(0, 4))
     .map(e => `<span>Lote ${e.lote} · ${esc(e.nombre)} ${e.anio || ""} · ${cop(e.precio)}</span>`).join("");
   document.getElementById("cinta").innerHTML = items + items;
 })();
@@ -568,27 +580,27 @@ const msg = e => encodeURIComponent(`Hola Nestor, vi en Yellow Yard el lote ${e.
 function lote(e, grande, sinId) {
   const ficha = [["Año", e.anio || "Por confirmar"], ["Uso", e.uso]].concat(e.specs);
   return `<article class="lote${grande ? " grande" : ""}"${grande || sinId ? "" : ` id="lote-${e.lote}"`}>
-    <div class="foto">${e.img ? `<img class="relleno" src="${esc(e.img)}?v=${VER}" alt=""${grande ? "" : ' loading="lazy"'}><img src="${esc(e.img)}?v=${VER}" alt="${esc(e.cat)} ${esc(e.nombre)}"${grande ? "" : ' loading="lazy"'}>` : `<div class="sinfoto">Fotos por WhatsApp</div>`}${esNuevo(e) ? '<span class="nuevo">Nuevo ingreso</span>' : ""}</div>
+    <div class="foto">${e.img ? `<img class="relleno" src="${esc(e.img)}?v=${VER}" alt=""${grande ? "" : ' loading="lazy"'}><img src="${esc(e.img)}?v=${VER}" alt="${esc(e.cat)} ${esc(e.nombre)}"${grande ? "" : ' loading="lazy"'}>` : `<div class="sinfoto">Fotos por WhatsApp</div>`}${esNuevo(e) ? '<span class="nuevo">Nuevo ingreso</span>' : ""}${esVendido(e) ? SELLO_V : ""}</div>
     <div class="info">
       <div class="cabeza">
         <div style="min-width: 0"><div class="num">Lote ${e.lote}</div><div class="tipo">${esc(e.cat)}</div><h2>${esc(e.nombre)}</h2></div>
-        <div class="etiqueta"><small>PRECIO COP</small><strong>${cop(e.precio)}</strong></div>
+        ${esVendido(e) ? `<div class="etiqueta vend"><small>ESTADO</small><strong>Vendido</strong></div>` : `<div class="etiqueta"><small>PRECIO COP</small><strong>${cop(e.precio)}</strong></div>`}
       </div>
       <dl class="ficha">${ficha.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>
-      <div class="botones"><a class="boton wpp" data-consulta="${e.lote}" style="--d: ${(parseInt(e.lote, 10) % 5) * 0.9}s" href="${WA}${msg(e)}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>Consultar lote por WhatsApp</a><button type="button" class="boton linea interesa" data-lote="${e.lote}">Me interesa</button><button type="button" class="boton linea compartir" data-lote="${e.lote}" aria-label="Compartir ${esc(e.nombre)} como imagen"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M16 6l-4-4-4 4M12 2v13"/></svg>Compartir</button></div>
+      ${esVendido(e) ? `<div class="botones"><button type="button" class="boton linea" data-similar="${esc(e.tipo)}">Ver equipos similares</button></div>` : `<div class="botones"><a class="boton wpp" data-consulta="${e.lote}" style="--d: ${(parseInt(e.lote, 10) % 5) * 0.9}s" href="${WA}${msg(e)}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>Consultar lote por WhatsApp</a><button type="button" class="boton linea interesa" data-lote="${e.lote}">Me interesa</button><button type="button" class="boton linea compartir" data-lote="${e.lote}" aria-label="Compartir ${esc(e.nombre)} como imagen"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M16 6l-4-4-4 4M12 2v13"/></svg>Compartir</button></div>`}
     </div>
   </article>`;
 }
 
 // Destacados de la semana: max(3, 10 % del total). Rotan solos cada lunes entre los lotes con foto y precio.
 (function () {
-  const cuantos = Math.max(3, Math.ceil(LOTES.length * 0.1));
+  const cuantos = Math.max(3, Math.ceil(DISPONIBLES.length * 0.1));
   const lunes0 = Date.parse("2026-01-05T00:00:00-05:00");
   const semana = Math.floor((Date.now() - lunes0) / (7 * 864e5));
-  let pool = LOTES.filter(e => e.img && e.precio > 0);
+  let pool = DISPONIBLES.filter(e => e.img && e.precio > 0);
   // mezcla fija para que cada semana salgan equipos de distintos tipos
   let sem = 7; pool = pool.map(e => { sem = (sem * 9301 + 49297) % 233280; return [sem, e]; }).sort((a, b) => a[0] - b[0]).map(x => x[1]);
-  const manual = (typeof FIJOS !== "undefined" ? FIJOS : []).map(n => LOTES.find(e => e.nombre === n)).filter(Boolean);
+  const manual = (typeof FIJOS !== "undefined" ? FIJOS : []).map(n => DISPONIBLES.find(e => e.nombre === n)).filter(Boolean);
   const rot = []; for (let k = 0; rot.length < cuantos && k < pool.length; k++) { const e = pool[(semana * cuantos + k) % pool.length]; if (!manual.includes(e) && !rot.includes(e)) rot.push(e); }
   const sel = manual.concat(rot).slice(0, cuantos);
   const ini = new Date(lunes0 + semana * 7 * 864e5);
@@ -644,14 +656,14 @@ function pintarVista(l, animar) {
   let html;
   if (VISTA === "lista") {
     html = `<div class="vista-lista${animar ? " entra" : ""}">${l.map((e, i) => `<article class="fila" id="lote-${e.lote}" data-ficha="${e.lote}" style="--i:${i}" tabindex="0" aria-label="Ver ficha de ${esc(e.nombre)}">
-      <div class="mini">${foto(e)}${esNuevo(e) ? '<span class="nuevo">Nuevo</span>' : ""}</div>
+      <div class="mini">${foto(e)}${esNuevo(e) ? '<span class="nuevo">Nuevo</span>' : ""}${esVendido(e) ? SELLO_V : ""}</div>
       <div class="datos"><div class="num">Lote ${e.lote} · ${esc(e.cat)}</div><h3>${esc(e.nombre)}</h3><div class="meta">${[e.anio || "", e.uso].filter(Boolean).map(esc).join(" · ")}</div></div>
-      <div class="lado"><div class="precio">${cop(e.precio)}</div><div class="mini-btns"><a class="btn-ico wa" data-consulta="${e.lote}" href="${WA}${msg(e)}" target="_blank" rel="noopener" aria-label="Consultar ${esc(e.nombre)} por WhatsApp">${ICO_W}</a><button type="button" class="btn-ico" data-ficha="${e.lote}" aria-label="Ver ficha completa">${ICO_OJO.replace('<svg', '<svg style="fill:none;stroke:currentColor;stroke-width:2"')}</button></div></div>
+      <div class="lado">${esVendido(e) ? `<div class="precio vend">Vendido</div><div class="mini-btns">` : `<div class="precio">${cop(e.precio)}</div><div class="mini-btns"><a class="btn-ico wa" data-consulta="${e.lote}" href="${WA}${msg(e)}" target="_blank" rel="noopener" aria-label="Consultar ${esc(e.nombre)} por WhatsApp">${ICO_W}</a>`}<button type="button" class="btn-ico" data-ficha="${e.lote}" aria-label="Ver ficha completa">${ICO_OJO.replace('<svg', '<svg style="fill:none;stroke:currentColor;stroke-width:2"')}</button></div></div>
     </article>`).join("")}</div>`;
   } else if (VISTA === "mosaico") {
-    html = `<div class="vista-mosaico${animar ? " entra" : ""}">${l.map((e, i) => `<button type="button" class="tesela" id="lote-${e.lote}" data-ficha="${e.lote}" style="--i:${i}" aria-label="Ver ficha de ${esc(e.nombre)}, ${cop(e.precio)}">
-      ${foto(e)}${esNuevo(e) ? '<span class="nuevo">Nuevo</span>' : ""}<span class="ver">${ICO_OJO}</span>
-      <span class="pie"><span class="lt">Lote ${e.lote}</span><h3>${esc(e.nombre)}</h3><span class="pr">${cop(e.precio)}</span></span>
+    html = `<div class="vista-mosaico${animar ? " entra" : ""}">${l.map((e, i) => `<button type="button" class="tesela" id="lote-${e.lote}" data-ficha="${e.lote}" style="--i:${i}" aria-label="Ver ficha de ${esc(e.nombre)}, ${esVendido(e) ? "vendido" : cop(e.precio)}">
+      ${foto(e)}${esNuevo(e) ? '<span class="nuevo">Nuevo</span>' : ""}${esVendido(e) ? SELLO_V : ""}<span class="ver">${ICO_OJO}</span>
+      <span class="pie"><span class="lt">Lote ${e.lote}</span><h3>${esc(e.nombre)}</h3>${esVendido(e) ? `<span class="pr vend">Vendido</span>` : `<span class="pr">${cop(e.precio)}</span>`}</span>
     </button>`).join("")}</div>`;
   } else {
     html = l.map(e => lote(e, false)).join("");
@@ -698,10 +710,21 @@ function pintar() {
   if (v === "precio-asc") l.sort((a, b) => sp(a, b, (x, y) => x.precio - y.precio));
   if (v === "anio-desc") l.sort((a, b) => !a.anio - !b.anio || b.anio - a.anio);
   if (v === "anio-asc") l.sort((a, b) => !a.anio - !b.anio || a.anio - b.anio);
-  document.getElementById("conteo").textContent = `${l.length} ${l.length === 1 ? "lote" : "lotes"} en el patio`;
+  l = l.filter(e => !esVendido(e)).concat(l.filter(esVendido)); // los vendidos siempre al final
+  const nv = l.filter(esVendido).length, nd = l.length - nv;
+  document.getElementById("conteo").textContent = `${nd} ${nd === 1 ? "lote" : "lotes"} en el patio` + (nv ? ` · ${nv} ${nv === 1 ? "vendido" : "vendidos"}` : "");
   pintarVista(l);
 }
 pintar();
+
+// Equipo vendido: "Ver equipos similares" filtra el patio por el mismo tipo
+document.addEventListener("click", ev => {
+  const b = ev.target.closest("[data-similar]"); if (!b) return;
+  const t = DISPONIBLES.some(e => e.tipo === b.dataset.similar) ? b.dataset.similar : "Todos";
+  const dlg = document.getElementById("ficha-dlg"); if (dlg.open) dlg.close();
+  const f = filtros.querySelector(`button[data-t="${CSS.escape(t)}"]`); if (f) f.click(); else { actual = t; pintar(); }
+  document.querySelector(".lotes").scrollIntoView({ behavior: "smooth", block: "start" });
+});
 
 // "Me interesa": el visitante deja sus datos. Si FORMULARIO tiene la dirección del script de Google, los datos
 // llegan a la hoja "Interesados" y a tu correo; si no, se abre WhatsApp con el mensaje ya escrito.
@@ -746,7 +769,7 @@ const ICO_WA = `<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentC
 (function () {
   const dlg = document.getElementById("consulta"), cuerpo = document.getElementById("con-cuerpo"), barra = document.getElementById("barra-consulta");
   let lista = [];
-  try { lista = JSON.parse(localStorage.getItem("yy_consulta") || "[]").filter(l => LOTES.some(e => e.lote === l)); } catch (x) {}
+  try { lista = JSON.parse(localStorage.getItem("yy_consulta") || "[]").filter(l => DISPONIBLES.some(e => e.lote === l)); } catch (x) {}
   const guardar = () => { try { localStorage.setItem("yy_consulta", JSON.stringify(lista)); } catch (x) {} };
   const equipos = () => lista.map(l => LOTES.find(e => e.lote === l)).filter(Boolean);
   const abrir = () => { if (!dlg.open) { dlg.showModal ? dlg.showModal() : dlg.setAttribute("open", ""); } };
