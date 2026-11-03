@@ -914,18 +914,65 @@ async function copiar(t) {
 function bajar(blob, nombre) { const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = nombre; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); }
 const ICO_IG = `<svg viewBox="0 0 24 24" aria-hidden="true" style="fill:none;stroke:currentColor;stroke-width:2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" style="fill:currentColor;stroke:none"/></svg>`;
 const ICO_SH = `<svg viewBox="0 0 24 24" aria-hidden="true" style="fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M16 6l-4-4-4 4M12 2v13"/></svg>`;
+// Las imágenes se preparan antes del toque: los celulares (sobre todo iPhone) solo abren el menú de compartir
+// si se pide en el mismo instante del toque, sin esperas de por medio.
+const IMG_LISTA = new Map(), IMG_PEND = new Map();
+function prepararImagen(e) {
+  if (IMG_LISTA.has(e.lote)) return Promise.resolve(IMG_LISTA.get(e.lote));
+  if (!IMG_PEND.has(e.lote)) IMG_PEND.set(e.lote, tarjeta(e).then(b => { const f = new File([b], `Yellow-Yard-lote-${e.lote}.jpg`, { type: "image/jpeg" }); IMG_LISTA.set(e.lote, f); return f; }).finally(() => IMG_PEND.delete(e.lote)));
+  return IMG_PEND.get(e.lote);
+}
+(function () { // adelanta la imagen de los equipos que aparecen en pantalla, de a uno
+  if (!("IntersectionObserver" in window)) return;
+  const cola = []; let ocupado = false;
+  const sig = () => { if (ocupado || !cola.length) return; ocupado = true; const e = cola.shift(); prepararImagen(e).catch(() => {}).finally(() => { ocupado = false; setTimeout(sig, 150); }); };
+  const io = new IntersectionObserver(ents => ents.forEach(en => {
+    if (!en.isIntersecting) return; io.unobserve(en.target);
+    const e = LOTES.find(z => z.lote === (en.target.dataset.lote || en.target.dataset.igLote));
+    if (e && !IMG_LISTA.has(e.lote) && !cola.includes(e)) { cola.push(e); sig(); }
+  }), { rootMargin: "200px" });
+  const vigilar = raiz => raiz.querySelectorAll && raiz.querySelectorAll(".compartir, [data-ig-lote]").forEach(x => io.observe(x));
+  vigilar(document);
+  new MutationObserver(ms => ms.forEach(m => m.addedNodes.forEach(n => n.nodeType === 1 && vigilar(n)))).observe(document.body, { childList: true, subtree: true });
+})();
+const textoCorto = e => `🚜 ${e.nombre}${e.anio ? " " + e.anio : ""} · ${cop(e.precio)}\nMira este y más equipos en venta en Yellow Yard by Nestor Sierra 👉 ${CATALOGO}#lote-${e.lote}`;
+const puedeArchivos = f => !!(navigator.canShare && navigator.share && navigator.canShare({ files: [f] }));
 (function () {
   const dlg = document.getElementById("compartir-dlg"), cuerpo = document.getElementById("com-cuerpo");
   const abrir = () => { if (!dlg.open) { dlg.showModal ? dlg.showModal() : dlg.setAttribute("open", ""); } };
   const cerrar = () => dlg.close ? dlg.close() : dlg.removeAttribute("open");
-  let e = null, blob = null, archivo = null, desc = "";
-  function preparar(lote) {
-    e = lote; blob = null; archivo = null; desc = descripcionIG(e);
-    document.getElementById("com-sub").textContent = `Lote ${e.lote} · ${e.nombre}`;
+  let e = null, desc = "";
+  function preparar(lote) { e = lote; desc = descripcionIG(e); document.getElementById("com-sub").textContent = `Lote ${e.lote} · ${e.nombre}`; }
+  const fallo = err => { if (err && err.name === "AbortError") return; aviso("No se abrió el menú de compartir. Toca otra vez “Compartir”."); };
+
+  // Compartir normal (WhatsApp, Facebook…): se llama sin esperas dentro del toque
+  function compartirYa(f) {
+    const texto = textoCorto(e);
+    if (f && puedeArchivos(f)) { navigator.share({ files: [f], text: texto, title: `${e.nombre} · Yellow Yard` }).then(cerrar).catch(err => {
+        if (err && err.name === "AbortError") return;
+        // algunos navegadores (p. ej. el de Facebook o Instagram) no aceptan imagen: va solo el texto con el enlace
+        mostrarBoton(f, true); }); return; }
+    if (navigator.share) { navigator.share({ text: texto, title: `${e.nombre} · Yellow Yard` }).then(cerrar).catch(fallo); return; }
+    // computador: descarga la imagen y copia el texto
+    copiar(texto); if (f) bajar(f, f.name); cerrar(); aviso("Imagen descargada. El texto con el enlace quedó copiado: pégalo al publicarla.");
   }
-  async function imagen() { if (!blob) { blob = await tarjeta(e); archivo = new File([blob], `Yellow-Yard-lote-${e.lote}.jpg`, { type: "image/jpeg" }); } return archivo; }
+  function mostrarBoton(f, soloTexto) {
+    document.getElementById("com-titulo").textContent = "Compartir equipo";
+    cuerpo.innerHTML = `<p>${soloTexto ? "Este navegador no deja compartir la imagen. Puedes enviar el enlace del equipo:" : "La imagen está lista."}</p>
+      <div class="acciones-ig"><button type="button" class="boton" data-compartir-ya${soloTexto ? " data-solo-texto" : ""}>${ICO_SH} Compartir ahora</button>
+      ${f ? '<button type="button" class="boton linea" data-bajar-img>Descargar imagen</button>' : ""}</div>`;
+    abrir();
+  }
+  function otras() {
+    const f = IMG_LISTA.get(e.lote);
+    if (f || !navigator.share) { if (f) compartirYa(f); else prepararImagen(e).then(compartirYa).catch(() => compartirYa(null)); return; }
+    // la imagen aún no está: se prepara y se pide un segundo toque
+    document.getElementById("com-titulo").textContent = "Compartir equipo";
+    cuerpo.innerHTML = `<p>Preparando la imagen del equipo…</p>`; abrir();
+    prepararImagen(e).then(f2 => mostrarBoton(f2, false)).catch(() => mostrarBoton(null, true));
+  }
   async function instagram() {
-    const ok = await copiar(desc); // primero, mientras el toque sigue activo
+    const ok = await copiar(desc);
     document.getElementById("com-titulo").textContent = "Publicación de Instagram";
     cuerpo.innerHTML = `<p>${ok ? "✅ <b>Descripción copiada.</b>" : "Copia la descripción de abajo."} Ahora:</p>
       <ol class="pasos-ig"><li>Toca <b>Compartir imagen</b> y elige <b>Instagram → Publicación</b> (en computador, descárgala y súbela).</li><li>En el pie de foto, mantén presionado y elige <b>Pegar</b>.</li><li>Revisa y publica.</li></ol>
@@ -934,43 +981,25 @@ const ICO_SH = `<svg viewBox="0 0 24 24" aria-hidden="true" style="fill:none;str
       <textarea class="desc-ig" id="desc-ig">${esc(desc)}</textarea>
       <div class="acciones-ig"><button type="button" class="boton" data-ig-compartir>Compartir imagen</button>
       <button type="button" class="boton linea" data-ig-copiar>Copiar descripción otra vez</button>
-      <button type="button" class="boton linea" data-ig-bajar>Descargar imagen</button></div>`;
-    try { const f = await imagen(); document.getElementById("prev-ig").src = URL.createObjectURL(f); } catch (err) {}
+      <button type="button" class="boton linea" data-bajar-img>Descargar imagen</button></div>`;
+    try { const f = await prepararImagen(e); const im = document.getElementById("prev-ig"); if (im) im.src = URL.createObjectURL(f); } catch (err) {}
   }
-  async function otras() {
-    const link = `${SITIO}#lote-${e.lote}`;
-    const texto = `🚜 ${e.nombre}${e.anio ? " " + e.anio : ""} · ${cop(e.precio)}\nMira este y más equipos en venta en Yellow Yard by Nestor Sierra 👉 ${link}`;
-    await copiar(texto);
-    try {
-      const f = await imagen();
-      if (navigator.canShare && navigator.canShare({ files: [f] })) {
-        try { await navigator.share({ files: [f], text: texto, title: `${e.nombre} · Yellow Yard` }); cerrar(); } catch (err) { if (err.name !== "AbortError") throw err; }
-      } else { bajar(f, f.name); cerrar(); aviso("Imagen descargada. El texto con el enlace quedó copiado: pégalo al publicarla."); }
-    } catch (err) { aviso("No se pudo compartir desde este navegador. Intenta de nuevo o usa el botón de WhatsApp."); }
-  }
-  document.addEventListener("click", async ev => {
+  document.addEventListener("click", ev => {
     const b = ev.target.closest(".compartir");
-    if (b) { // predeterminado: WhatsApp, Facebook y demás apps del teléfono
-      const l = LOTES.find(z => z.lote === b.dataset.lote); if (!l) return;
-      preparar(l); b.setAttribute("aria-busy", "true"); try { await otras(); } finally { b.removeAttribute("aria-busy"); } return;
-    }
+    if (b) { const l = LOTES.find(z => z.lote === b.dataset.lote); if (l) { preparar(l); otras(); } return; }
     const ig = ev.target.closest("[data-ig-lote]");
-    if (ig) { // solo en el modo de Nestor
-      const l = LOTES.find(z => z.lote === ig.dataset.igLote); if (!l) return;
-      preparar(l); abrir(); instagram(); return;
-    }
+    if (ig) { const l = LOTES.find(z => z.lote === ig.dataset.igLote); if (l) { preparar(l); abrir(); instagram(); } return; }
     if (!e) return;
     if (ev.target.closest("[data-cerrar-compartir]")) { cerrar(); return; }
+    const ya = ev.target.closest("[data-compartir-ya]");
+    if (ya) { compartirYa(ya.hasAttribute("data-solo-texto") ? null : IMG_LISTA.get(e.lote)); return; }
+    if (ev.target.closest("[data-bajar-img]")) { prepararImagen(e).then(f => bajar(f, f.name)).catch(() => {}); return; }
     const actual = () => (document.getElementById("desc-ig") || {}).value || desc;
-    if (ev.target.closest("[data-ig-copiar]")) { aviso((await copiar(actual())) ? "Descripción copiada. Pégala en el pie de foto." : "No se pudo copiar: selecciona el texto y cópialo."); return; }
-    if (ev.target.closest("[data-ig-bajar]")) { try { const f = await imagen(); bajar(f, f.name); } catch (err) {} return; }
+    if (ev.target.closest("[data-ig-copiar]")) { copiar(actual()).then(ok => aviso(ok ? "Descripción copiada. Pégala en el pie de foto." : "No se pudo copiar: selecciona el texto y cópialo.")); return; }
     if (ev.target.closest("[data-ig-compartir]")) {
-      const t = actual(); await copiar(t);
-      try {
-        const f = await imagen();
-        if (navigator.canShare && navigator.canShare({ files: [f] })) { try { await navigator.share({ files: [f] }); } catch (err) { if (err.name !== "AbortError") throw err; } }
-        else { bajar(f, f.name); aviso("Imagen descargada. Súbela a Instagram y pega la descripción."); }
-      } catch (err) { aviso("No se pudo abrir el menú de compartir. Usa “Descargar imagen”."); }
+      const f = IMG_LISTA.get(e.lote);
+      if (f && puedeArchivos(f)) { copiar(actual()); navigator.share({ files: [f] }).catch(fallo); return; }
+      copiar(actual()); prepararImagen(e).then(f2 => { bajar(f2, f2.name); aviso("Imagen descargada. Súbela a Instagram y pega la descripción."); }).catch(() => {});
     }
   });
   dlg.addEventListener("click", ev => { if (ev.target === dlg) cerrar(); });
