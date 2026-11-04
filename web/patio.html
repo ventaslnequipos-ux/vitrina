@@ -188,6 +188,17 @@ a { color: var(--ama); }
 /* La foto se ve completa (con su marca de agua); el espacio sobrante se rellena con la misma foto desenfocada */
 .foto img.relleno { object-fit: cover; filter: blur(18px) brightness(.55); transform: scale(1.15); }
 @media (max-width: 760px) { .foto { min-height: 0; aspect-ratio: 4 / 3; } }
+.mas-medios { position: absolute; left: 10px; bottom: 10px; z-index: 2; min-height: 36px; background: rgba(13,13,13,.86); color: var(--hueso); border: 1px solid var(--ama); padding: 4px 12px; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; }
+.mas-medios:hover, .mas-medios:focus-visible { background: var(--ama); color: #0D0D0D; }
+.ficha-dlg .mas-medios { display: none; }
+.col-foto { display: flex; flex-direction: column; min-width: 0; background: #0B0B0B; }
+.col-foto .foto { flex: 1 1 auto; }
+.galeria { display: flex; flex-direction: column; gap: 10px; padding: 10px; background: #0B0B0B; min-width: 0; }
+.miniaturas { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px; }
+.miniaturas button { flex: 0 0 auto; width: 92px; height: 69px; padding: 0; border: 2px solid transparent; background: #111; cursor: pointer; }
+.miniaturas button[aria-pressed="true"] { border-color: var(--ama); }
+.miniaturas img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.galeria video { width: 100%; max-height: 70vh; background: #000; display: block; }
 .sinfoto { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: var(--rotulo); font-weight: 400; font-size: 22px; color: var(--plata); text-transform: uppercase; }
 .nuevo { position: absolute; top: 0; left: 0; background: var(--ama); color: var(--negro); font-family: var(--mono); font-weight: 600; font-size: 12px; letter-spacing: 0.12em; padding: 6px 10px; text-transform: uppercase; }
 .info { padding: 20px 22px 22px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
@@ -281,12 +292,6 @@ dialog.consulta::backdrop { background: rgba(0,0,0,.72); }
 .opcion .ico { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 50%; background: rgba(0,0,0,.12); font-family: var(--rotulo); font-size: 22px; }
 .opcion .ico svg { width: 26px; height: 26px; }
 .opcion b { display: block; font-size: 18px; }
-.btn-ig-yo { display: none; }
-body.modo-yo .btn-ig-yo { display: inline-grid; place-items: center; width: 44px; height: 44px; padding: 0; background: none; border: 1px dashed var(--linea); color: var(--hueso); opacity: .45; cursor: pointer; }
-body.modo-yo .btn-ig-yo:hover, body.modo-yo .btn-ig-yo:focus-visible { opacity: 1; border-color: var(--ama); color: var(--ama); }
-.btn-ig-yo svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; }
-.btn-ig-yo svg .punto { fill: currentColor; stroke: none; }
-.lote.grande .btn-ig-yo { display: none !important; }
 .opcion.insta { background: #FFC20E; border-color: #FFC20E; color: #0D0D0D; }
 .pasos-ig { margin: 0; padding-left: 22px; display: grid; gap: 6px; font-size: 16px; }
 .pasos-ig b { color: var(--ama); }
@@ -566,7 +571,8 @@ footer p { margin: 6px 0 0; max-width: 60ch; }
   </div>
 </footer>
 
-<script src="equipos.js"></script>
+<script>/* equipos.js cambia cada vez que Nestor publica desde el control: se pide fresco (clave por minuto) */document.write('<script src="equipos.js?t=' + Math.floor(Date.now() / 60000) + '"><\/script>');</script>
+<noscript><script src="equipos.js"></script></noscript>
 <script>
 const WA = "https://wa.me/573017959540?text=";
 const VER = "20261028c"; // cambia cuando se actualizan las fotos, para que nadie vea fotos viejas guardadas
@@ -577,7 +583,18 @@ const cop = n => n > 0 ? "$" + n.toLocaleString("es-CO").replace(/,/g, ".") : "A
 const VEND = typeof VENDIDOS !== "undefined" ? VENDIDOS : {};
 const esVendido = e => !!VEND[e.nombre];
 const esNuevo = e => !esVendido(e) && ING[e.nombre] && (Date.now() - Date.parse(ING[e.nombre] + "T00:00:00-05:00")) < 15 * 864e5;
-const LOTES = EQUIPOS.map((e, i) => ({ ...e, lote: String(i + 1).padStart(2, "0") }));
+// Fotos adicionales y videos que Nestor sube desde el control privado
+function masMedios(e) {
+  const f = (e.fotos || []).length, v = (e.videos || []).length; if (!f && !v) return "";
+  return `<button type="button" class="mas-medios" data-ficha="${e.lote}">Ver ${f ? (f + 1) + " fotos" : ""}${f && v ? " y " : ""}${v ? (v === 1 ? "video" : v + " videos") : ""}</button>`;
+}
+function galeriaHTML(e) {
+  const fotos = [e.img, ...(e.fotos || [])].filter(Boolean), videos = e.videos || [];
+  if (fotos.length < 2 && !videos.length) return "";
+  return `<div class="galeria">${fotos.length > 1 ? `<div class="miniaturas" role="group" aria-label="Fotos del ${esc(e.nombre)}">${fotos.map((f, i) => `<button type="button" data-ver-foto="${esc(f)}" aria-pressed="${i === 0}" aria-label="Foto ${i + 1} de ${fotos.length}"><img src="${esc(f)}?v=${VER}" alt="" loading="lazy"></button>`).join("")}</div>` : ""}
+    ${videos.map((v, i) => `<video src="${esc(v)}" controls playsinline preload="metadata" aria-label="Video ${i + 1} del ${esc(e.nombre)}"></video>`).join("")}</div>`;
+}
+const LOTES = EQUIPOS.map((e, i) => ({ ...e, lote: e.lote || String(i + 1).padStart(2, "0") })); // el lote viene del control y no cambia
 const DISPONIBLES = LOTES.filter(e => !esVendido(e));
 const SELLO_V = `<svg class="sello-v" viewBox="0 0 160 160" role="img" aria-label="Equipo vendido"><defs><path id="giro-v" d="M80 80 m-59 0 a59 59 0 1 1 118 0 a59 59 0 1 1 -118 0"/></defs><circle cx="80" cy="80" r="76" fill="rgba(13,13,13,.92)" stroke="#C9A227" stroke-width="4"/><circle cx="80" cy="80" r="46" fill="none" stroke="#C9A227" stroke-width="1.5" stroke-dasharray="3 4"/><text font-family="Zilla Slab, Georgia, serif" font-size="12.5" font-weight="700" letter-spacing="1.6" fill="#C9A227"><textPath href="#giro-v">YELLOW YARD · BY NESTOR SIERRA ·</textPath></text><text x="80" y="76" text-anchor="middle" font-family="Alfa Slab One, Georgia, serif" font-size="13" letter-spacing="1" fill="#FFC20E">EQUIPO</text><text x="80" y="97" text-anchor="middle" font-family="Alfa Slab One, Georgia, serif" font-size="17.5" fill="#FFC20E">VENDIDO</text></svg>`;
 
@@ -596,14 +613,14 @@ const msg = e => encodeURIComponent(`Hola Nestor, vi en Yellow Yard el lote ${e.
 function lote(e, grande, sinId) {
   const ficha = [["Año", e.anio || "Por confirmar"], ["Uso", e.uso]].concat(e.specs);
   return `<article class="lote${grande ? " grande" : ""}"${grande || sinId ? "" : ` id="lote-${e.lote}"`}>
-    <div class="foto">${e.img ? `<img class="relleno" src="${esc(e.img)}?v=${VER}" alt=""${grande ? "" : ' loading="lazy"'}><img src="${esc(e.img)}?v=${VER}" alt="${esc(e.cat)} ${esc(e.nombre)}"${grande ? "" : ' loading="lazy"'}>` : `<div class="sinfoto">Fotos por WhatsApp</div>`}${esNuevo(e) ? '<span class="nuevo">Nuevo ingreso</span>' : ""}${esVendido(e) ? SELLO_V : ""}</div>
+    <div class="foto">${e.img ? `<img class="relleno" src="${esc(e.img)}?v=${VER}" alt=""${grande ? "" : ' loading="lazy"'}><img src="${esc(e.img)}?v=${VER}" alt="${esc(e.cat)} ${esc(e.nombre)}"${grande ? "" : ' loading="lazy"'}>` : `<div class="sinfoto">Fotos por WhatsApp</div>`}${esNuevo(e) ? '<span class="nuevo">Nuevo ingreso</span>' : ""}${esVendido(e) ? SELLO_V : ""}${masMedios(e)}</div>
     <div class="info">
       <div class="cabeza">
         <div style="min-width: 0"><div class="num">Lote ${e.lote}</div><div class="tipo">${esc(e.cat)}</div><h2>${esc(e.nombre)}</h2></div>
         ${esVendido(e) ? `<div class="etiqueta vend"><small>ESTADO</small><strong>Vendido</strong></div>` : `<div class="etiqueta"><small>PRECIO COP</small><strong>${cop(e.precio)}</strong></div>`}
       </div>
       <dl class="ficha">${ficha.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>
-      ${esVendido(e) ? `<div class="botones"><button type="button" class="boton linea" data-similar="${esc(e.tipo)}">Ver equipos similares</button></div>` : `<div class="botones"><a class="boton wpp" data-consulta="${e.lote}" style="--d: ${(parseInt(e.lote, 10) % 5) * 0.9}s" href="${WA}${msg(e)}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>Consultar lote por WhatsApp</a><button type="button" class="boton linea interesa" data-lote="${e.lote}">Me interesa</button><button type="button" class="boton linea compartir" data-lote="${e.lote}" aria-label="Compartir ${esc(e.nombre)} como imagen"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M16 6l-4-4-4 4M12 2v13"/></svg>Compartir</button><button type="button" class="btn-ig-yo" data-ig-lote="${e.lote}" aria-label="Publicar ${esc(e.nombre)} en Instagram" title="Publicar en Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" class="punto"/></svg></button></div>`}
+      ${esVendido(e) ? `<div class="botones"><button type="button" class="boton linea" data-similar="${esc(e.tipo)}">Ver equipos similares</button></div>` : `<div class="botones"><a class="boton wpp" data-consulta="${e.lote}" style="--d: ${(parseInt(e.lote, 10) % 5) * 0.9}s" href="${WA}${msg(e)}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>Consultar lote por WhatsApp</a><button type="button" class="boton linea interesa" data-lote="${e.lote}">Me interesa</button><button type="button" class="boton linea compartir" data-lote="${e.lote}" aria-label="Compartir ${esc(e.nombre)} como imagen"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M16 6l-4-4-4 4M12 2v13"/></svg>Compartir</button></div>`}
     </div>
   </article>`;
 }
@@ -700,6 +717,8 @@ document.getElementById("vistas").addEventListener("click", ev => {
     if (!VISIBLES.length) return;
     idx = (i + VISIBLES.length) % VISIBLES.length;
     cuerpo.innerHTML = lote(VISIBLES[idx], false, true);
+    const gal = galeriaHTML(VISIBLES[idx]);
+    if (gal) { const f = cuerpo.querySelector(".foto"), col = document.createElement("div"); col.className = "col-foto"; f.replaceWith(col); col.append(f); col.insertAdjacentHTML("beforeend", gal); }
     dlg.scrollTop = 0;
     if (!dlg.open) dlg.showModal ? dlg.showModal() : dlg.setAttribute("open", "");
   }
@@ -716,7 +735,12 @@ document.getElementById("vistas").addEventListener("click", ev => {
   document.getElementById("ficha-cerrar").onclick = () => dlg.close();
   document.getElementById("ficha-ant").onclick = () => mostrar(idx - 1);
   document.getElementById("ficha-sig").onclick = () => mostrar(idx + 1);
-  dlg.addEventListener("click", ev => { if (ev.target === dlg) dlg.close(); });
+  dlg.addEventListener("click", ev => {
+    if (ev.target === dlg) { dlg.close(); return; }
+    const b = ev.target.closest("[data-ver-foto]"); if (!b) return;
+    cuerpo.querySelectorAll(".foto img").forEach(im => { im.src = b.dataset.verFoto + "?v=" + VER; });
+    cuerpo.querySelectorAll("[data-ver-foto]").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+  });
 })();
 
 function pintar() {
@@ -843,16 +867,9 @@ const ICO_WA = `<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentC
 })();
 
 // Compartir cada equipo como imagen (estados de WhatsApp, redes) con el enlace al catálogo
-// Modo de Nestor: abre una vez el catálogo con ?yo=1 en tu celular y el botón de Instagram aparece solo ahí (?yo=0 lo quita)
-(function () {
-  try {
-    const q = new URLSearchParams(location.search).get("yo");
-    if (q === "1") localStorage.setItem("yy_yo", "1");
-    if (q === "0") localStorage.removeItem("yy_yo");
-    if (localStorage.getItem("yy_yo") === "1") document.body.classList.add("modo-yo");
-    if (q === "1" || q === "0") setTimeout(() => aviso(q === "1" ? "Modo Instagram activado en este dispositivo." : "Modo Instagram desactivado."), 600);
-  } catch (x) {}
-})();
+// La página pública no tiene modo privado: todo se maneja desde el control privado de Nestor.
+// Borra en este dispositivo la marca del antiguo modo privado y la llave de GitHub que guardaba.
+try { localStorage.removeItem("yy_yo"); localStorage.removeItem("yy_gh"); } catch (x) {}
 const SITIO = location.protocol.startsWith("http") ? location.origin + location.pathname : "https://ventaslnequipos-ux.github.io/vitrina/";
 function aviso(t) { let a = document.querySelector(".aviso"); if (!a) { a = document.createElement("div"); a.className = "aviso"; a.setAttribute("role", "status"); document.body.appendChild(a); } a.textContent = t; clearTimeout(a._t); a._t = setTimeout(() => a.remove(), 5000); }
 const cargarImg = src => new Promise((ok, mal) => { const i = new Image(); i.onload = () => ok(i); i.onerror = mal; i.src = src; });
@@ -994,24 +1011,9 @@ const puedeArchivos = f => !!(navigator.canShare && navigator.share && navigator
     cuerpo.innerHTML = `<p>Preparando la imagen del equipo…</p>`; abrir();
     prepararImagen(e).then(f2 => mostrarBoton(f2, false)).catch(() => mostrarBoton(null, true));
   }
-  async function instagram() {
-    const ok = await copiar(desc);
-    document.getElementById("com-titulo").textContent = "Publicación de Instagram";
-    cuerpo.innerHTML = `<p>${ok ? "✅ <b>Descripción copiada.</b>" : "Copia la descripción de abajo."} Ahora:</p>
-      <ol class="pasos-ig"><li>Toca <b>Compartir imagen</b> y elige <b>Instagram → Publicación</b> (en computador, descárgala y súbela).</li><li>En el pie de foto, mantén presionado y elige <b>Pegar</b>.</li><li>Revisa y publica.</li></ol>
-      <img class="prev-ig" id="prev-ig" alt="Imagen de la publicación del ${esc(e.nombre)}">
-      <label for="desc-ig" style="font-size:15px;opacity:.85">Descripción (puedes editarla antes de copiar)</label>
-      <textarea class="desc-ig" id="desc-ig">${esc(desc)}</textarea>
-      <div class="acciones-ig"><button type="button" class="boton" data-ig-compartir>Compartir imagen</button>
-      <button type="button" class="boton linea" data-ig-copiar>Copiar descripción otra vez</button>
-      <button type="button" class="boton linea" data-bajar-img>Descargar imagen</button></div>`;
-    try { const f = await prepararImagen(e); const im = document.getElementById("prev-ig"); if (im) im.src = URL.createObjectURL(f); } catch (err) {}
-  }
   document.addEventListener("click", ev => {
     const b = ev.target.closest(".compartir");
     if (b) { const l = LOTES.find(z => z.lote === b.dataset.lote); if (l) { preparar(l); otras(); } return; }
-    const ig = ev.target.closest("[data-ig-lote]");
-    if (ig) { const l = LOTES.find(z => z.lote === ig.dataset.igLote); if (l) { preparar(l); abrir(); instagram(); } return; }
     if (!e) return;
     if (ev.target.closest("[data-cerrar-compartir]")) { cerrar(); return; }
     const ya = ev.target.closest("[data-compartir-ya]");
@@ -1027,6 +1029,7 @@ const puedeArchivos = f => !!(navigator.canShare && navigator.share && navigator
   });
   dlg.addEventListener("click", ev => { if (ev.target === dlg) cerrar(); });
 })();
+
 </script>
 </body>
 </html>

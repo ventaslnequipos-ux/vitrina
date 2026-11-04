@@ -7,7 +7,8 @@ Esta rama (`fuente`) guarda los archivos de trabajo del catálogo. La página p�
 | Carpeta | Contenido |
 |---|---|
 | `web/vitrina.html` | **Fuente de los datos**: `const EQUIPOS = [...]`, `INGRESOS` (fecha de ingreso por equipo) y `FIJOS` (destacados fijos). De aquí sale `equipos.js`. |
-| `web/patio.html` | **Plantilla de la página principal** (diseño Yellow Yard). Se copia tal cual a `index.html`. |
+| `web/patio.html` | Copia de `index.html` de la página principal (diseño Yellow Yard). |
+| `tools/publicar.py` | **Publica el control privado en la página**: genera `equipos.js`, fotos con marca de agua y videos. |
 | `web/marketplace.html` | Página de apoyo (noindex) con textos listos para publicar en Facebook Marketplace. |
 | `tools/build_site.sh` | Genera `site/equipos.js` (desde vitrina.html) y `site/index.html` (desde patio.html). |
 | `tools/marca_agua.py` | Pone la marca de agua (placa + "by Nestor Sierra") a las fotos: lee `img_limpias/*.jpg` y escribe `site/img/*.jpg`. |
@@ -18,19 +19,17 @@ Esta rama (`fuente`) guarda los archivos de trabajo del catálogo. La página p�
 
 Las rutas de los scripts apuntan a una carpeta de trabajo (`S=...`). En una sesión nueva, cambia esa variable por la carpeta que uses.
 
-## Agregar un equipo
+## Cómo se publica (desde el 4 de noviembre de 2026)
 
-1. Foto limpia (sin logos de otras empresas) en `img_limpias/<nombre>.jpg`, máximo 1100 px.
-2. `python3 tools/marca_agua.py <nombre>.jpg` → crea `site/img/<nombre>.jpg` con marca de agua.
-3. Agregar el objeto en `EQUIPOS` de `web/vitrina.html` y su fecha en `INGRESOS`.
-4. `bash tools/build_site.sh`, copiar `site/index.html`, `site/equipos.js` y la foto a la rama `main`, commit y push.
+La única fuente de datos es el **control privado** (artifact de Claude, `control/control.html`): equipos, precios, estado, características técnicas, fotos y videos. La página pública ya no tiene modo privado ni botones de Nestor.
 
-## Marcar un equipo como vendido
+1. Nestor edita en el control (agregar equipo, cambiar precio, marcar vendido, subir fotos o videos, cambiar características). El control muestra cuántos cambios hay sin publicar.
+2. Toca **Publicar en la página**. El control llama a la tarea programada «Publicar Yellow Yard en la página» (solo se ejecuta a pedido) por el conector Claude Code Remote.
+3. La tarea baja la base del control, corre `tools/publicar.py` (fotos con marca de agua, videos, `equipos.js`, `medios.json`), hace commit y push a `main`, actualiza la hoja "Base de datos Yellow Yard" y deja el resultado en `sistema/publicacion` del control. La página se ve actualizada 1 a 3 minutos después del push.
 
-1. Nestor abre la ficha del equipo en el control privado y toca **Marcar como vendido** (queda `estado: "Vendido"` y `fecha_venta`). "Deshacer venta" lo devuelve a Disponible.
-2. El control muestra arriba los cambios "Por publicar en la página": son los equipos cuyo `estado` no coincide con `web_vendido`.
-3. Al pedir «publica los vendidos», Claude lee la colección `equipos` del control, actualiza `VENDIDOS` en `web/vitrina.html` (nombre exacto del equipo: fecha de venta), corre `tools/build_site.sh`, copia `equipos.js` a `main`, hace commit y push, pone `web_vendido` (fecha) en el control (o lo borra si se deshizo la venta) y cambia el estado en la hoja "Base de datos Yellow Yard".
-4. En la página el equipo queda con el sello "Equipo vendido · Yellow Yard by Nestor Sierra" en la esquina de la foto, sin precio, al final de la lista y fuera de destacados, cinta, "Nuevo ingreso" y "Mi consulta". La página de Marketplace avisa que hay que retirar esa publicación.
+Reglas de `publicar.py`: sale todo equipo con "Publicado en la web" marcado y estado distinto de Retirado; el lote es fijo; Vendido va a `VENDIDOS` (sello, sin precio, al final); la primera foto del banco es la principal; las fotos marcadas "Solo interno" no salen; `medios.json` guarda qué archivo del banco corresponde a cada foto o video ya publicado.
+
+`web/vitrina.html` y `tools/build_site.sh` quedan como respaldo histórico: `equipos.js` ya no se genera desde ahí.
 
 ## Tipografía y colores
 
