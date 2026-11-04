@@ -188,6 +188,17 @@ a { color: var(--ama); }
 /* La foto se ve completa (con su marca de agua); el espacio sobrante se rellena con la misma foto desenfocada */
 .foto img.relleno { object-fit: cover; filter: blur(18px) brightness(.55); transform: scale(1.15); }
 @media (max-width: 760px) { .foto { min-height: 0; aspect-ratio: 4 / 3; } }
+.mas-medios { position: absolute; left: 10px; bottom: 10px; z-index: 2; min-height: 36px; background: rgba(13,13,13,.86); color: var(--hueso); border: 1px solid var(--ama); padding: 4px 12px; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; }
+.mas-medios:hover, .mas-medios:focus-visible { background: var(--ama); color: #0D0D0D; }
+.ficha-dlg .mas-medios { display: none; }
+.col-foto { display: flex; flex-direction: column; min-width: 0; background: #0B0B0B; }
+.col-foto .foto { flex: 1 1 auto; }
+.galeria { display: flex; flex-direction: column; gap: 10px; padding: 10px; background: #0B0B0B; min-width: 0; }
+.miniaturas { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px; }
+.miniaturas button { flex: 0 0 auto; width: 92px; height: 69px; padding: 0; border: 2px solid transparent; background: #111; cursor: pointer; }
+.miniaturas button[aria-pressed="true"] { border-color: var(--ama); }
+.miniaturas img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.galeria video { width: 100%; max-height: 70vh; background: #000; display: block; }
 .sinfoto { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: var(--rotulo); font-weight: 400; font-size: 22px; color: var(--plata); text-transform: uppercase; }
 .nuevo { position: absolute; top: 0; left: 0; background: var(--ama); color: var(--negro); font-family: var(--mono); font-weight: 600; font-size: 12px; letter-spacing: 0.12em; padding: 6px 10px; text-transform: uppercase; }
 .info { padding: 20px 22px 22px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
@@ -560,7 +571,8 @@ footer p { margin: 6px 0 0; max-width: 60ch; }
   </div>
 </footer>
 
-<script src="equipos.js"></script>
+<script>/* equipos.js cambia cada vez que Nestor publica desde el control: se pide fresco (clave por minuto) */document.write('<script src="equipos.js?t=' + Math.floor(Date.now() / 60000) + '"><\/script>');</script>
+<noscript><script src="equipos.js"></script></noscript>
 <script>
 const WA = "https://wa.me/573017959540?text=";
 const VER = "20261028c"; // cambia cuando se actualizan las fotos, para que nadie vea fotos viejas guardadas
@@ -571,7 +583,18 @@ const cop = n => n > 0 ? "$" + n.toLocaleString("es-CO").replace(/,/g, ".") : "A
 const VEND = typeof VENDIDOS !== "undefined" ? VENDIDOS : {};
 const esVendido = e => !!VEND[e.nombre];
 const esNuevo = e => !esVendido(e) && ING[e.nombre] && (Date.now() - Date.parse(ING[e.nombre] + "T00:00:00-05:00")) < 15 * 864e5;
-const LOTES = EQUIPOS.map((e, i) => ({ ...e, lote: String(i + 1).padStart(2, "0") }));
+// Fotos adicionales y videos que Nestor sube desde el control privado
+function masMedios(e) {
+  const f = (e.fotos || []).length, v = (e.videos || []).length; if (!f && !v) return "";
+  return `<button type="button" class="mas-medios" data-ficha="${e.lote}">Ver ${f ? (f + 1) + " fotos" : ""}${f && v ? " y " : ""}${v ? (v === 1 ? "video" : v + " videos") : ""}</button>`;
+}
+function galeriaHTML(e) {
+  const fotos = [e.img, ...(e.fotos || [])].filter(Boolean), videos = e.videos || [];
+  if (fotos.length < 2 && !videos.length) return "";
+  return `<div class="galeria">${fotos.length > 1 ? `<div class="miniaturas" role="group" aria-label="Fotos del ${esc(e.nombre)}">${fotos.map((f, i) => `<button type="button" data-ver-foto="${esc(f)}" aria-pressed="${i === 0}" aria-label="Foto ${i + 1} de ${fotos.length}"><img src="${esc(f)}?v=${VER}" alt="" loading="lazy"></button>`).join("")}</div>` : ""}
+    ${videos.map((v, i) => `<video src="${esc(v)}" controls playsinline preload="metadata" aria-label="Video ${i + 1} del ${esc(e.nombre)}"></video>`).join("")}</div>`;
+}
+const LOTES = EQUIPOS.map((e, i) => ({ ...e, lote: e.lote || String(i + 1).padStart(2, "0") })); // el lote viene del control y no cambia
 const DISPONIBLES = LOTES.filter(e => !esVendido(e));
 const SELLO_V = `<svg class="sello-v" viewBox="0 0 160 160" role="img" aria-label="Equipo vendido"><defs><path id="giro-v" d="M80 80 m-59 0 a59 59 0 1 1 118 0 a59 59 0 1 1 -118 0"/></defs><circle cx="80" cy="80" r="76" fill="rgba(13,13,13,.92)" stroke="#C9A227" stroke-width="4"/><circle cx="80" cy="80" r="46" fill="none" stroke="#C9A227" stroke-width="1.5" stroke-dasharray="3 4"/><text font-family="Zilla Slab, Georgia, serif" font-size="12.5" font-weight="700" letter-spacing="1.6" fill="#C9A227"><textPath href="#giro-v">YELLOW YARD · BY NESTOR SIERRA ·</textPath></text><text x="80" y="76" text-anchor="middle" font-family="Alfa Slab One, Georgia, serif" font-size="13" letter-spacing="1" fill="#FFC20E">EQUIPO</text><text x="80" y="97" text-anchor="middle" font-family="Alfa Slab One, Georgia, serif" font-size="17.5" fill="#FFC20E">VENDIDO</text></svg>`;
 
@@ -590,7 +613,7 @@ const msg = e => encodeURIComponent(`Hola Nestor, vi en Yellow Yard el lote ${e.
 function lote(e, grande, sinId) {
   const ficha = [["Año", e.anio || "Por confirmar"], ["Uso", e.uso]].concat(e.specs);
   return `<article class="lote${grande ? " grande" : ""}"${grande || sinId ? "" : ` id="lote-${e.lote}"`}>
-    <div class="foto">${e.img ? `<img class="relleno" src="${esc(e.img)}?v=${VER}" alt=""${grande ? "" : ' loading="lazy"'}><img src="${esc(e.img)}?v=${VER}" alt="${esc(e.cat)} ${esc(e.nombre)}"${grande ? "" : ' loading="lazy"'}>` : `<div class="sinfoto">Fotos por WhatsApp</div>`}${esNuevo(e) ? '<span class="nuevo">Nuevo ingreso</span>' : ""}${esVendido(e) ? SELLO_V : ""}</div>
+    <div class="foto">${e.img ? `<img class="relleno" src="${esc(e.img)}?v=${VER}" alt=""${grande ? "" : ' loading="lazy"'}><img src="${esc(e.img)}?v=${VER}" alt="${esc(e.cat)} ${esc(e.nombre)}"${grande ? "" : ' loading="lazy"'}>` : `<div class="sinfoto">Fotos por WhatsApp</div>`}${esNuevo(e) ? '<span class="nuevo">Nuevo ingreso</span>' : ""}${esVendido(e) ? SELLO_V : ""}${masMedios(e)}</div>
     <div class="info">
       <div class="cabeza">
         <div style="min-width: 0"><div class="num">Lote ${e.lote}</div><div class="tipo">${esc(e.cat)}</div><h2>${esc(e.nombre)}</h2></div>
@@ -694,6 +717,8 @@ document.getElementById("vistas").addEventListener("click", ev => {
     if (!VISIBLES.length) return;
     idx = (i + VISIBLES.length) % VISIBLES.length;
     cuerpo.innerHTML = lote(VISIBLES[idx], false, true);
+    const gal = galeriaHTML(VISIBLES[idx]);
+    if (gal) { const f = cuerpo.querySelector(".foto"), col = document.createElement("div"); col.className = "col-foto"; f.replaceWith(col); col.append(f); col.insertAdjacentHTML("beforeend", gal); }
     dlg.scrollTop = 0;
     if (!dlg.open) dlg.showModal ? dlg.showModal() : dlg.setAttribute("open", "");
   }
@@ -710,7 +735,12 @@ document.getElementById("vistas").addEventListener("click", ev => {
   document.getElementById("ficha-cerrar").onclick = () => dlg.close();
   document.getElementById("ficha-ant").onclick = () => mostrar(idx - 1);
   document.getElementById("ficha-sig").onclick = () => mostrar(idx + 1);
-  dlg.addEventListener("click", ev => { if (ev.target === dlg) dlg.close(); });
+  dlg.addEventListener("click", ev => {
+    if (ev.target === dlg) { dlg.close(); return; }
+    const b = ev.target.closest("[data-ver-foto]"); if (!b) return;
+    cuerpo.querySelectorAll(".foto img").forEach(im => { im.src = b.dataset.verFoto + "?v=" + VER; });
+    cuerpo.querySelectorAll("[data-ver-foto]").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+  });
 })();
 
 function pintar() {
