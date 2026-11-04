@@ -849,7 +849,8 @@ const ICO_WA = `<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentC
     const q = new URLSearchParams(location.search).get("yo");
     if (q === "1") localStorage.setItem("yy_yo", "1");
     if (q === "0") localStorage.removeItem("yy_yo");
-    if (localStorage.getItem("yy_yo") === "1") document.body.classList.add("modo-yo");
+    const verCliente = new URLSearchParams(location.search).get("vista") === "publica"; // ver como cliente sin desactivar el modo
+    if (!verCliente && localStorage.getItem("yy_yo") === "1") document.body.classList.add("modo-yo");
     if (q === "1" || q === "0") setTimeout(() => aviso(q === "1" ? "Modo Instagram activado en este dispositivo." : "Modo Instagram desactivado."), 600);
   } catch (x) {}
 })();
