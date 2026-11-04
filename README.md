@@ -1,7 +1,7 @@
-# La Vitrina de las Máquinas
+# yellow yard
 
 Catálogo de maquinaria y vehículos en venta, by Nestor Sierra.
 
 WhatsApp: 301 795 9540
 
-Ver el catálogo: https://ventaslnequipos-ux.github.io/vitrina/
+Ver el catálogo: https://yellowyard-ux.github.io/catalogo/
