@@ -3,7 +3,7 @@ const EQUIPOS = [
     specs: [["Capacidad máx.", "3.800 kg"], ["Altura de elevación", "15,7 m"], ["Giro de torreta", "400°"], ["Tracción", "4x4"]] },
   { img: "img/mg120_a.jpg", tipo: "Motoniveladoras", cat: "Motoniveladora", nombre: "Caterpillar 120G (2007)", anio: 2007, uso: "12.000 h", precio: 270000000,
     specs: [["Motor", "Caterpillar 3304"], ["Potencia", "125 hp"], ["Peso operativo", "11.500 kg aprox."], ["Transmisión", "6 avance / 6 reversa"]] },
-  { img: "img/mg140.jpg", tipo: "Motoniveladoras", cat: "Motoniveladora", nombre: "Caterpillar 12G (140G)", anio: 1989, uso: "30.000 h", precio: 199990000,
+  { img: "img/mg140.jpg", tipo: "Motoniveladoras", cat: "Motoniveladora", nombre: "Caterpillar 12G (140G)", anio: 1989, uso: "30.000 h", precio: 250000000,
     specs: [["Motor", "Caterpillar 3306"], ["Potencia", "135 hp"], ["Hoja", "12 pies (3,66 m)"], ["Eje trasero", "Tándem"]] },
   { img: "img/cp433.jpg", tipo: "Compactación", cat: "Vibrocompactador", nombre: "Caterpillar CP-433C", anio: 2003, uso: "7.000 h", precio: 145000000,
     specs: [["Motor", "Caterpillar 3054T"], ["Potencia", "105 hp"], ["Peso operativo", "6.900 kg aprox."], ["Ancho de tambor", "1,68 m"]] },
