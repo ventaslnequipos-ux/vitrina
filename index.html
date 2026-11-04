@@ -281,8 +281,11 @@ dialog.consulta::backdrop { background: rgba(0,0,0,.72); }
 .opcion .ico { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 50%; background: rgba(0,0,0,.12); font-family: var(--rotulo); font-size: 22px; }
 .opcion .ico svg { width: 26px; height: 26px; }
 .opcion b { display: block; font-size: 18px; }
+.marca-yo { display: none; }
+body.modo-yo .marca-yo { display: flex; align-items: center; gap: 8px; position: fixed; top: max(10px, env(safe-area-inset-top)); right: 10px; z-index: 60; background: #0E0E0E; color: #FFC20E; border: 1px solid #FFC20E; border-radius: 30px; padding: 6px 12px 6px 10px; font: 700 13px/1 'Zilla Slab', Georgia, serif; letter-spacing: .04em; box-shadow: 0 4px 14px rgba(0,0,0,.5); text-decoration: none; }
+body.modo-yo .marca-yo svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.4; }
 .btn-ig-yo { display: none; }
-body.modo-yo .btn-ig-yo { display: inline-grid; place-items: center; width: 44px; height: 44px; padding: 0; background: none; border: 1px dashed var(--linea); color: var(--hueso); opacity: .45; cursor: pointer; }
+body.modo-yo .btn-ig-yo { display: inline-grid; place-items: center; width: 44px; height: 44px; padding: 0; background: none; border: 1px dashed var(--linea); color: var(--hueso); opacity: .6; cursor: pointer; }
 body.modo-yo .btn-ig-yo:hover, body.modo-yo .btn-ig-yo:focus-visible { opacity: 1; border-color: var(--ama); color: var(--ama); }
 .btn-ig-yo svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; }
 .btn-ig-yo svg .punto { fill: currentColor; stroke: none; }
@@ -521,6 +524,7 @@ footer p { margin: 6px 0 0; max-width: 60ch; }
 </main>
 
 
+<a class="marca-yo" href="?vista=publica" title="Ver como cliente"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Modo privado</a>
 <dialog class="ficha-dlg" id="ficha-dlg" aria-label="Ficha del equipo"><button type="button" class="cerrar-ficha" id="ficha-cerrar" aria-label="Cerrar">×</button><div id="ficha-cuerpo"></div><div class="nav-ficha"><button type="button" id="ficha-ant">‹ Anterior</button><button type="button" id="ficha-sig">Siguiente ›</button></div></dialog>
 <dialog class="consulta" id="consulta" aria-labelledby="con-titulo">
   <div class="cab"><div><small id="con-sub">Consulta por WhatsApp</small><h2 id="con-titulo">¿Cómo prefieres consultar?</h2></div><button type="button" class="cerrar" data-cerrar-consulta aria-label="Cerrar">×</button></div>
