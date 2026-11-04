@@ -95,7 +95,9 @@ const INGRESOS = {
 };
 // Equipos vendidos: nombre del equipo y fecha de venta. Siguen en el catálogo con el sello "Equipo vendido", al final de la lista,
 // sin precio y fuera de destacados, cinta y "Nuevo ingreso". Se marcan desde el control privado (estado "Vendido").
-const VENDIDOS = {};
+const VENDIDOS = {
+  "John Deere 320D": "2026-11-04",
+};
 // Carrusel de destacados: rota solo cada lunes (mínimo 3 o el 10 % del total). Si un equipo debe quedar fijo, poner su nombre aquí.
 const FIJOS = [];
 // Equipo destacado de la semana (cambiar el nombre para rotarlo).
