@@ -6,16 +6,17 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Publicaciones Marketplace · Yellow Yard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Zilla+Slab:wght@400;500;600;700&display=swap">
 <style>
 :root { --noche: #0E0E0E; --azul: #7A5C00; --ama: #FFC20E; --graf: #1C1F24; --muted: #5E6672; --linea: #D5D9E0; --hueso: #F6F5F1; --blanco: #FFFFFF; --ok: #1F7A3F;
-  --display: 'Barlow Condensed', 'Arial Narrow', sans-serif; --body: 'Barlow', Arial, sans-serif; color-scheme: light; }
+  --display: 'Alfa Slab One', Georgia, serif; --body: 'Zilla Slab', Georgia, serif; color-scheme: light; }
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--hueso); color: var(--graf); font-family: var(--body); font-size: 16px; line-height: 1.5; }
 .wrap { max-width: 900px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
 header { background: var(--noche); color: var(--blanco); border-top: 6px solid var(--ama); }
 header .wrap { padding-block: 24px; }
-h1 { margin: 0; font-family: var(--display); font-size: 36px; line-height: 1; }
+h1 { margin: 0; font-family: var(--display); font-weight: 400; font-size: 30px; line-height: 1.1; }
+h1 small { display: block; font-family: var(--body); font-weight: 600; font-size: 16px; color: var(--ama); margin-top: 4px; }
 header p { margin: 8px 0 0; color: #DCE3EE; }
 .steps { background: var(--blanco); border: 1px solid var(--linea); padding: 16px 20px; margin-block: 20px; }
 .steps ol { margin: 6px 0 0; padding-left: 20px; }
@@ -23,7 +24,7 @@ header p { margin: 8px 0 0; color: #DCE3EE; }
 .item { background: var(--blanco); border: 1px solid var(--linea); margin-bottom: 20px; }
 .item.done { opacity: 0.55; }
 .head { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 16px; background: var(--noche); color: var(--blanco); }
-.head h2 { margin: 0; font-family: var(--display); font-size: 24px; line-height: 1.1; min-width: 0; }
+.head h2 { margin: 0; font-family: var(--display); font-weight: 400; font-size: 21px; line-height: 1.1; min-width: 0; }
 .head label { display: flex; align-items: center; gap: 6px; font-size: 14px; white-space: nowrap; cursor: pointer; }
 .head input { width: 20px; height: 20px; }
 .photo { width: 100%; max-height: 420px; object-fit: cover; display: block; }
@@ -33,16 +34,29 @@ header p { margin: 8px 0 0; color: #DCE3EE; }
 .field .v { white-space: pre-wrap; overflow-wrap: anywhere; background: var(--hueso); border: 1px solid var(--linea); padding: 10px 12px; font-size: 15px; }
 .field .row { display: flex; gap: 10px; align-items: flex-start; }
 .field .row .v { flex: 1; min-width: 0; }
-button.copy { min-height: 44px; padding: 8px 16px; border: 0; border-radius: 4px; background: var(--ama); color: var(--noche); font-family: var(--display); font-weight: 700; font-size: 17px; cursor: pointer; flex-shrink: 0; }
+button.copy { min-height: 44px; padding: 8px 16px; border: 0; border-radius: 4px; background: var(--ama); color: var(--noche); font-family: var(--body); font-weight: 700; font-size: 17px; cursor: pointer; flex-shrink: 0; }
 button.copy.ok { background: var(--ok); color: var(--blanco); }
 button.copy:focus-visible { outline: 3px solid var(--azul); outline-offset: 2px; }
 .warn { color: #8A4B00; font-weight: 600; }
+.head .lote { display: block; font-family: var(--body); font-weight: 600; font-size: 13px; letter-spacing: .08em; color: var(--ama); }
+.head label { background: #2a2a2a; padding: 8px 12px; border-radius: 4px; }
+.item.done .head label { background: var(--ok); }
+.fecha { font-size: 13px; color: var(--ok); font-weight: 600; padding: 8px 16px 0; }
+.barra { position: sticky; top: 0; z-index: 5; background: var(--hueso); padding: 10px 0; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; border-bottom: 1px solid var(--linea); margin-bottom: 16px; }
+.barra .filtro { min-height: 40px; padding: 6px 14px; border: 1px solid var(--noche); background: var(--blanco); color: var(--noche); border-radius: 20px; font: 600 15px var(--body); cursor: pointer; }
+.barra .filtro[aria-pressed="true"] { background: var(--noche); color: var(--ama); }
+.barra .prog { flex: 1 1 100%; font-weight: 700; }
+.barra .prog .bar { height: 8px; background: var(--linea); margin-top: 4px; }
+.barra .prog .bar i { display: block; height: 100%; background: var(--ama); }
+.acciones { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+.acciones button { min-height: 40px; padding: 6px 14px; border: 1px solid var(--linea); background: var(--blanco); border-radius: 4px; font: 600 15px var(--body); cursor: pointer; }
+.vacio { padding: 30px 16px; text-align: center; color: var(--muted); }
 </style>
 </head>
 <body>
 <header><div class="wrap">
-  <h1>Publicaciones para Marketplace</h1>
-  <p>Uso interno de Yellow Yard · Textos listos para copiar y pegar</p>
+  <h1>Publicaciones para Marketplace<small>YELLOW YARD by Nestor Sierra</small></h1>
+  <p>Uso interno · Textos listos para copiar y pegar. Marca cada equipo apenas lo publiques.</p>
 </div></header>
 <main class="wrap">
   <div class="steps">
@@ -51,10 +65,17 @@ button.copy:focus-visible { outline: 3px solid var(--azul); outline-offset: 2px;
       <li>En Facebook abre <strong>Marketplace → Vender → Artículo</strong> (o Vehículo para camionetas y camiones).</li>
       <li>Mantén presionada la foto de abajo y guárdala; súbela en Facebook.</li>
       <li>Copia y pega el <strong>título</strong>, el <strong>precio</strong> y la <strong>descripción</strong>.</li>
-      <li>Ubicación: <strong>Barranquilla</strong>. Publica y marca el equipo como publicado aquí.</li>
+      <li>Ubicación: <strong>Barranquilla</strong>. Publica y toca <strong>Publicado</strong> en el equipo: pasa a la pestaña «Publicados» con la fecha.</li>
     </ol>
-    <p>Consejo: publica 3 o 4 equipos por día, no todos el mismo día.</p>
-    <div class="progress" id="progreso"></div>
+    <p>Consejo: publica de 5 a 8 equipos por día, no todos el mismo día.</p>
+    <p>Las marcas se guardan en este celular. Para pasarlas a la hoja de Drive, toca «Copiar lista de publicados» y pégasela a Claude.</p>
+    <div class="acciones"><button type="button" id="copiar-lista">Copiar lista de publicados</button><button type="button" id="reiniciar">Empezar de cero</button></div>
+  </div>
+  <div class="barra" role="toolbar" aria-label="Filtrar equipos">
+    <div class="prog" id="progreso"></div>
+    <button type="button" class="filtro" data-f="pend" aria-pressed="true">Pendientes</button>
+    <button type="button" class="filtro" data-f="pub" aria-pressed="false">Publicados</button>
+    <button type="button" class="filtro" data-f="todos" aria-pressed="false">Todos</button>
   </div>
   <div id="lista"></div>
 </main>
@@ -64,9 +85,13 @@ const URL_CAT = "https://ventaslnequipos-ux.github.io/vitrina/";
 const cop = n => "$" + n.toLocaleString("es-CO").replace(/,/g, ".");
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const lista = document.getElementById("lista"), prog = document.getElementById("progreso");
-let hechos = {};
-try { hechos = JSON.parse(localStorage.getItem("mk_hechos") || "{}"); } catch (e) {}
-const guardar = () => { try { localStorage.setItem("mk_hechos", JSON.stringify(hechos)); } catch (e) {} };
+// Desde el 4 nov 2026 se empezó de cero: clave nueva, las marcas anteriores no cuentan.
+const CLAVE = "mk_publicados_2026_11";
+let hechos = {}, filtro = "pend";
+try { hechos = JSON.parse(localStorage.getItem(CLAVE) || "{}"); } catch (e) {}
+const guardar = () => { try { localStorage.setItem(CLAVE, JSON.stringify(hechos)); } catch (e) {} };
+const lote = i => String(i + 1).padStart(2, "0");
+const hoy = () => new Date().toLocaleDateString("es-CO", { day: "numeric", month: "short", year: "numeric" });
 
 function titulo(e) { return `${e.nombre}${e.anio ? " " + e.anio : ""} · ${e.cat}`.slice(0, 99); }
 function descripcion(e) {
@@ -82,7 +107,7 @@ function descripcion(e) {
     `📲 WhatsApp 301 795 9540`,
     `🔎 Vea este y más equipos en el catálogo: ${URL_CAT}`,
     ``,
-    `YELLOW YARD · Maquinaria Barranquilla`,
+    `YELLOW YARD by Nestor Sierra · Maquinaria Barranquilla`,
     `Tu próxima máquina está en el patio amarillo.`,
   ].join("\n");
 }
@@ -91,18 +116,40 @@ function campo(k, v, id) {
     <button type="button" class="copy" data-target="${id}">Copiar</button></div></div>`;
 }
 function pintar() {
-  lista.innerHTML = EQUIPOS.map((e, i) => `
+  const ver = EQUIPOS.map((e, i) => [e, i]).filter(([e]) => filtro === "todos" || (filtro === "pub") === !!hechos[e.nombre]);
+  lista.innerHTML = ver.length ? ver.map(([e, i]) => `
     <article class="item${hechos[e.nombre] ? " done" : ""}">
-      <div class="head"><h2>${i + 1}. ${esc(e.nombre)}</h2>
+      <div class="head"><h2><span class="lote">LOTE ${lote(i)}</span>${esc(e.nombre)}</h2>
         <label><input type="checkbox" data-n="${esc(e.nombre)}" ${hechos[e.nombre] ? "checked" : ""}> Publicado</label></div>
+      ${hechos[e.nombre] ? `<div class="fecha">✓ Publicado en Marketplace el ${esc(hechos[e.nombre])}</div>` : ""}
       ${e.img ? `<img class="photo" src="${esc(e.img)}" alt="${esc(e.nombre)}"><div class="tip">Mantén presionada la foto para guardarla.</div>` : ""}
       ${typeof VENDIDOS !== "undefined" && VENDIDOS[e.nombre] ? `<div class="field"><div class="warn">Equipo vendido: retira o marca como vendida su publicación en Facebook Marketplace.</div></div>` : `${campo("Título", titulo(e), "t" + i)}
       ${e.precio ? campo("Precio", String(e.precio), "p" + i) : `<div class="field"><div class="k">Precio</div><div class="warn">Sin precio todavía: espera a tenerlo antes de publicar este equipo.</div></div>`}
       ${campo("Descripción", descripcion(e), "d" + i)}`}
-    </article>`).join("");
-  const n = Object.values(hechos).filter(Boolean).length;
-  prog.textContent = `Publicados: ${n} de ${EQUIPOS.length}`;
+    </article>`).join("") : `<div class="vacio">${filtro === "pub" ? "Todavía no has marcado ningún equipo como publicado." : "¡Listo! Todos los equipos están publicados."}</div>`;
+  const n = EQUIPOS.filter(e => hechos[e.nombre]).length;
+  prog.innerHTML = `Publicados: ${n} de ${EQUIPOS.length} · Pendientes: ${EQUIPOS.length - n}<div class="bar"><i style="width:${(100 * n / EQUIPOS.length).toFixed(1)}%"></i></div>`;
 }
+document.querySelector(".barra").addEventListener("click", ev => {
+  const b = ev.target.closest(".filtro"); if (!b) return;
+  filtro = b.dataset.f;
+  document.querySelectorAll(".filtro").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+  pintar();
+});
+async function copiarTexto(t) {
+  try { await navigator.clipboard.writeText(t); return true; }
+  catch (e) { const a = document.createElement("textarea"); a.value = t; document.body.appendChild(a); a.select(); let ok = false; try { ok = document.execCommand("copy"); } catch (x) {} a.remove(); return ok; }
+}
+document.getElementById("copiar-lista").addEventListener("click", async ev => {
+  const l = EQUIPOS.map((e, i) => [e, i]).filter(([e]) => hechos[e.nombre]).map(([e, i]) => `Lote ${lote(i)} · ${e.nombre} · ${hechos[e.nombre]}`);
+  const t = l.length ? `Publicados en Marketplace (${l.length}):\n` + l.join("\n") : "Todavía no hay equipos publicados en Marketplace.";
+  const ok = await copiarTexto(t); const b = ev.currentTarget;
+  b.textContent = ok ? "Lista copiada ✓" : "No se pudo copiar"; setTimeout(() => b.textContent = "Copiar lista de publicados", 2000);
+});
+document.getElementById("reiniciar").addEventListener("click", () => {
+  if (!confirm("¿Quitar todas las marcas de publicado en este celular?")) return;
+  hechos = {}; guardar(); pintar();
+});
 lista.addEventListener("click", async ev => {
   const b = ev.target.closest("button.copy"); if (!b) return;
   const el = document.getElementById(b.dataset.target);
@@ -113,7 +160,8 @@ lista.addEventListener("click", async ev => {
 });
 lista.addEventListener("change", ev => {
   const c = ev.target.closest("input[data-n]"); if (!c) return;
-  hechos[c.dataset.n] = c.checked; guardar(); pintar();
+  if (c.checked) hechos[c.dataset.n] = hoy(); else delete hechos[c.dataset.n];
+  guardar(); pintar();
 });
 pintar();
 </script>
