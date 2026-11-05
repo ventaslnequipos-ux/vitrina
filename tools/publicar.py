@@ -195,6 +195,8 @@ def generar(a):
     open(os.path.join(a.site, "equipos.js"), "w", encoding="utf-8").write(nuevo)
     json.dump(mapa, open(os.path.join(a.site, "medios.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=0)
     subprocess.check_call(["node", "-e", "new Function(require('fs').readFileSync(process.argv[1],'utf8'))", os.path.join(a.site, "equipos.js")])
+    # Página corta por equipo (e/<lote>/): el enlace compartido muestra la foto del equipo en WhatsApp
+    subprocess.check_call([sys.executable, os.path.join(os.path.dirname(os.path.abspath(__file__)), "fichas_compartir.py"), a.site])
     json.dump(informe, open(os.path.join(a.db, "informe.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     print(json.dumps(informe, ensure_ascii=False, indent=1))
 
