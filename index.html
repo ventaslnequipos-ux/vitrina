@@ -589,7 +589,7 @@ footer p { margin: 6px 0 0; max-width: 60ch; }
 <script>
 const WA = "https://wa.me/573017959540?text=";
 const URL_CAT = "https://ventaslnequipos-ux.github.io/vitrina/";
-const enlaceLote = e => `${URL_CAT}#lote-${e.lote}`;
+const enlaceLote = e => `${URL_CAT}e/${e.lote}/`; // página corta con la foto del equipo para la vista previa de WhatsApp
 const VER = "20261028c"; // cambia cuando se actualizan las fotos, para que nadie vea fotos viejas guardadas
 const DEST = typeof DESTACADO !== "undefined" ? DESTACADO : "";
 const ING = typeof INGRESOS !== "undefined" ? INGRESOS : {};
@@ -1001,44 +1001,34 @@ const puedeArchivos = f => !!(navigator.canShare && navigator.share && navigator
   function preparar(lote) { e = lote; desc = descripcionIG(e); document.getElementById("com-sub").textContent = `Lote ${e.lote} · ${e.nombre}`; }
   const fallo = err => { if (err && err.name === "AbortError") return; aviso("No se abrió el menú de compartir. Toca otra vez “Compartir”."); };
 
-  // Al tocar "Compartir" se elige cómo: mensaje con enlace (siempre llega completo) o imagen + mensaje.
-  // WhatsApp en Android descarta el texto cuando recibe una imagen desde otra app, por eso el mensaje
-  // también se copia al portapapeles para pegarlo como pie de foto.
-  function menu() {
+  // Un solo toque: se comparte la imagen del equipo con el mensaje y el enlace (como al principio).
+  // Respaldo: el mensaje también queda copiado, por si la app de destino no lo pega sola.
+  function compartirYa(f) {
     const texto = textoCorto(e);
-    document.getElementById("com-titulo").textContent = "¿Cómo lo quieres compartir?";
-    cuerpo.innerHTML = `<p>El mensaje lleva el equipo, el precio y el enlace directo a su ficha en el catálogo.</p>
-      <a class="opcion principal" href="https://wa.me/?text=${encodeURIComponent(texto)}" target="_blank" rel="noopener" data-cerrar-compartir><span class="ico">${ICO_WA}</span><span><b>Enviar por WhatsApp</b><span class="txt">Mensaje con el enlace del equipo. Eliges el contacto o grupo.</span></span></a>
-      <button type="button" class="opcion insta" data-con-imagen><span class="ico">${ICO_FOTO}</span><span><b>Imagen + mensaje</b><span class="txt">Para estados, Facebook o grupos. El mensaje queda copiado: pégalo si no aparece.</span></span></button>
-      ${navigator.share ? `<button type="button" class="opcion" data-otras-apps><span class="ico">${ICO_SH}</span><span><b>Otras apps</b><span class="txt">Telegram, Messenger, correo… con el mensaje y el enlace.</span></span></button>`
-        : `<button type="button" class="opcion" data-copiar-msg><span class="ico">${ICO_SH}</span><span><b>Copiar mensaje con enlace</b><span class="txt">Pégalo donde quieras.</span></span></button>`}`;
-    abrir();
-    prepararImagen(e).catch(() => {});
+    copiar(texto);
+    if (f && puedeArchivos(f)) { navigator.share({ files: [f], text: texto }).then(cerrar).catch(err => { if (err && err.name === "AbortError") return; mostrarBoton(f); }); return; }
+    if (navigator.share) { navigator.share({ text: texto }).then(cerrar).catch(fallo); return; }
+    if (f) bajar(f, f.name); cerrar(); aviso("Imagen descargada. El mensaje con el enlace quedó copiado: pégalo al publicarla.");
   }
-  function conImagen() {
-    const texto = textoCorto(e), f = IMG_LISTA.get(e.lote);
-    if (f && puedeArchivos(f)) {
-      copiar(texto);
-      navigator.share({ files: [f], text: texto, title: `${e.nombre} · Yellow Yard` }).then(() => { cerrar(); aviso("Si el mensaje no salió con la imagen, pégalo en el chat: ya está copiado."); }).catch(fallo);
-      return;
-    }
-    if (!f && navigator.share) { // la imagen aún se está preparando: un segundo toque la comparte
-      cuerpo.innerHTML = `<p>Preparando la imagen del equipo…</p>`;
-      prepararImagen(e).then(() => { cuerpo.innerHTML = `<p>La imagen está lista.</p><div class="acciones-ig"><button type="button" class="boton" data-con-imagen>${ICO_SH} Compartir imagen + mensaje</button></div>`; }).catch(() => menu());
-      return;
-    }
-    // computador o navegador sin compartir archivos: descarga la imagen y copia el mensaje
-    copiar(texto); (f ? Promise.resolve(f) : prepararImagen(e)).then(f2 => bajar(f2, f2.name)).catch(() => {});
-    cerrar(); aviso("Imagen descargada. El mensaje con el enlace quedó copiado: pégalo al publicarla.");
+  function mostrarBoton(f) {
+    document.getElementById("com-titulo").textContent = "Compartir equipo";
+    cuerpo.innerHTML = `<p>La imagen del equipo está lista.</p><div class="acciones-ig"><button type="button" class="boton" data-compartir-ya>${ICO_SH} Compartir ahora</button></div>`;
+    abrir();
+  }
+  function otras() {
+    const f = IMG_LISTA.get(e.lote);
+    if (f || !navigator.share) { if (f) compartirYa(f); else prepararImagen(e).then(compartirYa).catch(() => compartirYa(null)); return; }
+    // la imagen aún se está preparando: un segundo toque la comparte (el celular exige el toque)
+    document.getElementById("com-titulo").textContent = "Compartir equipo";
+    cuerpo.innerHTML = `<p>Preparando la imagen del equipo…</p>`; abrir();
+    prepararImagen(e).then(mostrarBoton).catch(() => compartirYa(null));
   }
   document.addEventListener("click", ev => {
     const b = ev.target.closest(".compartir");
-    if (b) { const l = LOTES.find(z => z.lote === b.dataset.lote); if (l) { preparar(l); menu(); } return; }
+    if (b) { const l = LOTES.find(z => z.lote === b.dataset.lote); if (l) { preparar(l); otras(); } return; }
     if (!e) return;
-    if (ev.target.closest("[data-cerrar-compartir]")) { setTimeout(cerrar, 300); return; }
-    if (ev.target.closest("[data-con-imagen]")) { conImagen(); return; }
-    if (ev.target.closest("[data-otras-apps]")) { navigator.share({ text: textoCorto(e), title: `${e.nombre} · Yellow Yard` }).then(cerrar).catch(fallo); return; }
-    if (ev.target.closest("[data-copiar-msg]")) { copiar(textoCorto(e)).then(ok => { aviso(ok ? "Mensaje con enlace copiado." : "No se pudo copiar."); cerrar(); }); return; }
+    if (ev.target.closest("[data-cerrar-compartir]")) { cerrar(); return; }
+    if (ev.target.closest("[data-compartir-ya]")) { compartirYa(IMG_LISTA.get(e.lote)); return; }
     const actual = () => (document.getElementById("desc-ig") || {}).value || desc;
     if (ev.target.closest("[data-ig-copiar]")) { copiar(actual()).then(ok => aviso(ok ? "Descripción copiada. Pégala en el pie de foto." : "No se pudo copiar: selecciona el texto y cópialo.")); return; }
     if (ev.target.closest("[data-ig-compartir]")) {
