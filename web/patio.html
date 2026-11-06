@@ -518,6 +518,14 @@ footer .wrap { padding-block: 28px 40px; display: flex; flex-wrap: wrap; gap: 20
 footer .firma { font-family: var(--rotulo); font-weight: 400; font-size: 32px; color: #FFFFFF; text-transform: uppercase; line-height: 1; }
 footer .firma em { font-style: normal; color: var(--ama); }
 footer p { margin: 6px 0 0; max-width: 60ch; }
+/* Botón para volver al inicio */
+.subir { position: fixed; right: 18px; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); z-index: 45; width: 52px; height: 52px; padding: 0; display: grid; place-items: center; border-radius: 50%; border: 2px solid var(--ama); background: rgba(13,13,13,.88); color: var(--ama); cursor: pointer; box-shadow: 0 4px 16px rgba(0,0,0,.5); opacity: 0; visibility: hidden; transform: translateY(10px); transition: opacity .25s, transform .25s, visibility .25s, background .2s, color .2s; }
+.subir.ver { opacity: 1; visibility: visible; transform: none; }
+.subir:hover, .subir:focus-visible { background: var(--ama); color: #14100A; }
+.subir svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+@media (max-width: 760px) { .subir { right: 12px; width: 42px; height: 42px; border-width: 1.5px; } .subir.ver { opacity: .72; } .subir.ver:active { opacity: 1; } .subir svg { width: 20px; height: 20px; } }
+body.con-consulta .subir { bottom: calc(92px + env(safe-area-inset-bottom, 0px)); }
+@media (prefers-reduced-motion: reduce) { .subir { transition: none; } }
 </style>
 </head>
 <body>
@@ -700,6 +708,7 @@ footer p { margin: 6px 0 0; max-width: 60ch; }
   </div>
 </footer>
 
+<button type="button" class="subir" id="subir" aria-label="Volver al inicio de la página"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
 <script>/* equipos.js cambia cada vez que Nestor publica desde el control: se pide fresco (clave por minuto) */document.write('<script src="equipos.js?t=' + Math.floor(Date.now() / 60000) + '"><\/script>');</script>
 <noscript><script src="equipos.js"></script></noscript>
 <script>
@@ -796,7 +805,7 @@ const n2 = n => String(n).padStart(2, "0");
 const filtros = document.getElementById("filtros"), orden = document.getElementById("orden"), panel = document.getElementById("panel-f");
 let MARCAS_TODAS = false;
 function chipsHTML(g, opts) {
-  const todos = g === "oferta" ? `<button type="button" class="pf-chip oferta" data-g="oferta" data-v="__todos" aria-pressed="${F.oferta == null}">Todos <span>${LOTES.filter(e => pasa(e, "oferta")).length}</span></button>` : "";
+  const todos = g === "oferta" ? `<button type="button" class="pf-chip oferta" data-g="oferta" data-v="__todos" aria-pressed="${F.oferta == null}">Todos los equipos <span>${LOTES.length}</span></button>` : "";
   return todos + opts.map(([v, t]) => { const n = cuantos(g, v), on = F[g] === v; return `<button type="button" class="pf-chip${g === "oferta" ? " oferta" : ""}" data-g="${g}" data-v="${esc(v)}" aria-pressed="${on}"${!n && !on ? " disabled" : ""}>${g === "oferta" ? ICO_OF[v] : ""}${esc(t)} <span>${n}</span></button>`; }).join("");
 }
 function pintarFiltros() {
@@ -841,7 +850,8 @@ panel.addEventListener("click", ev => {
   if (ev.target.closest("#pf-mas")) { panel.classList.toggle("abierto"); document.getElementById("pf-mas").setAttribute("aria-expanded", String(panel.classList.contains("abierto"))); pintarFiltros(); return; }
   if (ev.target.closest("#pf-limpiar")) { limpiar(); return; }
   const c = ev.target.closest(".pf-chip[data-g]"); if (!c || c.disabled) return;
-  F[c.dataset.g] = (c.dataset.v === "__todos" || F[c.dataset.g] === c.dataset.v) ? null : c.dataset.v; pintar();
+  if (c.dataset.v === "__todos") { limpiar(); return; }
+  F[c.dataset.g] = F[c.dataset.g] === c.dataset.v ? null : c.dataset.v; pintar();
 });
 function limpiar() {
   Object.assign(F, { oferta: null, tipo: "Todos", marca: null, anio: null, uso: null, disp: null, q: "", pmin: 0, pmax: P_TOPE });
@@ -1353,6 +1363,13 @@ const puedeArchivos = f => !!(navigator.canShare && navigator.share && navigator
     preparar(c).then(g => mostrar(c, g)).catch(() => compartir(c, null));
   });
   dlg.addEventListener("close", () => { activo = false; });
+})();
+// Botón "volver al inicio": aparece al bajar un poco
+(function () {
+  const b = document.getElementById("subir"); if (!b) return;
+  const ver = () => b.classList.toggle("ver", (window.scrollY || document.documentElement.scrollTop) > 400);
+  addEventListener("scroll", ver, { passive: true }); ver();
+  b.addEventListener("click", () => { const quieto = matchMedia("(prefers-reduced-motion: reduce)").matches; scrollTo({ top: 0, behavior: quieto ? "auto" : "smooth" }); });
 })();
 </script>
 </body>
