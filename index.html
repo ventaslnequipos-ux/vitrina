@@ -859,7 +859,7 @@ function comboHTML(c) {
         <h3>${esc(c.nombre || c.eq.map(e => e.cat).join(" + "))}</h3>
         <ul>${c.eq.map(e => `<li><b>${esc(e.nombre)}</b>${e.anio ? " · " + e.anio : ""}${e.uso ? " · " + esc(e.uso) : ""}</li>`).join("")}</ul>
         <div class="cifras"><div><div class="separado">Por separado <s>${cop(suma)}</s></div><div class="precio-combo">${cop(c.precio)}</div></div>${ahorro > 0 ? `<span class="ahorro">Ahorras ${cop(ahorro)}</span>` : ""}</div>
-        <div class="botones"><a class="boton" href="${WA}${txt}" target="_blank" rel="noopener">${ICO_W}Consultar combo</a><button type="button" class="boton linea" data-ver-combo="${esc(c.id)}">Ver los ${c.eq.length} equipos</button></div>
+        <div class="botones"><a class="boton" href="${WA}${txt}" target="_blank" rel="noopener">${ICO_W}Consultar combo</a><button type="button" class="boton linea" data-ver-combo="${esc(c.id)}">Ver los ${c.eq.length} equipos</button><button type="button" class="boton linea compartir-combo" data-combo="${esc(c.id)}" aria-label="Compartir combo ${esc(c.nombre || "")}"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M16 6l-4-4-4 4M12 2v13"/></svg>Compartir</button></div>
       </div></article>`;
 }
 const COMBOS_VIVOS = () => COMB.map(c => ({ ...c, eq: c.lotes.map(l => LOTES.find(e => e.lote === l)).filter(e => e && !esVendido(e)) })).filter(c => c.eq.length === c.lotes.length && c.eq.length > 1);
@@ -1268,6 +1268,91 @@ const puedeArchivos = f => !!(navigator.canShare && navigator.share && navigator
   dlg.addEventListener("click", ev => { if (ev.target === dlg) cerrar(); });
 })();
 
+// Compartir combo: imagen con los equipos juntos, el precio del combo y el enlace al catálogo
+(function () {
+  const arch = new Map(), pend = new Map();
+  let activo = false;
+  const dlg = document.getElementById("compartir-dlg"), cuerpo = document.getElementById("com-cuerpo");
+  const abrir = () => { if (!dlg.open) { dlg.showModal ? dlg.showModal() : dlg.setAttribute("open", ""); } };
+  const cerrar = () => { activo = false; dlg.close ? dlg.close() : dlg.removeAttribute("open"); };
+  const dato = id => { const c = COMB.find(z => z.id === id); if (!c) return null; const eq = c.lotes.map(l => LOTES.find(e => e.lote === l)).filter(Boolean); return eq.length === c.lotes.length ? { ...c, eq, suma: eq.reduce((s, e) => s + e.precio, 0) } : null; };
+  const titulo = c => c.nombre || c.eq.map(e => e.cat).join(" + ");
+  const enlace = () => URL_CAT + "#combos";
+  const texto = c => `🚜 *COMBO: ${c.eq.map(e => e.nombre).join(" + ")}*\n💰 Los ${c.eq.length} por ${cop(c.precio)}${c.suma > c.precio ? " (ahorras " + cop(c.suma - c.precio) + ")" : ""} · 📍 Barranquilla\n\n👉 Mira el combo y más máquinas en el patio amarillo:\n${enlace()}\n\nYELLOW YARD by Nestor Sierra · WhatsApp 301 795 9540`;
+  async function imagen(c) {
+    const W = 1080, H = 1350, FH = 640, lienzo = document.createElement("canvas"); lienzo.width = W; lienzo.height = H; const x = lienzo.getContext("2d");
+    try { await Promise.all(['64px "Alfa Slab One"', '700 40px "Zilla Slab"', '600 40px "Zilla Slab"'].map(f => document.fonts.load(f))); } catch (err) {}
+    const AL = '"Alfa Slab One", Rockwell, Georgia, serif', ZI = '"Zilla Slab", Rockwell, Georgia, serif';
+    x.fillStyle = "#0E0E0E"; x.fillRect(0, 0, W, H);
+    const n = c.eq.length, pw = W / n;
+    for (let i = 0; i < n; i++) {
+      const e = c.eq[i]; x.save(); x.beginPath(); x.rect(i * pw, 0, pw, FH); x.clip();
+      if (e.img) { try { const im = await cargarImg(e.img + "?v=" + VER); const k = Math.max(pw / im.width, FH / im.height); x.drawImage(im, i * pw + (pw - im.width * k) / 2, (FH - im.height * k) / 2, im.width * k, im.height * k); } catch (err) {} }
+      x.restore();
+      x.fillStyle = "rgba(13,13,13,.85)"; x.fillRect(i * pw + 14, FH - 56, 150, 40); x.fillStyle = "#ECE8DE"; x.font = `700 24px ${ZI}`; x.fillText("LOTE " + e.lote, i * pw + 28, FH - 28);
+      if (i) { x.fillStyle = "#0E0E0E"; x.fillRect(i * pw - 3, 0, 6, FH); }
+    }
+    if (n > 1) { x.fillStyle = "#0E0E0E"; x.beginPath(); x.arc(W / 2, FH / 2, 40, 0, 6.2832); x.fill(); x.fillStyle = "#D29B32"; x.beginPath(); x.arc(W / 2, FH / 2, 32, 0, 6.2832); x.fill(); x.fillStyle = "#0E0E0E"; x.font = `40px ${AL}`; x.textAlign = "center"; x.fillText("+", W / 2, FH / 2 + 14); x.textAlign = "left"; }
+    x.fillStyle = "#D29B32"; x.fillRect(0, FH, W, 8);
+    let y = FH + 62;
+    x.fillStyle = "#D29B32"; x.font = `700 30px ${ZI}`; x.fillText("COMBO DEL PATIO · " + c.eq.map(e => "LOTE " + e.lote).join(" + "), 56, y);
+    let fs = 64; x.font = `${fs}px ${AL}`; let ls = lineas(x, titulo(c).toUpperCase(), W - 112);
+    while (ls.length > 2 && fs > 40) { fs -= 6; x.font = `${fs}px ${AL}`; ls = lineas(x, titulo(c).toUpperCase(), W - 112); }
+    x.fillStyle = "#FFFFFF"; ls.slice(0, 2).forEach(l => { y += fs * 1.1; x.fillText(l, 56, y); });
+    x.fillStyle = "#BFC5CC"; x.font = `600 33px ${ZI}`;
+    c.eq.slice(0, 3).forEach(e => { y += 46; let t = [e.nombre, e.anio, e.uso].filter(Boolean).join(" · "); while (x.measureText(t).width > W - 112 && t.length > 8) t = t.slice(0, -2); x.fillText(t, 56, y); });
+    y += 34;
+    const pr = cop(c.precio); x.font = `56px ${AL}`; const w2 = x.measureText(pr).width + 64;
+    x.fillStyle = "#D29B32"; x.beginPath(); x.roundRect ? x.roundRect(56, y, w2, 86, 43) : x.rect(56, y, w2, 86); x.fill();
+    x.fillStyle = "#0E0E0E"; x.fillText(pr, 88, y + 63);
+    if (c.suma > c.precio) {
+      x.fillStyle = "#BFC5CC"; x.font = `600 28px ${ZI}`; const s = "Por separado " + cop(c.suma), sx = 56 + w2 + 28, sy = y + 36; x.fillText(s, sx, sy); x.fillRect(sx + x.measureText("Por separado ").width, sy - 9, x.measureText(cop(c.suma)).width, 2);
+      x.fillStyle = "#D29B32"; x.font = `700 30px ${ZI}`; x.fillText("Ahorras " + cop(c.suma - c.precio), sx, y + 74);
+    }
+    const by = H - 150; x.fillStyle = "#161616"; x.fillRect(0, by - 20, W, 170);
+    try { const lg = await cargarImg("logo.svg"); x.drawImage(lg, 50, by - 4, 82, 102); } catch (err) {}
+    x.fillStyle = "#FFFFFF"; x.font = `40px ${AL}`; x.fillText("YELLOW", 150, by + 42); const yw = x.measureText("YELLOW ").width; x.fillStyle = "#D29B32"; x.fillText("YARD", 150 + yw, by + 42);
+    x.fillStyle = "#D9B23A"; x.font = `700 28px ${ZI}`; x.fillText("by Nestor Sierra", 150, by + 80);
+    x.textAlign = "right"; x.fillStyle = "#ECE8DE"; x.font = `700 28px ${ZI}`; x.fillText("Mira el catálogo completo:", W - 50, by + 36);
+    x.fillStyle = "#D29B32"; x.font = `700 27px ${ZI}`; x.fillText(SITIO.replace(/^https?:\/\//, "").replace(/\/$/, ""), W - 50, by + 74); x.textAlign = "left";
+    x.fillStyle = "#D29B32"; x.fillRect(0, H - 6, W, 3); x.strokeStyle = "#D29B32"; x.lineWidth = 3; x.lineCap = "round";
+    [W * 0.2, W * 0.5, W * 0.8].forEach(cx => { x.beginPath(); x.moveTo(cx - 12, H - 6); x.lineTo(cx - 17, H - 24); x.moveTo(cx, H - 6); x.lineTo(cx + 2, H - 34); x.moveTo(cx + 12, H - 6); x.lineTo(cx + 20, H - 22); x.stroke(); });
+    return await new Promise(ok => lienzo.toBlob(ok, "image/jpeg", .9));
+  }
+  function preparar(c) {
+    if (arch.has(c.id)) return Promise.resolve(arch.get(c.id));
+    if (!pend.has(c.id)) pend.set(c.id, imagen(c).then(b => { const f = new File([b], `Yellow-Yard-combo-${c.lotes.join("-")}.jpg`, { type: "image/jpeg" }); arch.set(c.id, f); return f; }).finally(() => pend.delete(c.id)));
+    return pend.get(c.id);
+  }
+  function precargar() { document.querySelectorAll("[data-combo]").forEach(b => { const c = dato(b.dataset.combo); if (c && !arch.has(c.id)) preparar(c).catch(() => {}); }); }
+  precargar();
+  const caja = document.getElementById("combos");
+  if (caja && window.MutationObserver) new MutationObserver(precargar).observe(caja, { childList: true });
+  function mostrar(c, f) {
+    activo = true; document.getElementById("com-sub").textContent = "Combo · " + c.eq.map(e => "Lote " + e.lote).join(" + "); document.getElementById("com-titulo").textContent = "Compartir combo";
+    cuerpo.innerHTML = `<p>La imagen del combo está lista.</p><div class="acciones-ig"><button type="button" class="boton" data-combo-ya="${esc(c.id)}">${ICO_SH} Compartir ahora</button></div>`; abrir();
+  }
+  function compartir(c, f) {
+    const t = texto(c); copiar(t);
+    const fallo = err => { if (err && err.name === "AbortError") return; mostrar(c, f); };
+    if (f && puedeArchivos(f)) { navigator.share({ files: [f], text: t }).then(cerrar).catch(fallo); return; }
+    if (navigator.share) { navigator.share({ text: t }).then(cerrar).catch(fallo); return; }
+    if (f) bajar(f, f.name); cerrar(); aviso("Imagen descargada. El mensaje con el enlace quedó copiado: pégalo al publicarla.");
+  }
+  document.addEventListener("click", ev => {
+    const ya = ev.target.closest("[data-combo-ya]");
+    if (ya) { const c = dato(ya.dataset.comboYa); if (c) compartir(c, arch.get(c.id)); return; }
+    if (activo && ev.target.closest("[data-cerrar-compartir]")) { cerrar(); return; }
+    const b = ev.target.closest("[data-combo]"); if (!b) return;
+    const c = dato(b.dataset.combo); if (!c) return;
+    const f = arch.get(c.id);
+    if (f || !navigator.share) { if (f) compartir(c, f); else preparar(c).then(g => compartir(c, g)).catch(() => compartir(c, null)); return; }
+    activo = true; document.getElementById("com-sub").textContent = "Combo · " + c.eq.map(e => "Lote " + e.lote).join(" + "); document.getElementById("com-titulo").textContent = "Compartir combo";
+    cuerpo.innerHTML = `<p>Preparando la imagen del combo…</p>`; abrir();
+    preparar(c).then(g => mostrar(c, g)).catch(() => compartir(c, null));
+  });
+  dlg.addEventListener("close", () => { activo = false; });
+})();
 </script>
 </body>
 </html>
