@@ -22,7 +22,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Zilla+Slab:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
 <style>
-/* Versión 3 (6 nov 2026): patio de maquinaria en ocre (#D29B32), YELLOW en blanco y YARD en ocre, sin cinta ni carrusel,
+/* Versión 3 (6 nov 2026): patio de maquinaria en ocre (#D29B32), YELLOW en blanco y YARD en ocre, sin cinta, carrusel de destacados con el combo fijo,
    base de hierba fina en vez de grama, columna de filtros fija con marquilla de agua, combos y "bajó de precio". */
 :root {
   --negro: #0D0D0D; --carbon: #151515; --panel: #1C1C1C; --linea: #2E2E2E;
@@ -69,6 +69,29 @@ a { color: var(--ama); }
 .ubic { font-family: var(--mono); font-size: 13px; letter-spacing: 0.14em; color: var(--plata); margin-top: 10px; text-transform: uppercase; }
 .sello { width: 150px; height: 150px; flex-shrink: 0; }
 @media (max-width: 760px) { .rotulo .wrap { grid-template-columns: auto minmax(0, 1fr); } .sello { display: none; } }
+
+/* Carrusel de destacados */
+.carrusel { position: relative; }
+.carrusel .slide { display: none; }
+.carrusel .slide.activa { display: block; animation: entra .6s ease both; }
+@keyframes entra { from { opacity: 0; transform: translateX(16px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .carrusel .slide.activa { animation: none; } }
+.mando { display: flex; align-items: center; gap: 14px; margin-top: 14px; }
+.mando button.flecha { width: 44px; height: 44px; background: var(--panel); color: var(--ama); border: 1px solid var(--linea); font-size: 22px; line-height: 1; cursor: pointer; }
+.puntos { display: flex; gap: 8px; }
+.puntos button { width: 44px; height: 44px; padding: 0; background: none; border: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.puntos button span { display: block; width: 30px; height: 6px; background: var(--linea); }
+.puntos button[aria-current="true"] span { background: var(--ama); }
+@media (max-width: 420px) { .mando { gap: 6px; } .puntos { gap: 0; } .puntos button { width: 30px; } .puntos button span { width: 20px; } }
+.tiempo { flex: 1; min-width: 0; height: 3px; background: var(--linea); overflow: hidden; }
+.tiempo i { display: block; height: 100%; width: 100%; background: var(--oro); transform-origin: left; transform: scaleX(0); }
+.tiempo i.corre { animation: llena 6s linear forwards; }
+.carrusel:hover .tiempo i.corre, .carrusel:focus-within .tiempo i.corre { animation-play-state: paused; }
+@keyframes llena { to { transform: scaleX(1); } }
+.carrusel .slide .combo { min-height: 100%; }
+.destacado .rotulito .fijo { color: var(--hueso); }
+/* Lote destacado */
+.destacado { padding-block: 36px 8px; }
 
 /* Base de hierba fina: filete ocre con tres matas en trazo fino (reemplaza la grama desde el 6 nov 2026) */
 .hierba { background: var(--negro); }
@@ -233,6 +256,7 @@ a { color: var(--ama); }
   main.wrap > .patio { display: contents; }
   .patio aside { order: 1; padding-top: 18px; flex: none; }
   .patio .lotes { flex: none; }
+  main.wrap > .destacado { order: 2; padding-block: 18px 4px; }
   .patio .lotes { order: 3; padding-block: 20px 48px; scroll-margin-top: 12px; }
   main.wrap > .faq { order: 4; }
   .filtros { gap: 6px; }
@@ -250,6 +274,8 @@ a { color: var(--ama); }
   .lote.grande .etiqueta strong { font-size: 17px; }
   .lote.grande .etiqueta small { font-size: 9px; }
   .lote.grande .boton { min-height: 42px; padding: 8px 16px; font-size: 17px; }
+  .destacado .rotulito { margin-bottom: 10px; }
+  .mando { margin-top: 8px; }
 }
 
 /* Lote */
@@ -547,6 +573,18 @@ footer p { margin: 6px 0 0; max-width: 60ch; }
 </section>
 
 <main class="wrap">
+  <section class="destacado" aria-label="Lotes destacados de la semana">
+    <div class="rotulito"><span>Lotes destacados · <span id="semana"></span></span></div>
+    <div class="carrusel" id="carrusel">
+      <div id="slides" aria-live="polite"></div>
+      <div class="mando">
+        <button type="button" class="flecha" id="prev" aria-label="Lote destacado anterior">‹</button>
+        <div class="puntos" id="puntos"></div>
+        <button type="button" class="flecha" id="next" aria-label="Siguiente lote destacado">›</button>
+        <div class="tiempo" aria-hidden="true"><i id="barra"></i></div>
+      </div>
+    </div>
+  </section>
   <div class="patio">
     <aside class="panel-f" id="panel-f" aria-label="Filtros del patio">
       <div class="pf-cab"><h2>Encuentra tu máquina</h2><p id="pf-conteo" aria-live="polite"></p></div>
@@ -811,12 +849,7 @@ function limpiar() {
 orden.addEventListener("change", pintar);
 pintarPrecio();
 // Combos: tarjeta con los equipos juntos, precio por separado tachado y lo que se ahorra
-function pintarCombos() {
-  const caja = document.getElementById("combos");
-  const lista = COMB.map(c => ({ ...c, eq: c.lotes.map(l => LOTES.find(e => e.lote === l)).filter(e => e && !esVendido(e)) })).filter(c => c.eq.length === c.lotes.length && c.eq.length > 1);
-  const ver = lista.filter(c => F.oferta === "combo" || c.eq.some(e => pasa(e)));
-  caja.hidden = !ver.length;
-  caja.innerHTML = ver.map(c => {
+function comboHTML(c) {
     const suma = c.eq.reduce((s, e) => s + e.precio, 0), ahorro = suma - c.precio;
     const txt = encodeURIComponent(`Hola Nestor, vi en Yellow Yard el combo ${c.eq.map(e => "lote " + e.lote).join(" + ")}: ${c.eq.map(e => e.nombre).join(" + ")} por ${cop(c.precio)}.\nMe gustaría recibir información sobre las condiciones y cuándo podría verlos.\nQuedo atento, gracias.\n\n👉 ${URL_CAT}`);
     return `<article class="combo" aria-label="Combo ${esc(c.nombre || "")}">
@@ -828,7 +861,13 @@ function pintarCombos() {
         <div class="cifras"><div><div class="separado">Por separado <s>${cop(suma)}</s></div><div class="precio-combo">${cop(c.precio)}</div></div>${ahorro > 0 ? `<span class="ahorro">Ahorras ${cop(ahorro)}</span>` : ""}</div>
         <div class="botones"><a class="boton" href="${WA}${txt}" target="_blank" rel="noopener">${ICO_W}Consultar combo</a><button type="button" class="boton linea" data-ver-combo="${esc(c.id)}">Ver los ${c.eq.length} equipos</button></div>
       </div></article>`;
-  }).join("");
+}
+const COMBOS_VIVOS = () => COMB.map(c => ({ ...c, eq: c.lotes.map(l => LOTES.find(e => e.lote === l)).filter(e => e && !esVendido(e)) })).filter(c => c.eq.length === c.lotes.length && c.eq.length > 1);
+function pintarCombos() {
+  const caja = document.getElementById("combos");
+  const ver = F.oferta === "combo" ? COMBOS_VIVOS() : [];
+  caja.hidden = !ver.length;
+  caja.innerHTML = ver.map(comboHTML).join("");
 }
 document.addEventListener("click", ev => {
   const b = ev.target.closest("[data-ver-combo]"); if (!b) return;
@@ -920,6 +959,44 @@ function pintar() {
   pintarVista(l);
   if (!l.length) document.getElementById("lista").innerHTML = `<div class="pf-vacio"><b>No hay equipos con esa combinación</b>Quita algún filtro o escríbenos: si no está en el patio, te lo buscamos.<div style="margin-top: 14px"><button type="button" class="pf-limpiar" onclick="limpiar()">Limpiar filtros</button></div></div>`;
 }
+// Destacados de la semana: el combo va fijo de primero y además max(3, 10 % del total) lotes que rotan cada lunes.
+(function () {
+  const cuantos = Math.max(3, Math.ceil(DISPONIBLES.length * 0.1));
+  const lunes0 = Date.parse("2026-01-05T00:00:00-05:00");
+  const semana = Math.floor((Date.now() - lunes0) / (7 * 864e5));
+  const combos = COMBOS_VIVOS(), enCombo = new Set(combos.flatMap(c => c.lotes));
+  let pool = DISPONIBLES.filter(e => e.img && e.precio > 0 && !enCombo.has(e.lote));
+  // mezcla fija para que cada semana salgan equipos de distintos tipos
+  let sem = 7; pool = pool.map(e => { sem = (sem * 9301 + 49297) % 233280; return [sem, e]; }).sort((a, b) => a[0] - b[0]).map(x => x[1]);
+  const manual = (typeof FIJOS !== "undefined" ? FIJOS : []).map(n => DISPONIBLES.find(e => e.nombre === n)).filter(Boolean);
+  const rot = []; for (let k = 0; rot.length < cuantos && k < pool.length; k++) { const e = pool[(semana * cuantos + k) % pool.length]; if (!manual.includes(e) && !rot.includes(e)) rot.push(e); }
+  const sel = manual.concat(rot).slice(0, cuantos);
+  const ini = new Date(lunes0 + semana * 7 * 864e5);
+  document.getElementById("semana").textContent = "Semana del " + ini.toLocaleDateString("es-CO", { day: "numeric", month: "long", timeZone: "America/Bogota" });
+  const slides = document.getElementById("slides"), puntos = document.getElementById("puntos"), barra = document.getElementById("barra");
+  const total = combos.length + sel.length;
+  slides.innerHTML = combos.map((c, i) => `<div class="slide" role="group" aria-roledescription="combo destacado" aria-label="${i + 1} de ${total}">${comboHTML(c)}</div>`).join("")
+    + sel.map((e, i) => `<div class="slide" role="group" aria-roledescription="lote destacado" aria-label="${combos.length + i + 1} de ${total}">${lote(e, true)}</div>`).join("");
+  puntos.innerHTML = combos.map(c => `<button type="button" aria-label="Ver combo ${esc(c.lotes.join(" + "))}"><span></span></button>`).join("") + sel.map(e => `<button type="button" aria-label="Ver ${esc(e.nombre)}"><span></span></button>`).join("");
+  const s = [...slides.children], p = [...puntos.children];
+  const quieto = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let i = 0, t = null, pausa = false;
+  function ir(n) {
+    i = (n + s.length) % s.length;
+    s.forEach((x, k) => x.classList.toggle("activa", k === i));
+    p.forEach((x, k) => x.setAttribute("aria-current", String(k === i)));
+    barra.classList.remove("corre"); void barra.offsetWidth; if (!quieto) barra.classList.add("corre");
+    clearTimeout(t); if (!quieto) programar();
+  }
+  function programar() { t = setTimeout(function paso() { if (pausa) { t = setTimeout(paso, 500); return; } ir(i + 1); }, 6000); }
+  const car = document.getElementById("carrusel");
+  car.addEventListener("mouseenter", () => pausa = true); car.addEventListener("mouseleave", () => pausa = false);
+  car.addEventListener("focusin", () => pausa = true); car.addEventListener("focusout", () => pausa = false);
+  document.getElementById("prev").onclick = () => ir(i - 1);
+  document.getElementById("next").onclick = () => ir(i + 1);
+  p.forEach((b, k) => b.onclick = () => ir(k));
+  ir(0);
+})();
 pintar();
 
 // Equipo vendido: "Ver equipos similares" filtra el patio por el mismo tipo
