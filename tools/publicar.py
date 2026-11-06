@@ -20,10 +20,14 @@ Reglas:
   - Fotos: la primera foto del banco es la principal. Solo salen las que no están marcadas
     "Solo interno" (campo publica = false). Llevan marca de agua y máximo 1100 px.
   - Videos: se copian tal cual (máximo 20 MB, el límite del banco).
+  - Bajó de precio: si el precio publicado baja frente al que tenía la página, se guarda el anterior en
+    PRECIO_ANTES (se muestra tachado con la chapa "Bajó de precio" durante 30 días; si el precio sube, se quita).
+  - Combos: los equipos del control con el mismo campo combo.id salen juntos en COMBOS con su precio especial,
+    solo si todos están publicados y disponibles.
   - Si un equipo del control no tiene "Características técnicas", se conservan las que ya
     tenía la página y se informan para guardarlas en el control.
 """
-import argparse, json, os, re, glob, shutil, subprocess, sys
+import argparse, datetime, json, os, re, glob, shutil, subprocess, sys
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
 MARCA = os.path.join(AQUI, "..", "brandout", "marca.png")
@@ -33,7 +37,7 @@ def leer_js(site):
     src = open(os.path.join(site, "equipos.js"), encoding="utf-8").read()
     datos = json.loads(subprocess.check_output(["node", "-e", """
 const fs=require('fs');const s=fs.readFileSync(process.argv[1],'utf8');
-const f=new Function(s+';return {EQUIPOS, INGRESOS: typeof INGRESOS!=="undefined"?INGRESOS:{}, FIJOS: typeof FIJOS!=="undefined"?FIJOS:[], DESTACADO: typeof DESTACADO!=="undefined"?DESTACADO:""};');
+const f=new Function(s+';return {EQUIPOS, INGRESOS: typeof INGRESOS!=="undefined"?INGRESOS:{}, FIJOS: typeof FIJOS!=="undefined"?FIJOS:[], DESTACADO: typeof DESTACADO!=="undefined"?DESTACADO:"", PRECIO_ANTES: typeof PRECIO_ANTES!=="undefined"?PRECIO_ANTES:{}};');
 process.stdout.write(JSON.stringify(f()));""", os.path.join(site, "equipos.js")]))
     for i, e in enumerate(datos["EQUIPOS"]):
         e.setdefault("lote", str(i + 1).zfill(2))
@@ -168,6 +172,35 @@ def generar(a):
         ing = r.get("fecha_ingreso") or viejo["INGRESOS"].get(e["nombre"]) or ""
         if ing:
             ingresos[e["nombre"]] = ing
+    # Bajó de precio: precio anterior tachado durante 30 días
+    hoy = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=-5))).date()
+    antes = {}
+    for e in equipos:
+        l, p = e["lote"], e["precio"]
+        if e["nombre"] in vendidos or not p:
+            continue
+        reg = viejo["PRECIO_ANTES"].get(l)
+        previo = por_lote.get(l, {}).get("precio", 0)
+        if reg and reg.get("antes", 0) > p and (hoy - datetime.date.fromisoformat(reg.get("desde", str(hoy)))).days <= 30:
+            antes[l] = reg
+        elif previo and p < previo:
+            antes[l] = {"antes": previo, "desde": str(hoy)}
+    informe["bajaron"] = sorted(antes)
+    # Combos: equipos con el mismo combo.id, todos publicados y disponibles
+    grupos = {}
+    for r in filas:
+        c = r.get("combo") or {}
+        if isinstance(c, dict) and c.get("id") and num(c.get("precio")):
+            grupos.setdefault(c["id"], c)
+    disponibles = {e["lote"] for e in equipos if e["nombre"] not in vendidos}
+    combos = []
+    for cid, c in grupos.items():
+        lotes = [str(num(x)).zfill(2) for x in c.get("lotes", [])]
+        if len(lotes) > 1 and all(x in disponibles for x in lotes):
+            combos.append({"id": cid, "nombre": c.get("nombre", ""), "lotes": lotes, "precio": num(c["precio"])})
+        else:
+            informe["avisos"].append(f"Combo {cid} no se publicó: algún lote no está disponible en la página.")
+    informe["combos"] = [c["id"] for c in combos]
     informe["publicados"] = len(equipos)
     nombres = {e["nombre"] for e in equipos}
 
@@ -186,6 +219,10 @@ def generar(a):
     lineas.append("const VENDIDOS = {")
     lineas += [f"  {js(k)}: {js(v)}," for k, v in vendidos.items()]
     lineas.append("};")
+    lineas.append('// Precio anterior de los equipos que bajaron de precio (se muestra tachado 30 días). Lo calcula publicar.py.')
+    lineas.append(f"const PRECIO_ANTES = {js(antes)};")
+    lineas.append('// Combos: varios lotes juntos con precio especial. Se arman en el control privado (campo combo).')
+    lineas.append(f"const COMBOS = {js(combos)};")
     lineas.append("// Carrusel de destacados: rota solo cada lunes (mínimo 3 o el 10 % del total). Si un equipo debe quedar fijo, poner su nombre aquí.")
     lineas.append(f"const FIJOS = {js([n for n in viejo['FIJOS'] if n in nombres])};")
     lineas.append("// Equipo destacado de la semana (cambiar el nombre para rotarlo).")

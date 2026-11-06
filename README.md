@@ -27,6 +27,8 @@ La única fuente de datos es el **control privado** (artifact de Claude, `contro
 2. Toca **Publicar en la página**. El control llama a la tarea programada «Publicar Yellow Yard en la página» (solo se ejecuta a pedido) por el conector Claude Code Remote.
 3. La tarea baja la base del control, corre `tools/publicar.py` (fotos con marca de agua, videos, `equipos.js`, `medios.json`), hace commit y push a `main`, actualiza la hoja "Base de datos Yellow Yard" y deja el resultado en `sistema/publicacion` del control. La página se ve actualizada 1 a 3 minutos después del push.
 
+Ofertas (desde el 6 nov 2026): en el control, los equipos con el mismo `combo` ({id, nombre, lotes, precio}) salen como combo en la página; si un precio baja, `publicar.py` guarda el anterior en `PRECIO_ANTES` y la página lo muestra tachado con la chapa "Bajó de precio" durante 30 días.
+
 Reglas de `publicar.py`: sale todo equipo con "Publicado en la web" marcado y estado distinto de Retirado; el lote es fijo; Vendido va a `VENDIDOS` (sello, sin precio, al final); la primera foto del banco es la principal; las fotos marcadas "Solo interno" no salen; `medios.json` guarda qué archivo del banco corresponde a cada foto o video ya publicado.
 
 `web/vitrina.html` y `tools/build_site.sh` quedan como respaldo histórico: `equipos.js` ya no se genera desde ahí.
@@ -34,5 +36,7 @@ Reglas de `publicar.py`: sale todo equipo con "Publicado en la web" marcado y es
 ## Tipografía y colores
 
 - Títulos: Alfa Slab One. Texto: Zilla Slab. Datos: IBM Plex Mono.
-- Negro #0D0D0D / #161616 · Amarillo #FFC20E · Oro #C9A227 · Plata #BFC5CC.
+- Negro #0D0D0D / #161616 · Ocre #D29B32 (desde el 6 nov 2026; antes amarillo #FFC20E) · Oro #C9A227 · Plata #BFC5CC.
+- Marca: YELLOW en blanco y YARD en ocre. Sin grama: la base es un filete ocre con tres matas de hierba fina (logo, página e imagen para compartir).
+- Pendiente: la marca de agua de las fotos (`brandout/marca.png`) todavía es la versión amarilla con grama.
 - Las fuentes para renderizar localmente se bajan con un clon parcial de github.com/google/fonts (`ofl/alfaslabone`, `ofl/zillaslab`).
