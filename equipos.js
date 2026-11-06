@@ -4,7 +4,7 @@ const EQUIPOS = [
     specs: [["Capacidad máx.", "3.800 kg"], ["Altura de elevación", "15,7 m"], ["Giro de torreta", "400°"], ["Tracción", "4x4"]] },
   { lote: "02", img: "img/mg120_a.jpg", tipo: "Motoniveladoras", cat: "Motoniveladora", nombre: "Caterpillar 120G (2007)", anio: 2007, uso: "12.000 h", precio: 270000000,
     specs: [["Motor", "Caterpillar 3304"], ["Potencia", "125 hp"], ["Peso operativo", "11.500 kg aprox."], ["Transmisión", "6 avance / 6 reversa"]] },
-  { lote: "03", img: "img/mg140.jpg", tipo: "Motoniveladoras", cat: "Motoniveladora", nombre: "Caterpillar 12G (140G)", anio: 1989, uso: "30.000 h", precio: 250000000, fotos: ["img/l03-eb3ff0fc.jpg"],
+  { lote: "03", img: "img/mg140.jpg", tipo: "Motoniveladoras", cat: "Motoniveladora", nombre: "Caterpillar 12G (140G)", anio: 1989, uso: "30.000 h", precio: 220000000, fotos: ["img/l03-eb3ff0fc.jpg"],
     specs: [["Motor", "Caterpillar 3306"], ["Potencia", "135 hp"], ["Hoja", "12 pies (3,66 m)"], ["Eje trasero", "Tándem"]] },
   { lote: "04", img: "img/cp433.jpg", tipo: "Compactación", cat: "Vibrocompactador", nombre: "Caterpillar CP-433C", anio: 2003, uso: "7.000 h", precio: 145000000,
     specs: [["Motor", "Caterpillar 3054T"], ["Potencia", "105 hp"], ["Peso operativo", "6.900 kg aprox."], ["Ancho de tambor", "1,68 m"]] },
@@ -16,11 +16,11 @@ const EQUIPOS = [
     specs: [["Peso operativo", "13 t aprox."], ["Prof. de excavación", "5,5 m aprox."], ["Cucharón", "0,5 m³ aprox."], ["Tren de rodaje", "Largo (LC)"]] },
   { lote: "08", img: "img/ir_a.jpg", tipo: "Compactación", cat: "Vibrocompactador", nombre: "Ingersoll Rand SD100", anio: 2014, uso: "8.000 h", precio: 170000000,
     specs: [["Clase", "10 toneladas"], ["Ancho de tambor", "2,13 m"], ["Tambor", "Liso"], ["Protección", "Techo ROPS"]] },
-  { lote: "09", img: "img/bomag2.jpg", tipo: "Compactación", cat: "Vibrocompactador", nombre: "Bomag", anio: 1988, uso: "Operativo", precio: 60000000,
+  { lote: "09", img: "img/bomag2.jpg", tipo: "Compactación", cat: "Vibrocompactador", nombre: "Bomag", anio: 1988, uso: "Operativo", precio: 55000000,
     specs: [["Tambor", "Liso"], ["Protección", "Techo ROPS"]] },
   { lote: "10", img: "img/ford_b.jpg", tipo: "Vehículos", cat: "Volqueta", nombre: "Ford Piragua", anio: 1971, uso: "Operativa", precio: 42000000,
     specs: [["Motor", "Nissan 180 diésel"], ["Estado", "Totalmente operativa"], ["Carrocería", "Volco"], ["Eje trasero", "Doble llanta"]] },
-  { lote: "11", img: "img/duster_a.jpg", tipo: "Vehículos", cat: "Camioneta SUV", nombre: "Renault Duster Iconic", anio: 2026, uso: "19.000 km", precio: 90000000,
+  { lote: "11", img: "img/duster_a.jpg", tipo: "Vehículos", cat: "Camioneta SUV", nombre: "Renault Duster Iconic", anio: 2026, uso: "19.000 km", precio: 88000000,
     specs: [["Motor", "1.3 turbo (TCe)"], ["Potencia", "154 hp"], ["Combustible", "Gasolina"], ["Color", "Gris"]] },
   { lote: "12", img: "img/h940.jpg", tipo: "Excavación", cat: "Retroexcavadora cargadora", nombre: "Hyundai H940C", anio: 2018, uso: "9.925 h", precio: 280000000,
     specs: [["Potencia", "136 hp aprox."], ["Peso operativo", "7,5 t aprox."], ["Tracción", "4x4"], ["Cabina", "Cerrada"]] },
@@ -143,6 +143,10 @@ const INGRESOS = {
 const VENDIDOS = {
   "John Deere 320D": "2026-11-04",
 };
+// Precio anterior de los equipos que bajaron de precio (se muestra tachado 30 días). Lo calcula publicar.py.
+const PRECIO_ANTES = {"03": {"antes": 250000000, "desde": "2026-11-06"}, "09": {"antes": 60000000, "desde": "2026-11-06"}, "11": {"antes": 90000000, "desde": "2026-11-06"}};
+// Combos: varios lotes juntos con precio especial. Se arman en el control privado (campo combo).
+const COMBOS = [{"id": "combo-03-04", "nombre": "Combo motoniveladora + vibrocompactador", "lotes": ["03", "04"], "precio": 315000000}];
 // Carrusel de destacados: rota solo cada lunes (mínimo 3 o el 10 % del total). Si un equipo debe quedar fijo, poner su nombre aquí.
 const FIJOS = [];
 // Equipo destacado de la semana (cambiar el nombre para rotarlo).
