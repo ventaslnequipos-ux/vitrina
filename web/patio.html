@@ -796,7 +796,8 @@ const n2 = n => String(n).padStart(2, "0");
 const filtros = document.getElementById("filtros"), orden = document.getElementById("orden"), panel = document.getElementById("panel-f");
 let MARCAS_TODAS = false;
 function chipsHTML(g, opts) {
-  return opts.map(([v, t]) => { const n = cuantos(g, v), on = F[g] === v; return `<button type="button" class="pf-chip${g === "oferta" ? " oferta" : ""}" data-g="${g}" data-v="${esc(v)}" aria-pressed="${on}"${!n && !on ? " disabled" : ""}>${g === "oferta" ? ICO_OF[v] : ""}${esc(t)} <span>${n}</span></button>`; }).join("");
+  const todos = g === "oferta" ? `<button type="button" class="pf-chip oferta" data-g="oferta" data-v="__todos" aria-pressed="${F.oferta == null}">Todos <span>${LOTES.filter(e => pasa(e, "oferta")).length}</span></button>` : "";
+  return todos + opts.map(([v, t]) => { const n = cuantos(g, v), on = F[g] === v; return `<button type="button" class="pf-chip${g === "oferta" ? " oferta" : ""}" data-g="${g}" data-v="${esc(v)}" aria-pressed="${on}"${!n && !on ? " disabled" : ""}>${g === "oferta" ? ICO_OF[v] : ""}${esc(t)} <span>${n}</span></button>`; }).join("");
 }
 function pintarFiltros() {
   const of = GRUPOS.oferta.opts.filter(([v]) => LOTES.some(e => GRUPOS.oferta.ok(e, v)));
@@ -840,7 +841,7 @@ panel.addEventListener("click", ev => {
   if (ev.target.closest("#pf-mas")) { panel.classList.toggle("abierto"); document.getElementById("pf-mas").setAttribute("aria-expanded", String(panel.classList.contains("abierto"))); pintarFiltros(); return; }
   if (ev.target.closest("#pf-limpiar")) { limpiar(); return; }
   const c = ev.target.closest(".pf-chip[data-g]"); if (!c || c.disabled) return;
-  F[c.dataset.g] = F[c.dataset.g] === c.dataset.v ? null : c.dataset.v; pintar();
+  F[c.dataset.g] = (c.dataset.v === "__todos" || F[c.dataset.g] === c.dataset.v) ? null : c.dataset.v; pintar();
 });
 function limpiar() {
   Object.assign(F, { oferta: null, tipo: "Todos", marca: null, anio: null, uso: null, disp: null, q: "", pmin: 0, pmax: P_TOPE });
@@ -959,20 +960,20 @@ function pintar() {
   pintarVista(l);
   if (!l.length) document.getElementById("lista").innerHTML = `<div class="pf-vacio"><b>No hay equipos con esa combinación</b>Quita algún filtro o escríbenos: si no está en el patio, te lo buscamos.<div style="margin-top: 14px"><button type="button" class="pf-limpiar" onclick="limpiar()">Limpiar filtros</button></div></div>`;
 }
-// Destacados de la semana: el combo va fijo de primero y además max(3, 10 % del total) lotes que rotan cada lunes.
+// Destacados: el combo va fijo de primero y además max(3, 10 % del total) lotes que cambian al azar cada 3 días.
 (function () {
   const cuantos = Math.max(3, Math.ceil(DISPONIBLES.length * 0.1));
   const lunes0 = Date.parse("2026-01-05T00:00:00-05:00");
-  const semana = Math.floor((Date.now() - lunes0) / (7 * 864e5));
+  const PASO = 3 * 864e5, periodo = Math.floor((Date.now() - lunes0) / PASO);
   const combos = COMBOS_VIVOS(), enCombo = new Set(combos.flatMap(c => c.lotes));
   let pool = DISPONIBLES.filter(e => e.img && e.precio > 0 && !enCombo.has(e.lote));
-  // mezcla fija para que cada semana salgan equipos de distintos tipos
-  let sem = 7; pool = pool.map(e => { sem = (sem * 9301 + 49297) % 233280; return [sem, e]; }).sort((a, b) => a[0] - b[0]).map(x => x[1]);
+  // mezcla al azar que cambia cada 3 días (igual para todos los visitantes dentro del mismo periodo)
+  let sem = 7 + periodo * 7919; for (let w = 0; w < 5; w++) sem = (sem * 9301 + 49297) % 233280; pool = pool.map(e => { sem = (sem * 9301 + 49297) % 233280; return [sem, e]; }).sort((a, b) => a[0] - b[0]).map(x => x[1]);
   const manual = (typeof FIJOS !== "undefined" ? FIJOS : []).map(n => DISPONIBLES.find(e => e.nombre === n)).filter(Boolean);
-  const rot = []; for (let k = 0; rot.length < cuantos && k < pool.length; k++) { const e = pool[(semana * cuantos + k) % pool.length]; if (!manual.includes(e) && !rot.includes(e)) rot.push(e); }
+  const rot = []; for (let k = 0; rot.length < cuantos && k < pool.length; k++) { const e = pool[k]; if (!manual.includes(e) && !rot.includes(e)) rot.push(e); }
   const sel = manual.concat(rot).slice(0, cuantos);
-  const ini = new Date(lunes0 + semana * 7 * 864e5);
-  document.getElementById("semana").textContent = "Semana del " + ini.toLocaleDateString("es-CO", { day: "numeric", month: "long", timeZone: "America/Bogota" });
+  const ini = new Date(lunes0 + periodo * PASO);
+  document.getElementById("semana").textContent = "cambian cada 3 días · desde el " + ini.toLocaleDateString("es-CO", { day: "numeric", month: "long", timeZone: "America/Bogota" });
   const slides = document.getElementById("slides"), puntos = document.getElementById("puntos"), barra = document.getElementById("barra");
   const total = combos.length + sel.length;
   slides.innerHTML = combos.map((c, i) => `<div class="slide" role="group" aria-roledescription="combo destacado" aria-label="${i + 1} de ${total}">${comboHTML(c)}</div>`).join("")
