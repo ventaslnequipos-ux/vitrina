@@ -546,7 +546,22 @@ body.modo-aliado #barra-consulta, body.modo-cliente #barra-consulta, body.modo-a
 .yy-franja .num input { min-height: 40px; width: 170px; padding: 6px 10px; background: var(--negro); color: var(--hueso); border: 1px solid var(--linea); font: inherit; }
 .yy-franja .num button { min-height: 40px; padding: 6px 14px; background: none; border: 1px solid var(--ama); color: var(--ama); font: inherit; font-weight: 700; cursor: pointer; }
 .yy-franja .num .ok { color: var(--gris); font-size: 14px; }
-.yy-intro ul { margin: 0; padding-left: 20px; color: var(--plata); display: grid; gap: 6px; }
+.interes [hidden], .consulta [hidden] { display: none !important; }
+.yy-pestanas { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--linea); }
+.yy-pestanas button { min-height: 46px; background: none; border: 0; border-bottom: 3px solid transparent; color: var(--gris); font: inherit; font-weight: 700; font-size: 17px; cursor: pointer; }
+.yy-pestanas button[aria-selected="true"] { color: var(--ama); border-bottom-color: var(--ama); }
+.interes .dos { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.interes .dos label { min-width: 0; } .interes .dos input { width: 100%; min-width: 0; box-sizing: border-box; }
+.interes label.check { flex-direction: row; align-items: flex-start; gap: 10px; font-weight: 400; font-size: 14px; color: var(--plata); line-height: 1.35; }
+.interes label.check input { min-height: 0; width: 20px; height: 20px; margin: 2px 0 0; flex: 0 0 auto; accent-color: var(--ama); }
+.interes .nota a { color: var(--ama); }
+.interes .listo .acc { display: flex; flex-wrap: wrap; gap: 10px; }
+.yy-lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.yy-lista li { display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; padding: 10px 12px; background: var(--negro); border: 1px solid var(--linea); }
+.yy-lista b { color: #fff; font-size: 17px; }
+.yy-lista small { grid-column: 1; color: var(--gris); font-family: var(--mono); font-size: 12px; }
+.yy-lista .est { grid-row: 1 / span 2; grid-column: 2; align-self: center; font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--ama); border: 1px solid var(--ama); padding: 3px 8px; }
+.yy-lista .est.alerta { color: #F08A7E; border-color: #F08A7E; }
 @media (max-width: 760px) { .yy-franja h2 { font-size: 20px; } .yy-franja .acc { width: 100%; } .yy-franja .acc .boton { flex: 1 1 140px; justify-content: center; } }
 </style>
 </head>
@@ -716,32 +731,48 @@ body.modo-aliado #barra-consulta, body.modo-cliente #barra-consulta, body.modo-a
   <div class="listo" id="int-listo" hidden></div>
 </dialog>
 
-<dialog class="interes" id="yy-intro" aria-labelledby="yy-intro-t">
-  <div class="cab"><div><small>Yellow Yard · Aliados</small><h2 id="yy-intro-t">Vista para comisionistas aliados</h2></div><button type="button" class="cerrar" data-yy-cerrar aria-label="Cerrar">×</button></div>
-  <form method="dialog" class="yy-intro">
-    <p class="nota" style="font-size: 16px; color: var(--hueso)">Desde aquí compartes los equipos del patio con tus clientes <b>sin el número de Nestor</b>. Tu cliente te consulta a ti y tú sigues atendiéndolo hasta el cierre, siempre a través de Yellow Yard.</p>
-    <ul>
-      <li>Escribe tu WhatsApp (opcional): los equipos que compartas mostrarán tu número.</li>
-      <li>Usa el botón <b>Compartir</b> de cada equipo o <b>Compartir catálogo</b>.</li>
-      <li>Antes de presentar un cliente, toca <b>Registrar cliente</b>: le llega a Nestor con fecha y hora y queda como prueba de tu intermediación.</li>
-    </ul>
-    <p class="nota">Vista de prueba (piloto). Precios de referencia sujetos a disponibilidad.</p>
-    <button type="submit" class="boton">Entendido</button>
+<dialog class="interes" id="yy-acceso" aria-labelledby="yy-acc-t">
+  <div class="cab"><div><small>Yellow Yard · Aliados</small><h2 id="yy-acc-t">Acceso de aliados</h2></div><button type="button" class="cerrar" data-yy-cerrar aria-label="Cerrar">×</button></div>
+  <div class="yy-pestanas" role="tablist"><button type="button" role="tab" data-yy-tab="entrar" aria-selected="true">Entrar</button><button type="button" role="tab" data-yy-tab="crear" aria-selected="false">Crear cuenta</button></div>
+  <form id="yy-entrar" novalidate>
+    <p class="nota">Entra con el WhatsApp y el PIN de tu cuenta de aliado.</p>
+    <label>Tu WhatsApp<input id="yy-e-tel" type="tel" inputmode="tel" autocomplete="tel" placeholder="300 123 4567"></label>
+    <label>PIN<input id="yy-e-pin" type="password" inputmode="numeric" autocomplete="current-password" maxlength="6" placeholder="4 a 6 números"></label>
+    <p class="nota yy-error" role="alert" hidden></p>
+    <button type="submit" class="boton">Entrar</button>
+    <p class="nota"><a href="#" id="yy-olvido">Olvidé mi PIN</a></p>
   </form>
+  <form id="yy-crear" novalidate hidden>
+    <p class="nota">Crea tu cuenta para compartir los equipos del patio. Tus clientes verán tu WhatsApp, no el de Nestor.</p>
+    <label>Nombre completo<input id="yy-c-nombre" autocomplete="name"></label>
+    <label>Tu WhatsApp<input id="yy-c-tel" type="tel" inputmode="tel" autocomplete="tel" placeholder="300 123 4567"></label>
+    <label>Empresa (opcional)<input id="yy-c-empresa" autocomplete="organization"></label>
+    <label>Ciudad<input id="yy-c-ciudad" autocomplete="address-level2"></label>
+    <div class="dos"><label>Crea un PIN<input id="yy-c-pin" type="password" inputmode="numeric" autocomplete="new-password" maxlength="6" placeholder="4 a 6 números"></label><label>Repite el PIN<input id="yy-c-pin2" type="password" inputmode="numeric" autocomplete="new-password" maxlength="6"></label></div>
+    <label class="check"><input type="checkbox" id="yy-c-acepta"><span>Acepto las condiciones de aliado: registro aquí a mis clientes antes de presentarlos, no cambio precios ni datos de los equipos sin autorización de Nestor y Yellow Yard puede retirar mi cuenta si las incumplo. Autorizo el uso de mis datos para gestionar mi relación como aliado (Ley 1581 de 2012).</span></label>
+    <p class="nota yy-error" role="alert" hidden></p>
+    <button type="submit" class="boton">Crear mi cuenta</button>
+  </form>
+  <div class="listo" id="yy-acc-listo" hidden></div>
 </dialog>
 <dialog class="interes" id="yy-reg" aria-labelledby="yy-reg-t">
   <div class="cab"><div><small>Aliados · Trazabilidad</small><h2 id="yy-reg-t">Registrar cliente referido</h2></div><button type="button" class="cerrar" data-yy-cerrar aria-label="Cerrar">×</button></div>
   <form id="yy-reg-form" novalidate>
-    <p class="nota">Se abre WhatsApp con el registro listo para enviárselo a Nestor. Guarda ese chat: es tu constancia con fecha y hora.</p>
-    <label>Tu nombre (aliado)<input id="yy-r-aliado" autocomplete="name" required></label>
-    <label>Cliente (nombre o empresa)<input id="yy-r-cliente" required></label>
+    <p class="nota">Registra al cliente antes de presentarlo. Queda a tu nombre con fecha y hora.</p>
+    <label>Cliente (nombre o empresa)<input id="yy-r-cliente"></label>
     <label>Celular del cliente<input id="yy-r-tel" type="tel" inputmode="tel"></label>
     <label>Ciudad del cliente<input id="yy-r-ciudad"></label>
     <label>Equipos de interés (lotes)<input id="yy-r-lotes" placeholder="Ej.: lote 03 y lote 04"></label>
     <label>Nota (opcional)<textarea id="yy-r-nota" placeholder="Ej.: busca financiación, quiere verlo esta semana"></textarea></label>
-    <p class="nota" id="yy-r-error" role="alert" hidden></p>
-    <button type="submit" class="boton">Enviar registro a Nestor</button>
+    <p class="nota">Al registrarlo declaras que el cliente autorizó compartir sus datos con Yellow Yard.</p>
+    <p class="nota yy-error" role="alert" hidden></p>
+    <button type="submit" class="boton">Registrar cliente</button>
   </form>
+  <div class="listo" id="yy-reg-listo" hidden></div>
+</dialog>
+<dialog class="consulta" id="yy-mis" aria-labelledby="yy-mis-t">
+  <div class="cab"><div><small>Aliados</small><h2 id="yy-mis-t">Mis clientes registrados</h2></div><button type="button" class="cerrar" data-yy-cerrar aria-label="Cerrar">×</button></div>
+  <div class="cuerpo" id="yy-mis-cuerpo"></div>
 </dialog>
 
 <footer>
@@ -770,8 +801,11 @@ const URL_CAT = "https://ventaslnequipos-ux.github.io/vitrina/";
 const QS = new URLSearchParams(location.search);
 const ALIADO = QS.get("aliado") === "1";
 const NEUTRA = ALIADO || QS.get("v") === "a";
+// Dirección de la aplicación web de Google (apps_script/Aliados.gs en la rama fuente). Vacía: los perfiles quedan guardados en el celular del aliado.
+const API_ALIADOS = "";
+function sesionAliado() { try { return JSON.parse(localStorage.getItem("yy_aliado_s") || "null"); } catch (x) { return null; } }
 function wAliado() {
-  let n = ""; if (ALIADO) { try { n = localStorage.getItem("yy_aliado_w") || ""; } catch (x) {} } else n = QS.get("w") || "";
+  let n = ""; if (ALIADO) { const s = sesionAliado(); n = (s && s.tel) || ""; } else n = QS.get("w") || "";
   n = String(n).replace(/\D/g, ""); if (n.length === 10 && n[0] === "3") n = "57" + n;
   return /^\d{11,13}$/.test(n) && n !== "573017959540" ? n : "";
 }
@@ -1435,76 +1469,216 @@ const puedeArchivos = f => !!(navigator.canShare && navigator.share && navigator
   addEventListener("scroll", ver, { passive: true }); ver();
   b.addEventListener("click", () => { const quieto = matchMedia("(prefers-reduced-motion: reduce)").matches; scrollTo({ top: 0, behavior: quieto ? "auto" : "smooth" }); });
 })();
-// Vista de aliados (piloto): quita el contacto de Nestor y agrega las herramientas del comisionista
+// Vista de aliados: quita el contacto de Nestor y agrega el acceso y las herramientas del comisionista.
+// Con API_ALIADOS las cuentas viven en la hoja (pestañas Aliados y Referidos); sin ella, en el celular del aliado.
 (function () {
   if (!NEUTRA) return;
   document.body.classList.add(ALIADO ? "modo-aliado" : "modo-cliente");
   const NESTOR = "573017959540", WN = "https://wa.me/" + NESTOR + "?text=";
+  let ALIADO_OFF = false; // el aliado del enlace fue retirado: su WhatsApp no se muestra
   const pt = document.getElementById("pie-texto");
   if (pt) pt.textContent = "Tu próxima máquina está en el patio amarillo. Todos los equipos están en Barranquilla y se pueden inspeccionar antes de comprar.";
   function limpiarWA(raiz) {
     if (!raiz.querySelectorAll) return;
-    const w = ALIADO ? "" : wAliado();
+    const w = ALIADO || ALIADO_OFF ? "" : wAliado();
     raiz.querySelectorAll('a[href*="wa.me/' + NESTOR + '"]:not([data-nestor])').forEach(a => {
       a.removeAttribute("data-consulta");
       if (!w) { a.classList.add("yy-oculto"); return; }
       a.href = a.href.replace("wa.me/" + NESTOR, "wa.me/" + w).replace(/Hola%20Nestor/g, "Hola").replace(/Hola Nestor/g, "Hola");
     });
+    if (ALIADO_OFF && wAliado()) raiz.querySelectorAll('a[href*="wa.me/' + wAliado() + '"]').forEach(a => a.classList.add("yy-oculto"));
     raiz.querySelectorAll(".interesa").forEach(b => b.classList.add("yy-oculto"));
   }
   limpiarWA(document);
   new MutationObserver(ms => ms.forEach(m => m.addedNodes.forEach(n => n.nodeType === 1 && limpiarWA(n.parentNode || n)))).observe(document.body, { childList: true, subtree: true });
 
   const franja = document.createElement("section"); franja.className = "yy-franja"; franja.setAttribute("aria-label", ALIADO ? "Vista de aliados" : "Tu asesor");
-  const ancla = document.querySelector(".hierba") || document.querySelector("header");
-  ancla.insertAdjacentElement("afterend", franja);
-  const abrir = d => d.showModal ? d.showModal() : d.setAttribute("open", "");
+  (document.querySelector(".hierba") || document.querySelector("header")).insertAdjacentElement("afterend", franja);
+  const abrir = d => { if (!d.open) { d.showModal ? d.showModal() : d.setAttribute("open", ""); } };
   const cerrar = d => d.close ? d.close() : d.removeAttribute("open");
   document.addEventListener("click", ev => { const c = ev.target.closest("[data-yy-cerrar]"); if (c) cerrar(c.closest("dialog")); });
+  async function api(datos) {
+    const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), 20000);
+    try { const r = await fetch(API_ALIADOS, { method: "POST", body: JSON.stringify(datos), signal: ctl.signal }); return await r.json(); }
+    finally { clearTimeout(t); }
+  }
 
+  // ----- Vista del cliente del aliado
   if (!ALIADO) {
     const w = wAliado();
     franja.innerHTML = `<div class="wrap"><div class="txt"><small>Equipos compartidos por tu asesor</small><p>Para precio final, visitas al patio y condiciones de negociación, comunícate con la persona que te compartió estos equipos.</p></div>${w ? `<div class="acc"><a class="boton" href="https://wa.me/${w}?text=${encodeURIComponent("Hola, vi los equipos del patio que me compartiste y quiero más información.")}" target="_blank" rel="noopener">${ICO_W}Escribir a mi asesor</a></div>` : ""}</div>`;
+    if (w && API_ALIADOS) fetch(API_ALIADOS + "?accion=estado&tel=" + w).then(r => r.json()).then(r => { if (r && r.ok && !r.activo) { ALIADO_OFF = true; limpiarWA(document); } }).catch(() => {});
     return;
   }
 
-  // Vista del aliado
+  // ----- Vista del aliado
+  const HOJA = !!API_ALIADOS;
   const leer = k => { try { return localStorage.getItem(k) || ""; } catch (x) { return ""; } };
   const guardar = (k, v) => { try { localStorage.setItem(k, v); } catch (x) {} };
-  const w = wAliado();
-  franja.innerHTML = `<div class="wrap"><div class="txt"><small>Vista de aliados · Piloto</small><h2>Comparte sin el número de Nestor</h2>
-      <p>Lo que compartas desde aquí no muestra el contacto de Nestor: tu cliente te consulta a ti.</p>
-      <div class="num"><label for="yy-w">Tu WhatsApp (opcional):</label><input id="yy-w" type="tel" inputmode="tel" placeholder="300 123 4567" value="${w ? esc(fmtTel(w)) : ""}"><button type="button" id="yy-w-ok">Guardar</button><span class="ok">${w ? "Tus equipos compartidos muestran este número." : "Sin número, tu cliente no ve ningún contacto."}</span></div></div>
-    <div class="acc"><button type="button" class="boton" id="yy-reg-abrir">Registrar cliente</button><button type="button" class="boton linea" id="yy-cat">Compartir catálogo</button><a class="boton linea" href="${URL_CAT + qAliado()}" target="_blank" rel="noopener">Ver como mi cliente</a></div></div>`;
-  document.getElementById("yy-w-ok").onclick = () => {
-    const v = document.getElementById("yy-w").value.replace(/\D/g, "");
-    if (v && !(v.length === 10 || (v.length >= 11 && v.length <= 13))) { aviso("Escribe un celular válido, por ejemplo 300 123 4567."); return; }
-    guardar("yy_aliado_w", v); location.reload(); // recarga para rehacer las imágenes y enlaces con el número nuevo
-  };
-  document.getElementById("yy-cat").onclick = () => {
-    const t = `🚜 Maquinaria y vehículos usados en venta en Barranquilla\n👉 Mira el catálogo completo:\n${URL_CAT}a/${qAliado()}\n\n${PIE_TXT()}`;
-    copiar(t);
-    if (navigator.share) navigator.share({ text: t }).catch(() => {}); else aviso("Mensaje con el enlace copiado. Pégalo en WhatsApp o en tus redes.");
-  };
-  const reg = document.getElementById("yy-reg"), err = document.getElementById("yy-r-error");
-  document.getElementById("yy-reg-abrir").onclick = () => {
-    document.getElementById("yy-r-aliado").value = leer("yy_aliado_n"); err.hidden = true; abrir(reg);
-    setTimeout(() => document.getElementById(leer("yy_aliado_n") ? "yy-r-cliente" : "yy-r-aliado").focus(), 50);
-  };
-  document.getElementById("yy-reg-form").addEventListener("submit", ev => {
-    ev.preventDefault();
-    const v = id => document.getElementById(id).value.trim();
-    if (!v("yy-r-aliado") || !v("yy-r-cliente")) { err.textContent = "Escribe tu nombre y el nombre del cliente."; err.hidden = false; return; }
-    guardar("yy_aliado_n", v("yy-r-aliado"));
-    const f = new Date(), fecha = f.toLocaleString("es-CO", { timeZone: "America/Bogota", dateStyle: "short", timeStyle: "short" });
-    const t = ["📋 *REGISTRO DE CLIENTE REFERIDO · Yellow Yard*", "", `Aliado: ${v("yy-r-aliado")}${wAliado() ? " · WhatsApp " + fmtTel(wAliado()) : ""}`, `Cliente: ${v("yy-r-cliente")}`,
-      v("yy-r-tel") ? `Celular del cliente: ${v("yy-r-tel")}` : null, v("yy-r-ciudad") ? `Ciudad: ${v("yy-r-ciudad")}` : null, v("yy-r-lotes") ? `Equipos de interés: ${v("yy-r-lotes")}` : null,
-      v("yy-r-nota") ? `Nota: ${v("yy-r-nota")}` : null, `Fecha del registro: ${fecha}`, "", "Nestor, por favor confirma que este cliente queda registrado a mi nombre."].filter(l => l !== null).join("\n");
-    window.open(WN + encodeURIComponent(t), "_blank", "noopener");
-    ["yy-r-cliente", "yy-r-tel", "yy-r-ciudad", "yy-r-lotes", "yy-r-nota"].forEach(id => document.getElementById(id).value = "");
-    cerrar(reg); aviso("Se abrió WhatsApp con el registro. Toca Enviar y guarda ese chat como constancia.");
+  const borrar = k => { try { localStorage.removeItem(k); } catch (x) {} };
+  const setSesion = s => guardar("yy_aliado_s", JSON.stringify(s));
+  const v = id => document.getElementById(id).value.trim();
+  const normTel = x => { let n = String(x || "").replace(/\D/g, ""); if (n.length === 10 && n[0] === "3") n = "57" + n; return /^\d{11,13}$/.test(n) ? n : ""; };
+  const fallo = m => Object.assign(new Error(m), { yy: true });
+  const msgError = err => err && err.yy ? err.message : "No se pudo conectar. Revisa tu internet e intenta de nuevo.";
+  async function huella(t, pin) { const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode("yy|" + t + "|" + pin)); return [...new Uint8Array(b)].map(x => x.toString(16).padStart(2, "0")).join(""); }
+  const acceso = document.getElementById("yy-acceso"), fEntrar = document.getElementById("yy-entrar"), fCrear = document.getElementById("yy-crear"), accListo = document.getElementById("yy-acc-listo");
+  const reg = document.getElementById("yy-reg"), fReg = document.getElementById("yy-reg-form"), regListo = document.getElementById("yy-reg-listo");
+  const mis = document.getElementById("yy-mis");
+  const error = (form, t) => { const e = form.querySelector(".yy-error"); e.textContent = t || ""; e.hidden = !t; };
+  const ocupado = (form, si, txt) => { const b = form.querySelector("button[type=submit]"); b.disabled = si; if (txt) b.textContent = txt; };
+
+  let s0 = sesionAliado();
+  if (s0 && HOJA && s0.modo === "local") { borrar("yy_aliado_s"); s0 = null; } // ya hay hoja: el aliado crea su cuenta allí
+  let refs = s0 ? (s0.modo === "local" ? JSON.parse(leer("yy_aliado_refs") || "[]") : (s0.refs || [])) : [];
+
+  function pintarFranja() {
+    const s = sesionAliado();
+    if (!s) {
+      franja.innerHTML = `<div class="wrap"><div class="txt"><small>Vista de aliados</small><h2>Comparte los equipos sin el número de Nestor</h2><p>Entra con tu cuenta de aliado o créala en un minuto. Tus clientes te consultan a ti y tus registros quedan a tu nombre.</p></div><div class="acc"><button type="button" class="boton" data-yy-acceso="entrar">Entrar</button><button type="button" class="boton linea" data-yy-acceso="crear">Crear cuenta</button></div></div>`;
+      return;
+    }
+    franja.innerHTML = `<div class="wrap"><div class="txt"><small>Aliado Yellow Yard${s.modo === "local" ? " · perfil guardado en este celular" : ""}</small><h2>Hola, ${esc(String(s.nombre).split(" ")[0])}</h2><p>Lo que compartas desde aquí muestra tu WhatsApp (${esc(fmtTel(s.tel))}), no el de Nestor.</p></div>
+      <div class="acc"><button type="button" class="boton" data-yy-reg>Registrar cliente</button><button type="button" class="boton linea" data-yy-mis>Mis clientes${refs.length ? ` (${refs.length})` : ""}</button><button type="button" class="boton linea" data-yy-cat>Compartir catálogo</button><a class="boton linea" href="${URL_CAT + qAliado()}" target="_blank" rel="noopener">Ver como mi cliente</a><button type="button" class="boton linea" data-yy-salir>Salir</button></div></div>`;
+  }
+  function tab(cual) {
+    fEntrar.hidden = cual !== "entrar"; fCrear.hidden = cual !== "crear"; accListo.hidden = true;
+    acceso.querySelectorAll("[data-yy-tab]").forEach(b => b.setAttribute("aria-selected", String(b.dataset.yyTab === cual)));
+    error(fEntrar, ""); error(fCrear, "");
+  }
+  function abrirAcceso(cual) {
+    tab(cual); const t = leer("yy_aliado_tel"); if (t && !v("yy-e-tel")) document.getElementById("yy-e-tel").value = fmtTel(t);
+    abrir(acceso); setTimeout(() => document.getElementById(cual === "crear" ? "yy-c-nombre" : (v("yy-e-tel") ? "yy-e-pin" : "yy-e-tel")).focus(), 60);
+  }
+  acceso.addEventListener("click", ev => { const b = ev.target.closest("[data-yy-tab]"); if (b) tab(b.dataset.yyTab); });
+  const listoAcceso = (html, extra) => { fEntrar.hidden = fCrear.hidden = true; accListo.hidden = false; accListo.innerHTML = `${html}<div class="acc">${extra || ""}<button type="button" class="boton" data-yy-recargar>Ir a mi perfil</button></div>`; };
+  document.addEventListener("click", ev => { if (ev.target.closest("[data-yy-recargar]")) location.reload(); });
+
+  // Entrar
+  fEntrar.addEventListener("submit", async ev => {
+    ev.preventDefault(); error(fEntrar, "");
+    const t = normTel(v("yy-e-tel")), pin = v("yy-e-pin");
+    if (!t) return error(fEntrar, "Escribe tu WhatsApp, por ejemplo 300 123 4567.");
+    if (!/^\d{4,6}$/.test(pin)) return error(fEntrar, "El PIN tiene de 4 a 6 números.");
+    ocupado(fEntrar, true, "Entrando…");
+    try {
+      if (HOJA) {
+        const r = await api({ accion: "entrar", tel: t, pin }); if (!r.ok) throw fallo(r.error);
+        setSesion({ modo: "hoja", token: r.token, ...r.perfil, refs: r.referidos || [] });
+      } else {
+        const c = JSON.parse(leer("yy_aliado_local") || "null");
+        if (!c || c.tel !== t) throw fallo("En este celular no hay una cuenta de aliado con ese número. Crea tu cuenta.");
+        if (c.clave !== await huella(t, pin)) throw fallo("PIN incorrecto.");
+        setSesion({ modo: "local", tel: c.tel, nombre: c.nombre, empresa: c.empresa, ciudad: c.ciudad });
+      }
+      guardar("yy_aliado_tel", t); location.reload(); // recarga para rehacer imágenes y enlaces con tu número
+    } catch (err) { error(fEntrar, msgError(err)); ocupado(fEntrar, false, "Entrar"); }
   });
-  if (!leer("yy_aliado_ok")) { const d = document.getElementById("yy-intro"); abrir(d); d.addEventListener("close", () => guardar("yy_aliado_ok", "1"), { once: true }); }
+  document.getElementById("yy-olvido").addEventListener("click", ev => {
+    ev.preventDefault();
+    if (!HOJA) { aviso("Tu perfil está guardado solo en este celular: crea la cuenta de nuevo con un PIN nuevo."); tab("crear"); return; }
+    const t = normTel(v("yy-e-tel"));
+    window.open(WN + encodeURIComponent(`Hola Nestor, soy aliado de Yellow Yard y olvidé mi PIN.${t ? " Mi WhatsApp es " + fmtTel(t) + "." : ""} ¿Me lo puedes restablecer?`), "_blank", "noopener");
+  });
+
+  // Crear cuenta
+  fCrear.addEventListener("submit", async ev => {
+    ev.preventDefault(); error(fCrear, "");
+    const t = normTel(v("yy-c-tel")), pin = v("yy-c-pin"), datos = { nombre: v("yy-c-nombre"), empresa: v("yy-c-empresa"), ciudad: v("yy-c-ciudad") };
+    if (datos.nombre.length < 3) return error(fCrear, "Escribe tu nombre completo.");
+    if (!t) return error(fCrear, "Escribe tu WhatsApp, por ejemplo 300 123 4567.");
+    if (!/^\d{4,6}$/.test(pin)) return error(fCrear, "El PIN debe tener de 4 a 6 números.");
+    if (pin !== v("yy-c-pin2")) return error(fCrear, "Los dos PIN no coinciden.");
+    if (!document.getElementById("yy-c-acepta").checked) return error(fCrear, "Para crear la cuenta debes aceptar las condiciones de aliado.");
+    ocupado(fCrear, true, "Creando tu cuenta…");
+    try {
+      if (HOJA) {
+        const r = await api({ accion: "registro", tel: t, pin, acepta: true, ...datos }); if (!r.ok) throw fallo(r.error);
+        guardar("yy_aliado_tel", t);
+        if (r.pendiente) { listoAcceso(`<p>${esc(r.mensaje)}</p>`); accListo.querySelector("[data-yy-recargar]").textContent = "Entendido"; return; }
+        setSesion({ modo: "hoja", token: r.token, ...r.perfil, refs: [] });
+        listoAcceso(`<p>¡Bienvenido, ${esc(datos.nombre.split(" ")[0])}! Tu cuenta de aliado quedó creada. Desde ahora entras con tu WhatsApp y tu PIN.</p>`);
+      } else {
+        guardar("yy_aliado_local", JSON.stringify({ tel: t, ...datos, clave: await huella(t, pin), alta: new Date().toISOString() }));
+        setSesion({ modo: "local", tel: t, ...datos }); guardar("yy_aliado_tel", t);
+        const txt = `Hola Nestor, creé mi cuenta de aliado de Yellow Yard.\nNombre: ${datos.nombre}\nWhatsApp: ${fmtTel(t)}${datos.empresa ? "\nEmpresa: " + datos.empresa : ""}${datos.ciudad ? "\nCiudad: " + datos.ciudad : ""}\nAcepté las condiciones de aliado.`;
+        listoAcceso(`<p>¡Cuenta creada! Avísale a Nestor por WhatsApp para que te tenga en su lista de aliados.</p>`, `<a class="boton linea" data-nestor href="${WN + encodeURIComponent(txt)}" target="_blank" rel="noopener">${ICO_W}Avisar a Nestor</a>`);
+      }
+    } catch (err) { error(fCrear, msgError(err)); } finally { ocupado(fCrear, false, "Crear mi cuenta"); }
+  });
+
+  // Registrar cliente
+  function textoRegistro(s, d, codigo) {
+    const f = new Date().toLocaleString("es-CO", { timeZone: "America/Bogota", dateStyle: "short", timeStyle: "short" });
+    return ["📋 *REGISTRO DE CLIENTE REFERIDO · Yellow Yard*", "", codigo ? `Código: ${codigo}` : null, `Aliado: ${s.nombre} · WhatsApp ${fmtTel(s.tel)}`, `Cliente: ${d.cliente}`,
+      d.telCliente ? `Celular del cliente: ${d.telCliente}` : null, d.ciudad ? `Ciudad: ${d.ciudad}` : null, d.lotes ? `Equipos de interés: ${d.lotes}` : null,
+      d.nota ? `Nota: ${d.nota}` : null, `Fecha del registro: ${f}`, "", codigo ? "Constancia del registro hecho en la página de aliados." : "Nestor, por favor confirma que este cliente queda registrado a mi nombre."].filter(l => l !== null).join("\n");
+  }
+  function listoReg(html, texto, etiqueta) {
+    fReg.hidden = true; regListo.hidden = false;
+    regListo.innerHTML = `${html}<div class="acc">${texto ? `<a class="boton${etiqueta.includes("opcional") ? " linea" : ""}" data-nestor href="${WN + encodeURIComponent(texto)}" target="_blank" rel="noopener">${ICO_W}${esc(etiqueta)}</a>` : ""}<button type="button" class="boton linea" data-yy-otro>Registrar otro cliente</button></div>`;
+  }
+  function abrirReg() { fReg.hidden = false; regListo.hidden = true; error(fReg, ""); abrir(reg); setTimeout(() => document.getElementById("yy-r-cliente").focus(), 60); }
+  reg.addEventListener("click", ev => { if (ev.target.closest("[data-yy-otro]")) abrirReg(); });
+  fReg.addEventListener("submit", async ev => {
+    ev.preventDefault(); error(fReg, "");
+    const s = sesionAliado(); if (!s) { cerrar(reg); abrirAcceso("entrar"); return; }
+    const d = { cliente: v("yy-r-cliente"), telCliente: v("yy-r-tel"), ciudad: v("yy-r-ciudad"), lotes: v("yy-r-lotes"), nota: v("yy-r-nota") };
+    if (d.cliente.length < 2) return error(fReg, "Escribe el nombre del cliente o su empresa.");
+    const limpiar = () => ["yy-r-cliente", "yy-r-tel", "yy-r-ciudad", "yy-r-lotes", "yy-r-nota"].forEach(id => document.getElementById(id).value = "");
+    const fecha = new Date().toLocaleString("es-CO", { timeZone: "America/Bogota", dateStyle: "short", timeStyle: "short" });
+    if (s.modo === "local") {
+      refs.unshift({ codigo: "", fecha, cliente: d.cliente, lotes: d.lotes, estado: "Enviado por WhatsApp" }); guardar("yy_aliado_refs", JSON.stringify(refs));
+      listoReg(`<p>Último paso: envía el registro a Nestor por WhatsApp. Ese chat es tu constancia con fecha y hora.</p>`, textoRegistro(s, d, ""), "Enviar registro a Nestor");
+      limpiar(); pintarFranja(); return;
+    }
+    ocupado(fReg, true, "Registrando…");
+    try {
+      const r = await api({ accion: "referido", tel: s.tel, token: s.token, ...d });
+      if (!r.ok) { if (r.salir) { borrar("yy_aliado_s"); aviso(r.error); setTimeout(() => location.reload(), 2500); } throw fallo(r.error); }
+      refs = r.referidos || refs; setSesion({ ...s, refs });
+      listoReg(`<p>Cliente registrado con el código <b>${esc(r.codigo)}</b> el ${esc(r.fecha)}.${r.duplicado ? " Este cliente ya figuraba en el sistema: Nestor lo revisará y te confirmará." : " Queda a tu nombre."}</p>`, textoRegistro(s, d, r.codigo), "Enviar constancia a Nestor (opcional)");
+      limpiar(); pintarFranja();
+    } catch (err) {
+      if (err && err.yy) { error(fReg, err.message); return; }
+      // Sin conexión con la hoja: respaldo por WhatsApp
+      refs.unshift({ codigo: "", fecha, cliente: d.cliente, lotes: d.lotes, estado: "Enviado por WhatsApp" }); setSesion({ ...s, refs });
+      listoReg(`<p>No hubo conexión con el sistema. Envía el registro a Nestor por WhatsApp para que quede la constancia con fecha y hora.</p>`, textoRegistro(s, d, ""), "Enviar registro a Nestor");
+      limpiar(); pintarFranja();
+    } finally { ocupado(fReg, false, "Registrar cliente"); }
+  });
+
+  // Mis clientes
+  function abrirMis() {
+    const c = document.getElementById("yy-mis-cuerpo");
+    c.innerHTML = refs.length ? `<ul class="yy-lista">${refs.map(r => `<li><b>${esc(r.cliente)}</b><span class="est${/duplicado|descartado/i.test(r.estado) ? " alerta" : ""}">${esc(r.estado || "Registrado")}</span><small>${[r.codigo, r.fecha, r.lotes].filter(Boolean).map(esc).join(" · ")}</small></li>`).join("")}</ul>`
+      : `<p>Aún no has registrado clientes. Registra a cada cliente antes de presentarlo para que quede a tu nombre.</p>`;
+    c.innerHTML += `<div class="acciones-consulta"><button type="button" class="boton" data-yy-reg>Registrar cliente</button><button type="button" class="boton linea" data-yy-cerrar>Cerrar</button></div>`;
+    abrir(mis);
+  }
+
+  document.addEventListener("click", ev => {
+    const a = ev.target.closest("[data-yy-acceso]"); if (a) { abrirAcceso(a.dataset.yyAcceso); return; }
+    if (ev.target.closest("[data-yy-reg]")) { if (mis.open) cerrar(mis); abrirReg(); return; }
+    if (ev.target.closest("[data-yy-mis]")) { abrirMis(); return; }
+    if (ev.target.closest("[data-yy-salir]")) { borrar("yy_aliado_s"); location.reload(); return; }
+    if (ev.target.closest("[data-yy-cat]")) {
+      const t = `🚜 Maquinaria y vehículos usados en venta en Barranquilla\n👉 Mira el catálogo completo:\n${URL_CAT}a/${qAliado()}\n\n${PIE_TXT()}`;
+      copiar(t);
+      if (navigator.share) navigator.share({ text: t }).catch(() => {}); else aviso("Mensaje con el enlace copiado. Pégalo en WhatsApp o en tus redes.");
+    }
+  });
+
+  pintarFranja();
+  if (!sesionAliado()) abrirAcceso(leer("yy_aliado_tel") ? "entrar" : "crear");
+  else if (HOJA) (async () => { // valida la sesión: si Nestor retiró al aliado, se cierra aquí
+    const s = sesionAliado();
+    try {
+      const r = await api({ accion: "perfil", tel: s.tel, token: s.token });
+      if (r.ok) { refs = r.referidos || []; setSesion({ ...s, ...r.perfil, refs }); pintarFranja(); }
+      else if (r.salir) { borrar("yy_aliado_s"); aviso(r.error); setTimeout(() => location.reload(), 3000); }
+    } catch (x) { /* sin conexión: sigue con el perfil guardado en este celular */ }
+  })();
 })();
 </script>
 </body>
