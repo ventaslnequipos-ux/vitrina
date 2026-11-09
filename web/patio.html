@@ -526,6 +526,28 @@ footer p { margin: 6px 0 0; max-width: 60ch; }
 @media (max-width: 760px) { .subir { right: 12px; width: 42px; height: 42px; border-width: 1.5px; } .subir.ver { opacity: .72; } .subir.ver:active { opacity: 1; } .subir svg { width: 20px; height: 20px; } }
 body.con-consulta .subir { bottom: calc(92px + env(safe-area-inset-bottom, 0px)); }
 @media (prefers-reduced-motion: reduce) { .subir { transition: none; } }
+
+/* Vista de aliados (piloto nov 2026): ?aliado=1 comisionista, ?v=a su cliente. Sin contacto de Nestor. */
+.yy-oculto { display: none !important; }
+.pie-aliados { color: var(--gris); font-size: 12px; text-decoration: none; opacity: .55; border-bottom: 1px dotted currentColor; }
+.pie-aliados:hover, .pie-aliados:focus-visible { opacity: 1; color: var(--ama); }
+body.modo-aliado .contacto, body.modo-cliente .contacto, body.modo-aliado .directo, body.modo-cliente .directo,
+body.modo-aliado #preguntas, body.modo-cliente #preguntas, body.modo-aliado .pie-contacto, body.modo-cliente .pie-contacto,
+body.modo-aliado #barra-consulta, body.modo-cliente #barra-consulta, body.modo-aliado .pie-aliados, body.modo-cliente .pie-aliados { display: none !important; }
+.yy-franja { background: var(--carbon); border-top: 1px solid var(--linea); border-bottom: 2px solid var(--ama); }
+.yy-franja .wrap { padding-block: 16px; display: flex; flex-wrap: wrap; gap: 14px 24px; align-items: center; justify-content: space-between; }
+.yy-franja .txt { flex: 1 1 320px; min-width: 0; }
+.yy-franja small { display: block; color: var(--ama); font-family: var(--mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; margin-bottom: 4px; }
+.yy-franja h2 { margin: 0 0 4px; font-family: var(--rotulo); font-weight: 400; font-size: 24px; line-height: 1.1; color: #fff; }
+.yy-franja p { margin: 0; color: var(--plata); font-size: 16px; }
+.yy-franja .acc { display: flex; flex-wrap: wrap; gap: 10px; }
+.yy-franja .boton { font-size: 17px; min-height: 42px; padding: 8px 16px; }
+.yy-franja .num { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 10px; font-size: 15px; color: var(--hueso); }
+.yy-franja .num input { min-height: 40px; width: 170px; padding: 6px 10px; background: var(--negro); color: var(--hueso); border: 1px solid var(--linea); font: inherit; }
+.yy-franja .num button { min-height: 40px; padding: 6px 14px; background: none; border: 1px solid var(--ama); color: var(--ama); font: inherit; font-weight: 700; cursor: pointer; }
+.yy-franja .num .ok { color: var(--gris); font-size: 14px; }
+.yy-intro ul { margin: 0; padding-left: 20px; color: var(--plata); display: grid; gap: 6px; }
+@media (max-width: 760px) { .yy-franja h2 { font-size: 20px; } .yy-franja .acc { width: 100%; } .yy-franja .acc .boton { flex: 1 1 140px; justify-content: center; } }
 </style>
 </head>
 <body>
@@ -694,16 +716,45 @@ body.con-consulta .subir { bottom: calc(92px + env(safe-area-inset-bottom, 0px))
   <div class="listo" id="int-listo" hidden></div>
 </dialog>
 
+<dialog class="interes" id="yy-intro" aria-labelledby="yy-intro-t">
+  <div class="cab"><div><small>Yellow Yard · Aliados</small><h2 id="yy-intro-t">Vista para comisionistas aliados</h2></div><button type="button" class="cerrar" data-yy-cerrar aria-label="Cerrar">×</button></div>
+  <form method="dialog" class="yy-intro">
+    <p class="nota" style="font-size: 16px; color: var(--hueso)">Desde aquí compartes los equipos del patio con tus clientes <b>sin el número de Nestor</b>. Tu cliente te consulta a ti y tú sigues atendiéndolo hasta el cierre, siempre a través de Yellow Yard.</p>
+    <ul>
+      <li>Escribe tu WhatsApp (opcional): los equipos que compartas mostrarán tu número.</li>
+      <li>Usa el botón <b>Compartir</b> de cada equipo o <b>Compartir catálogo</b>.</li>
+      <li>Antes de presentar un cliente, toca <b>Registrar cliente</b>: le llega a Nestor con fecha y hora y queda como prueba de tu intermediación.</li>
+    </ul>
+    <p class="nota">Vista de prueba (piloto). Precios de referencia sujetos a disponibilidad.</p>
+    <button type="submit" class="boton">Entendido</button>
+  </form>
+</dialog>
+<dialog class="interes" id="yy-reg" aria-labelledby="yy-reg-t">
+  <div class="cab"><div><small>Aliados · Trazabilidad</small><h2 id="yy-reg-t">Registrar cliente referido</h2></div><button type="button" class="cerrar" data-yy-cerrar aria-label="Cerrar">×</button></div>
+  <form id="yy-reg-form" novalidate>
+    <p class="nota">Se abre WhatsApp con el registro listo para enviárselo a Nestor. Guarda ese chat: es tu constancia con fecha y hora.</p>
+    <label>Tu nombre (aliado)<input id="yy-r-aliado" autocomplete="name" required></label>
+    <label>Cliente (nombre o empresa)<input id="yy-r-cliente" required></label>
+    <label>Celular del cliente<input id="yy-r-tel" type="tel" inputmode="tel"></label>
+    <label>Ciudad del cliente<input id="yy-r-ciudad"></label>
+    <label>Equipos de interés (lotes)<input id="yy-r-lotes" placeholder="Ej.: lote 03 y lote 04"></label>
+    <label>Nota (opcional)<textarea id="yy-r-nota" placeholder="Ej.: busca financiación, quiere verlo esta semana"></textarea></label>
+    <p class="nota" id="yy-r-error" role="alert" hidden></p>
+    <button type="submit" class="boton">Enviar registro a Nestor</button>
+  </form>
+</dialog>
+
 <footer>
   <div class="wrap">
     <div>
       <div class="firma">Yellow <em>Yard</em></div>
       <div class="by" style="font-size: 22px">by Nestor Sierra</div>
-      <p>Tu próxima máquina está en el patio amarillo. Compra directa al propietario, sin cadenas de intermediarios. Todos los equipos están en Barranquilla y se pueden inspeccionar antes de comprar.</p>
+      <p id="pie-texto">Tu próxima máquina está en el patio amarillo. Compra directa al propietario, sin cadenas de intermediarios. Todos los equipos están en Barranquilla y se pueden inspeccionar antes de comprar.</p>
     </div>
     <div>
-      <div><a href="https://wa.me/573017959540?text=Hola%20Nestor%2C%20vi%20el%20cat%C3%A1logo%20de%20Yellow%20Yard%20y%20quiero%20m%C3%A1s%20informaci%C3%B3n." target="_blank" rel="noopener" style="color: var(--ama)">WhatsApp 301 795 9540</a> · Nestor Sierra</div>
+      <div class="pie-contacto"><a href="https://wa.me/573017959540?text=Hola%20Nestor%2C%20vi%20el%20cat%C3%A1logo%20de%20Yellow%20Yard%20y%20quiero%20m%C3%A1s%20informaci%C3%B3n." target="_blank" rel="noopener" style="color: var(--ama)">WhatsApp 301 795 9540</a> · Nestor Sierra</div>
       <p>Precios en pesos colombianos, sujetos a disponibilidad y a cambio sin previo aviso. Datos técnicos de referencia.</p>
+      <p><a class="pie-aliados" href="?aliado=1" rel="nofollow">Aliados</a></p>
     </div>
   </div>
 </footer>
@@ -714,7 +765,20 @@ body.con-consulta .subir { bottom: calc(92px + env(safe-area-inset-bottom, 0px))
 <script>
 const WA = "https://wa.me/573017959540?text=";
 const URL_CAT = "https://ventaslnequipos-ux.github.io/vitrina/";
-const enlaceLote = e => `${URL_CAT}e/${e.lote}/`; // página corta con la foto del equipo para la vista previa de WhatsApp
+// Vista de aliados (piloto nov 2026): ?aliado=1 es la vista del comisionista; ?v=a es lo que recibe su cliente.
+// En ambas no aparecen el número ni los botones de WhatsApp de Nestor. ?w=<celular> pone el WhatsApp del aliado.
+const QS = new URLSearchParams(location.search);
+const ALIADO = QS.get("aliado") === "1";
+const NEUTRA = ALIADO || QS.get("v") === "a";
+function wAliado() {
+  let n = ""; if (ALIADO) { try { n = localStorage.getItem("yy_aliado_w") || ""; } catch (x) {} } else n = QS.get("w") || "";
+  n = String(n).replace(/\D/g, ""); if (n.length === 10 && n[0] === "3") n = "57" + n;
+  return /^\d{11,13}$/.test(n) && n !== "573017959540" ? n : "";
+}
+const fmtTel = n => n.length === 12 && n.startsWith("57") ? `${n.slice(2, 5)} ${n.slice(5, 8)} ${n.slice(8)}` : "+" + n;
+const qAliado = () => "?v=a" + (wAliado() ? "&w=" + wAliado() : "");
+const PIE_TXT = () => NEUTRA ? "YELLOW YARD by Nestor Sierra" + (wAliado() ? " · WhatsApp " + fmtTel(wAliado()) : "") : "YELLOW YARD by Nestor Sierra · WhatsApp 301 795 9540";
+const enlaceLote = e => `${URL_CAT}e/${e.lote}/` + (NEUTRA ? qAliado() : ""); // página corta con la foto del equipo para la vista previa de WhatsApp
 const VER = "20261028c"; // cambia cuando se actualizan las fotos, para que nadie vea fotos viejas guardadas
 const DEST = typeof DESTACADO !== "undefined" ? DESTACADO : "";
 const ING = typeof INGRESOS !== "undefined" ? INGRESOS : {};
@@ -1153,8 +1217,8 @@ async function tarjeta(e) {
   try { const lg = await cargarImg("logo.svg"); x.drawImage(lg, 50, by - 4, 82, 102); } catch (err) {}
   x.fillStyle = "#FFFFFF"; x.font = `40px ${AL}`; x.fillText("YELLOW", 150, by + 42); const yw = x.measureText("YELLOW ").width; x.fillStyle = "#D29B32"; x.fillText("YARD", 150 + yw, by + 42);
   x.fillStyle = "#D9B23A"; x.font = `700 28px ${ZI}`; x.fillText("by Nestor Sierra", 150, by + 80);
-  x.textAlign = "right"; x.fillStyle = "#ECE8DE"; x.font = `700 28px ${ZI}`; x.fillText("Mira el catálogo completo:", W - 50, by + 36);
-  x.fillStyle = "#D29B32"; x.font = `700 27px ${ZI}`; x.fillText(SITIO.replace(/^https?:\/\//, "").replace(/\/$/, ""), W - 50, by + 74); x.textAlign = "left";
+  x.textAlign = "right"; x.fillStyle = "#ECE8DE"; x.font = `700 28px ${ZI}`; x.fillText(NEUTRA ? "Información y visitas:" : "Mira el catálogo completo:", W - 50, by + 36);
+  x.fillStyle = "#D29B32"; x.font = `700 27px ${ZI}`; x.fillText(NEUTRA ? (wAliado() ? "WhatsApp " + fmtTel(wAliado()) : "con tu asesor comercial") : SITIO.replace(/^https?:\/\//, "").replace(/\/$/, ""), W - 50, by + 74); x.textAlign = "left";
   // césped
   x.fillStyle = "#D29B32"; x.fillRect(0, H - 6, W, 3); x.strokeStyle = "#D29B32"; x.lineWidth = 3; x.lineCap = "round";
   [W * 0.2, W * 0.5, W * 0.8].forEach(cx => { x.beginPath(); x.moveTo(cx - 12, H - 6); x.lineTo(cx - 17, H - 24); x.moveTo(cx, H - 6); x.lineTo(cx + 2, H - 34); x.moveTo(cx + 12, H - 6); x.lineTo(cx + 20, H - 22); x.stroke(); });
@@ -1190,7 +1254,7 @@ function descripcionIG(e) {
     "",
     "Puedes ver el equipo en Barranquilla antes de comprar. Escríbenos y agenda tu visita.",
     "",
-    "📲 WhatsApp 301 795 9540",
+    ...(NEUTRA ? (wAliado() ? ["📲 WhatsApp " + fmtTel(wAliado())] : []) : ["📲 WhatsApp 301 795 9540"]),
     `🌐 Ficha y catálogo completo: ${link}`,
     "🔗 También en el enlace de la biografía",
     `🔖 Lote ${e.lote}`,
@@ -1230,7 +1294,7 @@ function prepararImagen(e) {
   vigilar(document);
   new MutationObserver(ms => ms.forEach(m => m.addedNodes.forEach(n => n.nodeType === 1 && vigilar(n)))).observe(document.body, { childList: true, subtree: true });
 })();
-const textoCorto = e => `🚜 *${e.nombre}${e.anio && !String(e.nombre).includes(String(e.anio)) ? " " + e.anio : ""}* en venta\n💰 ${e.precio > 0 ? cop(e.precio) : "Precio a consultar"} · 📍 Barranquilla\n\n👉 Mira la ficha de este equipo y más máquinas en el patio amarillo:\n${enlaceLote(e)}\n\nYELLOW YARD by Nestor Sierra · WhatsApp 301 795 9540`;
+const textoCorto = e => `🚜 *${e.nombre}${e.anio && !String(e.nombre).includes(String(e.anio)) ? " " + e.anio : ""}* en venta\n💰 ${e.precio > 0 ? cop(e.precio) : "Precio a consultar"} · 📍 Barranquilla\n\n👉 Mira la ficha de este equipo y más máquinas en el patio amarillo:\n${enlaceLote(e)}\n\n${PIE_TXT()}`;
 const puedeArchivos = f => !!(navigator.canShare && navigator.share && navigator.canShare({ files: [f] }));
 (function () {
   const dlg = document.getElementById("compartir-dlg"), cuerpo = document.getElementById("com-cuerpo");
@@ -1288,8 +1352,8 @@ const puedeArchivos = f => !!(navigator.canShare && navigator.share && navigator
   const cerrar = () => { activo = false; dlg.close ? dlg.close() : dlg.removeAttribute("open"); };
   const dato = id => { const c = COMB.find(z => z.id === id); if (!c) return null; const eq = c.lotes.map(l => LOTES.find(e => e.lote === l)).filter(Boolean); return eq.length === c.lotes.length ? { ...c, eq, suma: eq.reduce((s, e) => s + e.precio, 0) } : null; };
   const titulo = c => c.nombre || c.eq.map(e => e.cat).join(" + ");
-  const enlace = () => URL_CAT + "#combos";
-  const texto = c => `🚜 *COMBO: ${c.eq.map(e => e.nombre).join(" + ")}*\n💰 Los ${c.eq.length} por ${cop(c.precio)}${c.suma > c.precio ? " (ahorras " + cop(c.suma - c.precio) + ")" : ""} · 📍 Barranquilla\n\n👉 Mira el combo y más máquinas en el patio amarillo:\n${enlace()}\n\nYELLOW YARD by Nestor Sierra · WhatsApp 301 795 9540`;
+  const enlace = () => URL_CAT + (NEUTRA ? "a/" + qAliado() : "") + "#combos";
+  const texto = c => `🚜 *COMBO: ${c.eq.map(e => e.nombre).join(" + ")}*\n💰 Los ${c.eq.length} por ${cop(c.precio)}${c.suma > c.precio ? " (ahorras " + cop(c.suma - c.precio) + ")" : ""} · 📍 Barranquilla\n\n👉 Mira el combo y más máquinas en el patio amarillo:\n${enlace()}\n\n${PIE_TXT()}`;
   async function imagen(c) {
     const W = 1080, H = 1350, FH = 640, lienzo = document.createElement("canvas"); lienzo.width = W; lienzo.height = H; const x = lienzo.getContext("2d");
     try { await Promise.all(['64px "Alfa Slab One"', '700 40px "Zilla Slab"', '600 40px "Zilla Slab"'].map(f => document.fonts.load(f))); } catch (err) {}
@@ -1324,8 +1388,8 @@ const puedeArchivos = f => !!(navigator.canShare && navigator.share && navigator
     try { const lg = await cargarImg("logo.svg"); x.drawImage(lg, 50, by - 4, 82, 102); } catch (err) {}
     x.fillStyle = "#FFFFFF"; x.font = `40px ${AL}`; x.fillText("YELLOW", 150, by + 42); const yw = x.measureText("YELLOW ").width; x.fillStyle = "#D29B32"; x.fillText("YARD", 150 + yw, by + 42);
     x.fillStyle = "#D9B23A"; x.font = `700 28px ${ZI}`; x.fillText("by Nestor Sierra", 150, by + 80);
-    x.textAlign = "right"; x.fillStyle = "#ECE8DE"; x.font = `700 28px ${ZI}`; x.fillText("Mira el catálogo completo:", W - 50, by + 36);
-    x.fillStyle = "#D29B32"; x.font = `700 27px ${ZI}`; x.fillText(SITIO.replace(/^https?:\/\//, "").replace(/\/$/, ""), W - 50, by + 74); x.textAlign = "left";
+    x.textAlign = "right"; x.fillStyle = "#ECE8DE"; x.font = `700 28px ${ZI}`; x.fillText(NEUTRA ? "Información y visitas:" : "Mira el catálogo completo:", W - 50, by + 36);
+    x.fillStyle = "#D29B32"; x.font = `700 27px ${ZI}`; x.fillText(NEUTRA ? (wAliado() ? "WhatsApp " + fmtTel(wAliado()) : "con tu asesor comercial") : SITIO.replace(/^https?:\/\//, "").replace(/\/$/, ""), W - 50, by + 74); x.textAlign = "left";
     x.fillStyle = "#D29B32"; x.fillRect(0, H - 6, W, 3); x.strokeStyle = "#D29B32"; x.lineWidth = 3; x.lineCap = "round";
     [W * 0.2, W * 0.5, W * 0.8].forEach(cx => { x.beginPath(); x.moveTo(cx - 12, H - 6); x.lineTo(cx - 17, H - 24); x.moveTo(cx, H - 6); x.lineTo(cx + 2, H - 34); x.moveTo(cx + 12, H - 6); x.lineTo(cx + 20, H - 22); x.stroke(); });
     return await new Promise(ok => lienzo.toBlob(ok, "image/jpeg", .9));
@@ -1370,6 +1434,77 @@ const puedeArchivos = f => !!(navigator.canShare && navigator.share && navigator
   const ver = () => b.classList.toggle("ver", (window.scrollY || document.documentElement.scrollTop) > 400);
   addEventListener("scroll", ver, { passive: true }); ver();
   b.addEventListener("click", () => { const quieto = matchMedia("(prefers-reduced-motion: reduce)").matches; scrollTo({ top: 0, behavior: quieto ? "auto" : "smooth" }); });
+})();
+// Vista de aliados (piloto): quita el contacto de Nestor y agrega las herramientas del comisionista
+(function () {
+  if (!NEUTRA) return;
+  document.body.classList.add(ALIADO ? "modo-aliado" : "modo-cliente");
+  const NESTOR = "573017959540", WN = "https://wa.me/" + NESTOR + "?text=";
+  const pt = document.getElementById("pie-texto");
+  if (pt) pt.textContent = "Tu próxima máquina está en el patio amarillo. Todos los equipos están en Barranquilla y se pueden inspeccionar antes de comprar.";
+  function limpiarWA(raiz) {
+    if (!raiz.querySelectorAll) return;
+    const w = ALIADO ? "" : wAliado();
+    raiz.querySelectorAll('a[href*="wa.me/' + NESTOR + '"]:not([data-nestor])').forEach(a => {
+      a.removeAttribute("data-consulta");
+      if (!w) { a.classList.add("yy-oculto"); return; }
+      a.href = a.href.replace("wa.me/" + NESTOR, "wa.me/" + w).replace(/Hola%20Nestor/g, "Hola").replace(/Hola Nestor/g, "Hola");
+    });
+    raiz.querySelectorAll(".interesa").forEach(b => b.classList.add("yy-oculto"));
+  }
+  limpiarWA(document);
+  new MutationObserver(ms => ms.forEach(m => m.addedNodes.forEach(n => n.nodeType === 1 && limpiarWA(n.parentNode || n)))).observe(document.body, { childList: true, subtree: true });
+
+  const franja = document.createElement("section"); franja.className = "yy-franja"; franja.setAttribute("aria-label", ALIADO ? "Vista de aliados" : "Tu asesor");
+  const ancla = document.querySelector(".hierba") || document.querySelector("header");
+  ancla.insertAdjacentElement("afterend", franja);
+  const abrir = d => d.showModal ? d.showModal() : d.setAttribute("open", "");
+  const cerrar = d => d.close ? d.close() : d.removeAttribute("open");
+  document.addEventListener("click", ev => { const c = ev.target.closest("[data-yy-cerrar]"); if (c) cerrar(c.closest("dialog")); });
+
+  if (!ALIADO) {
+    const w = wAliado();
+    franja.innerHTML = `<div class="wrap"><div class="txt"><small>Equipos compartidos por tu asesor</small><p>Para precio final, visitas al patio y condiciones de negociación, comunícate con la persona que te compartió estos equipos.</p></div>${w ? `<div class="acc"><a class="boton" href="https://wa.me/${w}?text=${encodeURIComponent("Hola, vi los equipos del patio que me compartiste y quiero más información.")}" target="_blank" rel="noopener">${ICO_W}Escribir a mi asesor</a></div>` : ""}</div>`;
+    return;
+  }
+
+  // Vista del aliado
+  const leer = k => { try { return localStorage.getItem(k) || ""; } catch (x) { return ""; } };
+  const guardar = (k, v) => { try { localStorage.setItem(k, v); } catch (x) {} };
+  const w = wAliado();
+  franja.innerHTML = `<div class="wrap"><div class="txt"><small>Vista de aliados · Piloto</small><h2>Comparte sin el número de Nestor</h2>
+      <p>Lo que compartas desde aquí no muestra el contacto de Nestor: tu cliente te consulta a ti.</p>
+      <div class="num"><label for="yy-w">Tu WhatsApp (opcional):</label><input id="yy-w" type="tel" inputmode="tel" placeholder="300 123 4567" value="${w ? esc(fmtTel(w)) : ""}"><button type="button" id="yy-w-ok">Guardar</button><span class="ok">${w ? "Tus equipos compartidos muestran este número." : "Sin número, tu cliente no ve ningún contacto."}</span></div></div>
+    <div class="acc"><button type="button" class="boton" id="yy-reg-abrir">Registrar cliente</button><button type="button" class="boton linea" id="yy-cat">Compartir catálogo</button><a class="boton linea" href="${URL_CAT + qAliado()}" target="_blank" rel="noopener">Ver como mi cliente</a></div></div>`;
+  document.getElementById("yy-w-ok").onclick = () => {
+    const v = document.getElementById("yy-w").value.replace(/\D/g, "");
+    if (v && !(v.length === 10 || (v.length >= 11 && v.length <= 13))) { aviso("Escribe un celular válido, por ejemplo 300 123 4567."); return; }
+    guardar("yy_aliado_w", v); location.reload(); // recarga para rehacer las imágenes y enlaces con el número nuevo
+  };
+  document.getElementById("yy-cat").onclick = () => {
+    const t = `🚜 Maquinaria y vehículos usados en venta en Barranquilla\n👉 Mira el catálogo completo:\n${URL_CAT}a/${qAliado()}\n\n${PIE_TXT()}`;
+    copiar(t);
+    if (navigator.share) navigator.share({ text: t }).catch(() => {}); else aviso("Mensaje con el enlace copiado. Pégalo en WhatsApp o en tus redes.");
+  };
+  const reg = document.getElementById("yy-reg"), err = document.getElementById("yy-r-error");
+  document.getElementById("yy-reg-abrir").onclick = () => {
+    document.getElementById("yy-r-aliado").value = leer("yy_aliado_n"); err.hidden = true; abrir(reg);
+    setTimeout(() => document.getElementById(leer("yy_aliado_n") ? "yy-r-cliente" : "yy-r-aliado").focus(), 50);
+  };
+  document.getElementById("yy-reg-form").addEventListener("submit", ev => {
+    ev.preventDefault();
+    const v = id => document.getElementById(id).value.trim();
+    if (!v("yy-r-aliado") || !v("yy-r-cliente")) { err.textContent = "Escribe tu nombre y el nombre del cliente."; err.hidden = false; return; }
+    guardar("yy_aliado_n", v("yy-r-aliado"));
+    const f = new Date(), fecha = f.toLocaleString("es-CO", { timeZone: "America/Bogota", dateStyle: "short", timeStyle: "short" });
+    const t = ["📋 *REGISTRO DE CLIENTE REFERIDO · Yellow Yard*", "", `Aliado: ${v("yy-r-aliado")}${wAliado() ? " · WhatsApp " + fmtTel(wAliado()) : ""}`, `Cliente: ${v("yy-r-cliente")}`,
+      v("yy-r-tel") ? `Celular del cliente: ${v("yy-r-tel")}` : null, v("yy-r-ciudad") ? `Ciudad: ${v("yy-r-ciudad")}` : null, v("yy-r-lotes") ? `Equipos de interés: ${v("yy-r-lotes")}` : null,
+      v("yy-r-nota") ? `Nota: ${v("yy-r-nota")}` : null, `Fecha del registro: ${fecha}`, "", "Nestor, por favor confirma que este cliente queda registrado a mi nombre."].filter(l => l !== null).join("\n");
+    window.open(WN + encodeURIComponent(t), "_blank", "noopener");
+    ["yy-r-cliente", "yy-r-tel", "yy-r-ciudad", "yy-r-lotes", "yy-r-nota"].forEach(id => document.getElementById(id).value = "");
+    cerrar(reg); aviso("Se abrió WhatsApp con el registro. Toca Enviar y guarda ese chat como constancia.");
+  });
+  if (!leer("yy_aliado_ok")) { const d = document.getElementById("yy-intro"); abrir(d); d.addEventListener("close", () => guardar("yy_aliado_ok", "1"), { once: true }); }
 })();
 </script>
 </body>

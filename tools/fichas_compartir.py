@@ -54,8 +54,8 @@ def main(site):
 <meta property="og:image" content="{h(img)}">
 <meta property="og:url" content="{url}">
 <meta name="twitter:card" content="summary_large_image">
-<meta http-equiv="refresh" content="0; url={destino}">
-<script>location.replace("{destino}");</script>
+<noscript><meta http-equiv="refresh" content="0; url={destino}"></noscript>
+<script>location.replace("../../" + location.search + "#lote-{lote}");</script>
 <style>body{{margin:0;background:#0D0D0D;color:#ECE8DE;font-family:Georgia,serif;display:grid;place-items:center;min-height:100vh}}a{{color:#FFC20E}}</style>
 </head><body><p>Abriendo la ficha del equipo… <a href="{destino}">Ver {h(nombre)}</a></p></body></html>
 """
