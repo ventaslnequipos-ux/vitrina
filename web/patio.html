@@ -802,7 +802,7 @@ const QS = new URLSearchParams(location.search);
 const ALIADO = QS.get("aliado") === "1";
 const NEUTRA = ALIADO || QS.get("v") === "a";
 // Dirección de la aplicación web de Google (apps_script/Aliados.gs en la rama fuente). Vacía: los perfiles quedan guardados en el celular del aliado.
-const API_ALIADOS = "";
+const API_ALIADOS = "https://script.google.com/macros/s/AKfycbyiKSOBQOMoPHbMoE9TBaMcvnlKh75udjw-q_43_86ofnrDs76ELPOC54qm95V02lil/exec";
 function sesionAliado() { try { return JSON.parse(localStorage.getItem("yy_aliado_s") || "null"); } catch (x) { return null; } }
 function wAliado() {
   let n = ""; if (ALIADO) { const s = sesionAliado(); n = (s && s.tel) || ""; } else n = QS.get("w") || "";
