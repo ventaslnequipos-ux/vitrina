@@ -186,6 +186,12 @@ a { color: var(--ama); }
 .pf-limpiar:hover { border-color: var(--ama); color: var(--ama); }
 .pf-activos { font-family: var(--mono); font-size: 12px; color: var(--gris); }
 .pf-mas { display: none; }
+.pf-desp { display: none; width: 100%; min-height: 46px; align-items: center; gap: 10px; padding: 8px 14px; background: rgba(0,0,0,.45); border: 1px solid var(--linea); color: var(--hueso); font: inherit; font-size: 16px; font-weight: 700; text-align: left; cursor: pointer; }
+.pf-desp span { flex: 1; min-width: 0; }
+.pf-desp b { font-family: var(--mono); font-size: 13px; font-weight: 600; color: var(--ama); }
+.pf-desp svg { width: 20px; height: 20px; fill: none; stroke: var(--ama); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; transition: transform .2s; }
+.pf-tipo.abierto .pf-desp { border-color: var(--ama); }
+.pf-tipo.abierto .pf-desp svg { transform: rotate(180deg); }
 .pf-vacio { padding: 36px 18px; text-align: center; border: 1px dashed var(--linea); color: var(--plata); }
 .pf-vacio b { display: block; font-family: var(--rotulo); font-weight: 400; font-size: 22px; color: #fff; margin-bottom: 6px; }
 @media (max-width: 899px) {
@@ -193,9 +199,13 @@ a { color: var(--ama); }
   .panel-f::before, .panel-f::after { top: 90px; }
   .pf-mas { display: inline-flex; align-items: center; gap: 8px; margin-top: 12px; min-height: 40px; padding: 6px 14px; background: transparent; border: 1px solid var(--ama); color: var(--ama); font: inherit; font-weight: 700; cursor: pointer; }
   .panel-f:not(.abierto) .pf-extra { display: none; }
-  .panel-f .filtros { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
-  .panel-f .filtros button { border: 1px solid var(--linea); border-radius: 999px; }
-  .panel-f .filtros button[aria-pressed="true"] { border-color: var(--ama); }
+  .panel-f .pf-desp { display: flex; }
+  .panel-f .filtros { display: none; flex-direction: column; flex-wrap: nowrap; gap: 0; margin-top: 6px; border: 1px solid rgba(210,155,50,.45); background: #121110; }
+  .panel-f .pf-tipo.abierto .filtros { display: flex; }
+  .panel-f .filtros li { width: 100%; }
+  .panel-f .filtros button { width: 100%; min-height: 46px; padding: 10px 14px; font-size: 16px; border: 0; border-bottom: 1px solid rgba(255,255,255,.07); border-left: 3px solid transparent; border-radius: 0; white-space: normal; }
+  .panel-f .filtros li:last-child button { border-bottom: 0; }
+  .panel-f .filtros button[aria-pressed="true"] { border-left-color: var(--ama); background: rgba(210,155,50,.12); }
 }
 
 /* Ofertas: chapas sobre la foto, precio anterior tachado y tarjeta de combo */
@@ -650,7 +660,7 @@ body.modo-aliado #barra-consulta, body.modo-cliente #barra-consulta, body.modo-a
       <div class="pf-cab"><h2>Encuentra tu máquina</h2><p id="pf-conteo" aria-live="polite"></p></div>
       <label class="pf-buscar"><span class="sr-only">Buscar en el patio</span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg><input type="search" id="pf-q" placeholder="Marca, modelo o número de lote" autocomplete="off"></label>
       <div class="pf-grupo" id="g-oferta-caja"><div class="pf-tit">Ofertas del patio</div><div class="pf-chips" id="g-oferta"></div></div>
-      <div class="pf-grupo"><div class="pf-tit">Tipo de equipo</div><ul class="filtros" id="filtros"></ul></div>
+      <div class="pf-grupo pf-tipo" id="pf-tipo"><div class="pf-tit">Tipo de equipo</div><button type="button" class="pf-desp" id="pf-desp" aria-expanded="false" aria-controls="filtros"><span id="pf-desp-t">Todos</span><b id="pf-desp-n"></b><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button><ul class="filtros" id="filtros"></ul></div>
       <button type="button" class="pf-mas" id="pf-mas" aria-expanded="false" aria-controls="panel-f">Más filtros</button>
       <div class="pf-grupo pf-extra"><div class="pf-tit">Marca</div><div class="pf-chips" id="g-marca"></div></div>
       <div class="pf-grupo pf-extra pf-precio"><div class="pf-tit">Precio</div>
@@ -927,6 +937,8 @@ function pintarFiltros() {
   document.getElementById("g-oferta-caja").hidden = !of.length;
   document.getElementById("g-oferta").innerHTML = chipsHTML("oferta", of);
   const tipos = ["Todos", ...new Set(LOTES.map(e => e.tipo))];
+  document.getElementById("pf-desp-t").textContent = F.tipo;
+  document.getElementById("pf-desp-n").textContent = n2(cuantos("tipo", F.tipo));
   filtros.innerHTML = tipos.map(t => { const n = cuantos("tipo", t), on = F.tipo === t; return `<li><button type="button" aria-pressed="${on}" data-t="${esc(t)}"${!n && !on ? " disabled" : ""}>${esc(t)} <span>${n2(n)}</span></button></li>`; }).join("");
   const marcas = Object.entries(LOTES.reduce((o, e) => (o[marcaDe(e)] = (o[marcaDe(e)] || 0) + 1, o), {})).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], "es")).map(([m]) => [m, m]);
   const vis = MARCAS_TODAS ? marcas : marcas.filter((m, i) => i < 8 || F.marca === m[0]);
@@ -958,7 +970,12 @@ pmin.addEventListener("input", moverPrecio); pmax.addEventListener("input", move
 let tQ = null;
 document.getElementById("pf-q").addEventListener("input", ev => { F.q = ev.target.value; clearTimeout(tQ); tQ = setTimeout(pintar, 160); });
 const alPatio = () => { if (matchMedia("(max-width: 899px)").matches) document.querySelector(".lotes").scrollIntoView({ behavior: "smooth", block: "start" }); };
-filtros.addEventListener("click", ev => { const b = ev.target.closest("button"); if (!b || b.disabled) return; F.tipo = b.dataset.t; pintar(); alPatio(); });
+const cajaTipo = document.getElementById("pf-tipo"), despTipo = document.getElementById("pf-desp");
+const abrirTipo = si => { cajaTipo.classList.toggle("abierto", si); despTipo.setAttribute("aria-expanded", String(si)); };
+despTipo.addEventListener("click", () => { const si = !cajaTipo.classList.contains("abierto"); abrirTipo(si); if (si) { const b = filtros.querySelector('button[aria-pressed="true"]'); if (b) b.focus(); } });
+document.addEventListener("click", ev => { if (cajaTipo.classList.contains("abierto") && !cajaTipo.contains(ev.target)) abrirTipo(false); });
+document.addEventListener("keydown", ev => { if (ev.key === "Escape" && cajaTipo.classList.contains("abierto")) { abrirTipo(false); despTipo.focus(); } });
+filtros.addEventListener("click", ev => { const b = ev.target.closest("button"); if (!b || b.disabled) return; F.tipo = b.dataset.t; abrirTipo(false); pintar(); alPatio(); });
 panel.addEventListener("click", ev => {
   if (ev.target.closest("#marcas-mas")) { MARCAS_TODAS = !MARCAS_TODAS; pintarFiltros(); return; }
   if (ev.target.closest("#pf-mas")) { panel.classList.toggle("abierto"); document.getElementById("pf-mas").setAttribute("aria-expanded", String(panel.classList.contains("abierto"))); pintarFiltros(); return; }
