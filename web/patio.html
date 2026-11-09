@@ -186,6 +186,12 @@ a { color: var(--ama); }
 .pf-limpiar:hover { border-color: var(--ama); color: var(--ama); }
 .pf-activos { font-family: var(--mono); font-size: 12px; color: var(--gris); }
 .pf-mas { display: none; }
+.pf-desp { display: none; width: 100%; min-height: 46px; align-items: center; gap: 10px; padding: 8px 14px; background: rgba(0,0,0,.45); border: 1px solid var(--linea); color: var(--hueso); font: inherit; font-size: 16px; font-weight: 700; text-align: left; cursor: pointer; }
+.pf-desp span { flex: 1; min-width: 0; }
+.pf-desp b { font-family: var(--mono); font-size: 13px; font-weight: 600; color: var(--ama); }
+.pf-desp svg { width: 20px; height: 20px; fill: none; stroke: var(--ama); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; transition: transform .2s; }
+.pf-tipo.abierto .pf-desp { border-color: var(--ama); }
+.pf-tipo.abierto .pf-desp svg { transform: rotate(180deg); }
 .pf-vacio { padding: 36px 18px; text-align: center; border: 1px dashed var(--linea); color: var(--plata); }
 .pf-vacio b { display: block; font-family: var(--rotulo); font-weight: 400; font-size: 22px; color: #fff; margin-bottom: 6px; }
 @media (max-width: 899px) {
@@ -193,9 +199,13 @@ a { color: var(--ama); }
   .panel-f::before, .panel-f::after { top: 90px; }
   .pf-mas { display: inline-flex; align-items: center; gap: 8px; margin-top: 12px; min-height: 40px; padding: 6px 14px; background: transparent; border: 1px solid var(--ama); color: var(--ama); font: inherit; font-weight: 700; cursor: pointer; }
   .panel-f:not(.abierto) .pf-extra { display: none; }
-  .panel-f .filtros { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
-  .panel-f .filtros button { border: 1px solid var(--linea); border-radius: 999px; }
-  .panel-f .filtros button[aria-pressed="true"] { border-color: var(--ama); }
+  .panel-f .pf-desp { display: flex; }
+  .panel-f .filtros { display: none; flex-direction: column; flex-wrap: nowrap; gap: 0; margin-top: 6px; border: 1px solid rgba(210,155,50,.45); background: #121110; }
+  .panel-f .pf-tipo.abierto .filtros { display: flex; }
+  .panel-f .filtros li { width: 100%; }
+  .panel-f .filtros button { width: 100%; min-height: 46px; padding: 10px 14px; font-size: 16px; border: 0; border-bottom: 1px solid rgba(255,255,255,.07); border-left: 3px solid transparent; border-radius: 0; white-space: normal; }
+  .panel-f .filtros li:last-child button { border-bottom: 0; }
+  .panel-f .filtros button[aria-pressed="true"] { border-left-color: var(--ama); background: rgba(210,155,50,.12); }
 }
 
 /* Ofertas: chapas sobre la foto, precio anterior tachado y tarjeta de combo */
@@ -309,6 +319,21 @@ a { color: var(--ama); }
 .lote h2 { margin: 4px 0 0; font-family: var(--rotulo); font-weight: 400; font-size: clamp(22px, 2.5vw, 30px); line-height: 1.08; text-transform: uppercase; color: #FFFFFF; overflow-wrap: break-word; hyphens: auto; -webkit-hyphens: auto; }
 .etiqueta { position: relative; flex-shrink: 0; background: var(--ama); color: var(--negro); padding: 10px 16px 10px 26px; clip-path: polygon(14px 0, 100% 0, 100% 100%, 14px 100%, 0 50%); text-align: right; }
 /* Equipo vendido: sello en la esquina, sin tapar la máquina */
+/* Botón tenue para compartir en redes (publicación o historia) */
+.red-btn { position: absolute; right: 10px; bottom: 10px; z-index: 3; width: 30px; height: 30px; display: grid; place-items: center; padding: 0; border: 1px solid rgba(236,232,222,.22); border-radius: 50%; background: rgba(13,13,13,.35); color: rgba(236,232,222,.55); cursor: pointer; opacity: .45; transition: opacity .2s, color .2s, border-color .2s; }
+.red-btn svg { width: 15px; height: 15px; }
+.red-btn:hover, .red-btn:focus-visible { opacity: 1; color: var(--ama); border-color: var(--ama); }
+.lote.grande .red-btn, .ficha-dlg .red-btn { display: none; }
+.tesela .red-btn { right: 8px; bottom: auto; top: 46px; width: 28px; height: 28px; z-index: 2; }
+@media (max-width: 560px) { .tesela .red-btn { top: 8px; } }
+.btn-ico.red-ico { width: 32px; height: 40px; border-color: transparent; background: transparent; color: rgba(236,232,222,.4); }
+.btn-ico.red-ico svg { width: 16px; height: 16px; }
+.btn-ico.red-ico:hover, .btn-ico.red-ico:focus-visible { color: var(--ama); border-color: transparent; }
+.red-op { display: flex; align-items: center; gap: 14px; width: 100%; text-align: left; background: #151515; color: var(--hueso); border: 1px solid #2A2A2A; padding: 12px 14px; font: inherit; cursor: pointer; }
+.red-op:hover, .red-op:focus-visible { border-color: var(--ama); }
+.red-op .fmt { flex: none; border: 2px solid var(--ama); }
+.red-op b { display: block; font-size: 17px; } .red-op small { color: var(--gris); font-size: 14px; }
+.red-op[aria-busy="true"] { opacity: .6; }
 .sello-v { position: absolute; top: 10px; right: 10px; z-index: 2; width: 108px; height: 108px; transform: rotate(-10deg); filter: drop-shadow(0 3px 10px rgba(0,0,0,.55)); pointer-events: none; }
 .lote.grande .sello-v { width: 136px; height: 136px; }
 .mini .sello-v { width: 46px; height: 46px; top: 3px; right: 3px; }
@@ -635,7 +660,7 @@ body.modo-aliado #barra-consulta, body.modo-cliente #barra-consulta, body.modo-a
       <div class="pf-cab"><h2>Encuentra tu máquina</h2><p id="pf-conteo" aria-live="polite"></p></div>
       <label class="pf-buscar"><span class="sr-only">Buscar en el patio</span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg><input type="search" id="pf-q" placeholder="Marca, modelo o número de lote" autocomplete="off"></label>
       <div class="pf-grupo" id="g-oferta-caja"><div class="pf-tit">Ofertas del patio</div><div class="pf-chips" id="g-oferta"></div></div>
-      <div class="pf-grupo"><div class="pf-tit">Tipo de equipo</div><ul class="filtros" id="filtros"></ul></div>
+      <div class="pf-grupo pf-tipo" id="pf-tipo"><div class="pf-tit">Tipo de equipo</div><button type="button" class="pf-desp" id="pf-desp" aria-expanded="false" aria-controls="filtros"><span id="pf-desp-t">Todos</span><b id="pf-desp-n"></b><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button><ul class="filtros" id="filtros"></ul></div>
       <button type="button" class="pf-mas" id="pf-mas" aria-expanded="false" aria-controls="panel-f">Más filtros</button>
       <div class="pf-grupo pf-extra"><div class="pf-tit">Marca</div><div class="pf-chips" id="g-marca"></div></div>
       <div class="pf-grupo pf-extra pf-precio"><div class="pf-tit">Precio</div>
@@ -813,6 +838,7 @@ const fmtTel = n => n.length === 12 && n.startsWith("57") ? `${n.slice(2, 5)} ${
 const qAliado = () => "?v=a" + (wAliado() ? "&w=" + wAliado() : "");
 const PIE_TXT = () => NEUTRA ? "YELLOW YARD by Nestor Sierra" + (wAliado() ? " · WhatsApp " + fmtTel(wAliado()) : "") : "YELLOW YARD by Nestor Sierra · WhatsApp 301 795 9540";
 const enlaceLote = e => `${URL_CAT}e/${e.lote}/` + (NEUTRA ? qAliado() : ""); // página corta con la foto del equipo para la vista previa de WhatsApp
+const ICO_RED = `<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6" fill="currentColor"/></svg>`;
 const VER = "20261028c"; // cambia cuando se actualizan las fotos, para que nadie vea fotos viejas guardadas
 const DEST = typeof DESTACADO !== "undefined" ? DESTACADO : "";
 const ING = typeof INGRESOS !== "undefined" ? INGRESOS : {};
@@ -857,7 +883,7 @@ function notaCombo(e) {
 function lote(e, grande, sinId) {
   const ficha = [["Año", e.anio || "Por confirmar"], ["Uso", e.uso]].concat(e.specs);
   return `<article class="lote${grande ? " grande" : ""}"${grande || sinId ? "" : ` id="lote-${e.lote}"`}>
-    <div class="foto">${e.img ? `<img class="relleno" src="${esc(e.img)}?v=${VER}" alt=""${grande ? "" : ' loading="lazy"'}><img src="${esc(e.img)}?v=${VER}" alt="${esc(e.cat)} ${esc(e.nombre)}"${grande ? "" : ' loading="lazy"'}>` : `<div class="sinfoto">Fotos por WhatsApp</div>`}${chapas(e)}${esVendido(e) ? SELLO_V : ""}${masMedios(e)}</div>
+    <div class="foto">${e.img ? `<img class="relleno" src="${esc(e.img)}?v=${VER}" alt=""${grande ? "" : ' loading="lazy"'}><img src="${esc(e.img)}?v=${VER}" alt="${esc(e.cat)} ${esc(e.nombre)}"${grande ? "" : ' loading="lazy"'}>` : `<div class="sinfoto">Fotos por WhatsApp</div>`}${chapas(e)}${esVendido(e) ? SELLO_V : ""}${masMedios(e)}${esVendido(e) ? "" : `<button type="button" class="red-btn" data-red-lote="${e.lote}" aria-label="Compartir en Instagram o Facebook" title="Instagram / Facebook">${ICO_RED}</button>`}</div>
     <div class="info">
       <div class="cabeza">
         <div style="min-width: 0"><div class="num">Lote ${e.lote}</div><div class="tipo">${esc(e.cat)}</div><h2>${esc(e.nombre)}</h2></div>
@@ -911,6 +937,8 @@ function pintarFiltros() {
   document.getElementById("g-oferta-caja").hidden = !of.length;
   document.getElementById("g-oferta").innerHTML = chipsHTML("oferta", of);
   const tipos = ["Todos", ...new Set(LOTES.map(e => e.tipo))];
+  document.getElementById("pf-desp-t").textContent = F.tipo;
+  document.getElementById("pf-desp-n").textContent = n2(cuantos("tipo", F.tipo));
   filtros.innerHTML = tipos.map(t => { const n = cuantos("tipo", t), on = F.tipo === t; return `<li><button type="button" aria-pressed="${on}" data-t="${esc(t)}"${!n && !on ? " disabled" : ""}>${esc(t)} <span>${n2(n)}</span></button></li>`; }).join("");
   const marcas = Object.entries(LOTES.reduce((o, e) => (o[marcaDe(e)] = (o[marcaDe(e)] || 0) + 1, o), {})).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], "es")).map(([m]) => [m, m]);
   const vis = MARCAS_TODAS ? marcas : marcas.filter((m, i) => i < 8 || F.marca === m[0]);
@@ -942,7 +970,12 @@ pmin.addEventListener("input", moverPrecio); pmax.addEventListener("input", move
 let tQ = null;
 document.getElementById("pf-q").addEventListener("input", ev => { F.q = ev.target.value; clearTimeout(tQ); tQ = setTimeout(pintar, 160); });
 const alPatio = () => { if (matchMedia("(max-width: 899px)").matches) document.querySelector(".lotes").scrollIntoView({ behavior: "smooth", block: "start" }); };
-filtros.addEventListener("click", ev => { const b = ev.target.closest("button"); if (!b || b.disabled) return; F.tipo = b.dataset.t; pintar(); alPatio(); });
+const cajaTipo = document.getElementById("pf-tipo"), despTipo = document.getElementById("pf-desp");
+const abrirTipo = si => { cajaTipo.classList.toggle("abierto", si); despTipo.setAttribute("aria-expanded", String(si)); };
+despTipo.addEventListener("click", () => { const si = !cajaTipo.classList.contains("abierto"); abrirTipo(si); if (si) { const b = filtros.querySelector('button[aria-pressed="true"]'); if (b) b.focus(); } });
+document.addEventListener("click", ev => { if (cajaTipo.classList.contains("abierto") && !cajaTipo.contains(ev.target)) abrirTipo(false); });
+document.addEventListener("keydown", ev => { if (ev.key === "Escape" && cajaTipo.classList.contains("abierto")) { abrirTipo(false); despTipo.focus(); } });
+filtros.addEventListener("click", ev => { const b = ev.target.closest("button"); if (!b || b.disabled) return; F.tipo = b.dataset.t; abrirTipo(false); pintar(); alPatio(); });
 panel.addEventListener("click", ev => {
   if (ev.target.closest("#marcas-mas")) { MARCAS_TODAS = !MARCAS_TODAS; pintarFiltros(); return; }
   if (ev.target.closest("#pf-mas")) { panel.classList.toggle("abierto"); document.getElementById("pf-mas").setAttribute("aria-expanded", String(panel.classList.contains("abierto"))); pintarFiltros(); return; }
@@ -1001,11 +1034,11 @@ function pintarVista(l, animar) {
     html = `<div class="vista-lista${animar ? " entra" : ""}">${l.map((e, i) => `<article class="fila" id="lote-${e.lote}" data-ficha="${e.lote}" style="--i:${i}" tabindex="0" aria-label="Ver ficha de ${esc(e.nombre)}">
       <div class="mini">${foto(e)}${chapas(e).replace("Nuevo ingreso", "Nuevo")}${esVendido(e) ? SELLO_V : ""}</div>
       <div class="datos"><div class="num">Lote ${e.lote} · ${esc(e.cat)}</div><h3>${esc(e.nombre)}</h3><div class="meta">${[e.anio || "", e.uso].filter(Boolean).map(esc).join(" · ")}</div></div>
-      <div class="lado">${esVendido(e) ? `<div class="precio vend">Vendido</div><div class="mini-btns">` : `<div>${antesHTML(e)}<div class="precio">${cop(e.precio)}</div></div><div class="mini-btns"><a class="btn-ico wa" data-consulta="${e.lote}" href="${WA}${msg(e)}" target="_blank" rel="noopener" aria-label="Consultar ${esc(e.nombre)} por WhatsApp">${ICO_W}</a>`}<button type="button" class="btn-ico" data-ficha="${e.lote}" aria-label="Ver ficha completa">${ICO_OJO.replace('<svg', '<svg style="fill:none;stroke:currentColor;stroke-width:2"')}</button></div></div>
+      <div class="lado">${esVendido(e) ? `<div class="precio vend">Vendido</div><div class="mini-btns">` : `<div>${antesHTML(e)}<div class="precio">${cop(e.precio)}</div></div><div class="mini-btns"><a class="btn-ico wa" data-consulta="${e.lote}" href="${WA}${msg(e)}" target="_blank" rel="noopener" aria-label="Consultar ${esc(e.nombre)} por WhatsApp">${ICO_W}</a><button type="button" class="btn-ico red-ico" data-red-lote="${e.lote}" aria-label="Compartir en Instagram o Facebook" title="Instagram / Facebook">${ICO_RED}</button>`}<button type="button" class="btn-ico" data-ficha="${e.lote}" aria-label="Ver ficha completa">${ICO_OJO.replace('<svg', '<svg style="fill:none;stroke:currentColor;stroke-width:2"')}</button></div></div>
     </article>`).join("")}</div>`;
   } else if (VISTA === "mosaico") {
     html = `<div class="vista-mosaico${animar ? " entra" : ""}">${l.map((e, i) => `<button type="button" class="tesela" id="lote-${e.lote}" data-ficha="${e.lote}" style="--i:${i}" aria-label="Ver ficha de ${esc(e.nombre)}, ${esVendido(e) ? "vendido" : cop(e.precio)}">
-      ${foto(e)}${chapas(e).replace("Nuevo ingreso", "Nuevo")}${esVendido(e) ? SELLO_V : ""}<span class="ver">${ICO_OJO}</span>
+      ${foto(e)}${chapas(e).replace("Nuevo ingreso", "Nuevo")}${esVendido(e) ? SELLO_V : ""}<span class="ver">${ICO_OJO}</span>${esVendido(e) ? "" : `<span class="red-btn" role="button" tabindex="0" data-red-lote="${e.lote}" aria-label="Compartir en Instagram o Facebook" title="Instagram / Facebook">${ICO_RED}</span>`}
       <span class="pie"><span class="lt">Lote ${e.lote}</span><h3>${esc(e.nombre)}</h3>${esVendido(e) ? `<span class="pr vend">Vendido</span>` : `${antesHTML(e)}<span class="pr">${cop(e.precio)}</span>`}</span>
     </button>`).join("")}</div>`;
   } else {
@@ -1375,6 +1408,88 @@ const puedeArchivos = f => !!(navigator.canShare && navigator.share && navigator
     }
   });
   dlg.addEventListener("click", ev => { if (ev.target === dlg) cerrar(); });
+})();
+
+// Botón tenue en cada equipo: imagen para publicación (4:5) o historia (9:16) de Instagram o Facebook.
+// La descripción con ficha técnica y hashtags queda copiada para pegarla al publicar.
+async function tarjetaHistoria(e) {
+  const W = 1080, H = 1920, c = document.createElement("canvas"); c.width = W; c.height = H; const x = c.getContext("2d");
+  try { await Promise.all(['64px "Alfa Slab One"', '700 40px "Zilla Slab"', '600 40px "Zilla Slab"'].map(f => document.fonts.load(f))); } catch (err) {}
+  const AL = '"Alfa Slab One", Rockwell, Georgia, serif', ZI = '"Zilla Slab", Rockwell, Georgia, serif';
+  x.fillStyle = "#0E0E0E"; x.fillRect(0, 0, W, H);
+  // marca arriba (debajo de la zona que tapa Instagram)
+  try { const lg = await cargarImg("logo.svg"); x.drawImage(lg, 60, 230, 70, 87); } catch (err) {}
+  x.font = `46px ${AL}`; x.fillStyle = "#FFFFFF"; x.fillText("YELLOW", 150, 278); const yw = x.measureText("YELLOW ").width; x.fillStyle = "#D29B32"; x.fillText("YARD", 150 + yw, 278);
+  x.fillStyle = "#D9B23A"; x.font = `700 30px ${ZI}`; x.fillText("by Nestor Sierra", 150, 316);
+  // foto
+  const FY = 360, FH = 820;
+  if (e.img) { try { const im = await cargarImg(e.img + "?v=" + VER);
+    const kc = Math.max(W / im.width, FH / im.height); x.save(); x.beginPath(); x.rect(0, FY, W, FH); x.clip(); x.filter = "blur(28px) brightness(.45)"; x.drawImage(im, (W - im.width * kc) / 2, FY + (FH - im.height * kc) / 2, im.width * kc, im.height * kc); x.restore();
+    const k = Math.min(W / im.width, FH / im.height); x.drawImage(im, (W - im.width * k) / 2, FY + (FH - im.height * k) / 2, im.width * k, im.height * k);
+  } catch (err) {} }
+  x.fillStyle = "#D29B32"; x.fillRect(0, FY + FH, W, 8);
+  let y = FY + FH + 70;
+  x.fillStyle = "#D29B32"; x.font = `700 32px ${ZI}`; x.fillText(`LOTE ${e.lote} · ${e.cat.toUpperCase()}`, 60, y);
+  let fs = 74; x.font = `${fs}px ${AL}`; let ls = lineas(x, e.nombre.toUpperCase(), W - 120);
+  while (ls.length > 2 && fs > 46) { fs -= 6; x.font = `${fs}px ${AL}`; ls = lineas(x, e.nombre.toUpperCase(), W - 120); }
+  x.fillStyle = "#FFFFFF"; ls.slice(0, 2).forEach(l => { y += fs * 1.08; x.fillText(l, 60, y); });
+  y += 54; x.fillStyle = "#BFC5CC"; x.font = `600 38px ${ZI}`; x.fillText([e.anio || "", e.uso].filter(Boolean).join(" · "), 60, y);
+  const pr = e.precio > 0 ? cop(e.precio) : "Precio a consultar"; x.font = `58px ${AL}`; const pw = x.measureText(pr).width + 70; y += 34;
+  x.fillStyle = "#D29B32"; x.beginPath(); x.roundRect ? x.roundRect(60, y, pw, 92, 46) : x.rect(60, y, pw, 92); x.fill();
+  x.fillStyle = "#0E0E0E"; x.fillText(pr, 95, y + 67);
+  // contacto (por encima de la zona inferior que tapa Instagram)
+  const cy = H - 330;
+  x.fillStyle = "#ECE8DE"; x.font = `700 34px ${ZI}`;
+  x.fillText(NEUTRA ? "Información y visitas:" : "Escríbenos por WhatsApp:", 60, cy);
+  x.fillStyle = "#D29B32"; x.font = `44px ${AL}`;
+  x.fillText(NEUTRA ? (wAliado() ? fmtTel(wAliado()) : "con tu asesor comercial") : "301 795 9540", 60, cy + 58);
+  x.fillStyle = "#9EA3AA"; x.font = `600 28px ${ZI}`; x.fillText("Tu próxima máquina está en el patio amarillo.", 60, cy + 110);
+  // base de hierba fina
+  x.fillStyle = "#D29B32"; x.fillRect(0, H - 6, W, 3); x.strokeStyle = "#D29B32"; x.lineWidth = 3; x.lineCap = "round";
+  [W * 0.2, W * 0.5, W * 0.8].forEach(cx => { x.beginPath(); x.moveTo(cx - 12, H - 6); x.lineTo(cx - 17, H - 24); x.moveTo(cx, H - 6); x.lineTo(cx + 2, H - 34); x.moveTo(cx + 12, H - 6); x.lineTo(cx + 20, H - 22); x.stroke(); });
+  return await new Promise(ok => c.toBlob(ok, "image/jpeg", .9));
+}
+const HIS_LISTA = new Map(), HIS_PEND = new Map();
+function prepararHistoria(e) {
+  if (HIS_LISTA.has(e.lote)) return Promise.resolve(HIS_LISTA.get(e.lote));
+  if (!HIS_PEND.has(e.lote)) HIS_PEND.set(e.lote, tarjetaHistoria(e).then(b => { const f = new File([b], `Yellow-Yard-lote-${e.lote}-historia.jpg`, { type: "image/jpeg" }); HIS_LISTA.set(e.lote, f); return f; }).finally(() => HIS_PEND.delete(e.lote)));
+  return HIS_PEND.get(e.lote);
+}
+(function () {
+  const dlg = document.getElementById("compartir-dlg"), cuerpo = document.getElementById("com-cuerpo");
+  const abrir = () => { if (!dlg.open) { dlg.showModal ? dlg.showModal() : dlg.setAttribute("open", ""); } };
+  const cerrar = () => { rv = null; dlg.close ? dlg.close() : dlg.removeAttribute("open"); };
+  let rv = null;
+  const op = (fmt, tit, sub, w, h) => `<button type="button" class="red-op" data-red-fmt="${fmt}"><span class="fmt" style="width:${w}px;height:${h}px"></span><span><b>${tit}</b><small>${sub}</small></span></button>`;
+  function pintar() {
+    document.getElementById("com-sub").textContent = `Lote ${rv.lote} · ${rv.nombre}`;
+    document.getElementById("com-titulo").textContent = "Compartir en redes";
+    cuerpo.innerHTML = `<div class="acciones-ig">${op("pub", "Publicación", "Instagram o Facebook · formato 4:5", 24, 30)}${op("his", "Historia", "Instagram o Facebook · formato vertical", 18, 32)}</div><p class="nota" style="margin-top:12px">Al tocar, la descripción con la ficha y los hashtags queda copiada: pégala en el pie de la publicación.</p>`;
+  }
+  function enviar(fmt, f) {
+    copiar(descripcionIG(rv));
+    if (f && puedeArchivos(f)) { navigator.share({ files: [f] }).then(cerrar).catch(err => { if (err && err.name === "AbortError") return; listo(fmt); }); return; }
+    if (f) { bajar(f, f.name); cerrar(); aviso("Imagen descargada y descripción copiada. Súbela a Instagram o Facebook y pega el texto."); }
+  }
+  function listo(fmt) {
+    cuerpo.innerHTML = `<p>La imagen está lista.</p><div class="acciones-ig"><button type="button" class="boton" data-red-ya="${fmt}">${ICO_SH} Compartir ahora</button></div>`;
+  }
+  document.addEventListener("click", ev => {
+    const b = ev.target.closest("[data-red-lote]");
+    if (b) { ev.preventDefault(); ev.stopPropagation(); const l = LOTES.find(z => z.lote === b.dataset.redLote); if (!l) return; rv = l; pintar(); abrir(); prepararImagen(l).catch(() => {}); prepararHistoria(l).catch(() => {}); return; }
+    if (!rv) return;
+    if (ev.target.closest("[data-cerrar-compartir]")) { cerrar(); return; }
+    const o = ev.target.closest("[data-red-fmt], [data-red-ya]"); if (!o) return;
+    const fmt = o.dataset.redFmt || o.dataset.redYa;
+    const lista = fmt === "his" ? HIS_LISTA : IMG_LISTA, prep = fmt === "his" ? prepararHistoria : prepararImagen;
+    const f = lista.get(rv.lote);
+    if (f) { enviar(fmt, f); return; }
+    // el celular exige el toque: si la imagen no estaba lista, se prepara y se pide un segundo toque
+    cuerpo.innerHTML = `<p>Preparando la imagen…</p>`;
+    prep(rv).then(g => { if (navigator.share) listo(fmt); else enviar(fmt, g); }).catch(() => aviso("No se pudo preparar la imagen. Intenta otra vez."));
+  }, true);
+  dlg.addEventListener("close", () => { rv = null; });
+  document.addEventListener("keydown", ev => { const b = ev.target.closest && ev.target.closest("span[data-red-lote]"); if (b && (ev.key === "Enter" || ev.key === " ")) { ev.preventDefault(); ev.stopPropagation(); b.click(); } }, true);
 })();
 
 // Compartir combo: imagen con los equipos juntos, el precio del combo y el enlace al catálogo
