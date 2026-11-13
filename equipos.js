@@ -76,7 +76,7 @@ const EQUIPOS = [
     specs: [["Modelo", "Por confirmar"], ["Tambor", "Liso"], ["Cabina", "Cerrada"], ["Horómetro", "Nuevo"]] },
   { lote: "38", img: "img/jd310g.jpg", tipo: "Excavación", cat: "Retroexcavadora cargadora", nombre: "John Deere 310G", anio: 2006, uso: "8.776 h", precio: 190000000,
     specs: [["Configuración", "Pala + retro"], ["Cabina", "Cerrada"]] },
-  { lote: "39", img: "img/jd320d.jpg", tipo: "Minicargadores", cat: "Minicargador", nombre: "John Deere 320D", anio: 2013, uso: "Horas por confirmar", precio: 85000000,
+  { lote: "39", img: "img/l39-8e8300f6.jpg", tipo: "Minicargadores", cat: "Minicargador", nombre: "John Deere 320D", anio: 2013, uso: "Horas por confirmar", precio: 65000000, fotos: ["img/jd320d.jpg", "img/l39-520d64d3.jpg", "img/l39-5a2cc303.jpg", "img/l39-b76d66b7.jpg"],
     specs: [["Capacidad operativa", "794 kg (1.750 lb)"], ["Potencia", "66 hp"], ["Rodaje", "Llantas"]] },
   { lote: "40", img: "img/volq_isuzu.jpg", tipo: "Vehículos", cat: "Volqueta doble troque", nombre: "Chevrolet FVZ (Isuzu)", anio: 2013, uso: "447.000 km", precio: 280000000,
     specs: [["Línea", "FVZ tecnología Isuzu"], ["Configuración", "Doble troque"], ["Carrocería", "Volco"]] },
@@ -141,10 +141,9 @@ const INGRESOS = {
 // Equipos vendidos: nombre del equipo y fecha de venta. Siguen en el catálogo con el sello "Equipo vendido", al final de la lista,
 // sin precio y fuera de destacados, cinta y "Nuevo ingreso". Se marcan desde el control privado (estado "Vendido").
 const VENDIDOS = {
-  "John Deere 320D": "2026-11-04",
 };
 // Precio anterior de los equipos que bajaron de precio (se muestra tachado 30 días). Lo calcula publicar.py.
-const PRECIO_ANTES = {"03": {"antes": 250000000, "desde": "2026-11-06"}, "09": {"antes": 60000000, "desde": "2026-11-06"}, "11": {"antes": 90000000, "desde": "2026-11-06"}};
+const PRECIO_ANTES = {"03": {"antes": 250000000, "desde": "2026-11-06"}, "09": {"antes": 60000000, "desde": "2026-11-06"}, "11": {"antes": 90000000, "desde": "2026-11-06"}, "39": {"antes": 85000000, "desde": "2026-11-13"}};
 // Combos: varios lotes juntos con precio especial. Se arman en el control privado (campo combo).
 const COMBOS = [{"id": "combo-03-04", "nombre": "Combo motoniveladora + vibrocompactador", "lotes": ["03", "04"], "precio": 315000000}];
 // Carrusel de destacados: rota solo cada lunes (mínimo 3 o el 10 % del total). Si un equipo debe quedar fijo, poner su nombre aquí.
