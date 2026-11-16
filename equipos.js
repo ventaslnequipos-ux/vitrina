@@ -78,7 +78,7 @@ const EQUIPOS = [
     specs: [["Configuración", "Pala + retro"], ["Cabina", "Cerrada"]] },
   { lote: "39", img: "img/l39-8e8300f6.jpg", tipo: "Minicargadores", cat: "Minicargador", nombre: "John Deere 320D", anio: 2013, uso: "Horas por confirmar", precio: 65000000, fotos: ["img/jd320d.jpg", "img/l39-520d64d3.jpg", "img/l39-5a2cc303.jpg", "img/l39-b76d66b7.jpg"],
     specs: [["Capacidad operativa", "794 kg (1.750 lb)"], ["Potencia", "66 hp"], ["Rodaje", "Llantas"]] },
-  { lote: "40", img: "img/volq_isuzu.jpg", tipo: "Vehículos", cat: "Volqueta doble troque", nombre: "Chevrolet FVZ (Isuzu)", anio: 2013, uso: "447.000 km", precio: 280000000,
+  { lote: "40", img: "img/l40-2de9d5ec.jpg", tipo: "Vehículos", cat: "Volqueta doble troque", nombre: "Chevrolet FVZ (Isuzu)", anio: 2013, uso: "447.000 km", precio: 280000000, fotos: ["img/volq_isuzu.jpg", "img/l40-504e3cad.jpg", "img/l40-dae64d0b.jpg", "img/l40-b2299223.jpg", "img/l40-d312322f.jpg", "img/l40-7f4ad100.jpg"],
     specs: [["Línea", "FVZ tecnología Isuzu"], ["Configuración", "Doble troque"], ["Carrocería", "Volco"]] },
   { lote: "41", img: "img/volq_kodiak.jpg", tipo: "Vehículos", cat: "Volqueta doble troque", nombre: "Chevrolet volqueta doble troque (2008)", anio: 2008, uso: "Odómetro no funciona", precio: 140000000,
     specs: [["Configuración", "Doble troque"], ["Carrocería", "Volco"], ["Kilometraje", "Odómetro no funciona"]] },
