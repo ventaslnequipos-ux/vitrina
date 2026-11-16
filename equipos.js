@@ -60,7 +60,7 @@ const EQUIPOS = [
     specs: [["Motor", "Caterpillar C6.6"], ["Potencia", "150 hp aprox."], ["Peso operativo", "16 t aprox."], ["Protección", "Techo ROPS"]] },
   { lote: "30", img: "img/d5n07.jpg", tipo: "Bulldozers", cat: "Bulldozer sobre orugas", nombre: "Caterpillar D5N (2007)", anio: 2007, uso: "12.500 h", precio: 300000000,
     specs: [["Peso operativo", "12,7 t aprox."], ["Hoja", "2,7 m³ aprox."], ["Protección", "Techo ROPS"]] },
-  { lote: "31", img: "img/grua.jpg", tipo: "Vehículos", cat: "Camión grúa con tanque", nombre: "Camión grúa + tanque 9 m³", anio: 0, uso: "Listo para traspaso", precio: 95000000,
+  { lote: "31", img: "img/grua.jpg", tipo: "Vehículos", cat: "Camión grúa con tanque", nombre: "Camión grúa + tanque 9 m³", anio: 1989, uso: "Listo para traspaso", precio: 85000000,
     specs: [["Capacidad de carga", "Hasta 13 t"], ["Tanque", "9 m³"], ["Documentos", "Listo para traspaso"], ["Eje trasero", "Doble llanta"]] },
   { lote: "32", img: "img/mg120_91.jpg", tipo: "Motoniveladoras", cat: "Motoniveladora", nombre: "Caterpillar 120G (1991)", anio: 1991, uso: "Horas por confirmar", precio: 230000000,
     specs: [["Motor", "Caterpillar 3304"], ["Potencia", "125 hp"], ["Cabina", "Cerrada"]] },
@@ -143,7 +143,7 @@ const INGRESOS = {
 const VENDIDOS = {
 };
 // Precio anterior de los equipos que bajaron de precio (se muestra tachado 30 días). Lo calcula publicar.py.
-const PRECIO_ANTES = {"03": {"antes": 250000000, "desde": "2026-11-06"}, "09": {"antes": 60000000, "desde": "2026-11-06"}, "11": {"antes": 90000000, "desde": "2026-11-06"}, "39": {"antes": 85000000, "desde": "2026-11-13"}};
+const PRECIO_ANTES = {"03": {"antes": 250000000, "desde": "2026-11-06"}, "09": {"antes": 60000000, "desde": "2026-11-06"}, "11": {"antes": 90000000, "desde": "2026-11-06"}, "31": {"antes": 95000000, "desde": "2026-11-16"}, "39": {"antes": 85000000, "desde": "2026-11-13"}};
 // Combos: varios lotes juntos con precio especial. Se arman en el control privado (campo combo).
 const COMBOS = [{"id": "combo-03-04", "nombre": "Combo motoniveladora + vibrocompactador", "lotes": ["03", "04"], "precio": 315000000}];
 // Carrusel de destacados: rota solo cada lunes (mínimo 3 o el 10 % del total). Si un equipo debe quedar fijo, poner su nombre aquí.
