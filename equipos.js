@@ -20,7 +20,7 @@ const EQUIPOS = [
     specs: [["Tambor", "Liso"], ["Protección", "Techo ROPS"]] },
   { lote: "10", img: "img/ford_b.jpg", tipo: "Vehículos", cat: "Volqueta", nombre: "Ford Piragua", anio: 1971, uso: "Operativa", precio: 42000000,
     specs: [["Motor", "Nissan 180 diésel"], ["Estado", "Totalmente operativa"], ["Carrocería", "Volco"], ["Eje trasero", "Doble llanta"]] },
-  { lote: "11", img: "img/duster_a.jpg", tipo: "Vehículos", cat: "Camioneta SUV", nombre: "Renault Duster Iconic", anio: 2026, uso: "19.000 km", precio: 88000000,
+  { lote: "11", img: "img/duster_a.jpg", tipo: "Vehículos", cat: "Camioneta SUV", nombre: "Renault Duster Iconic", anio: 2026, uso: "19.000 km", precio: 82000000,
     specs: [["Motor", "1.3 turbo (TCe)"], ["Potencia", "154 hp"], ["Combustible", "Gasolina"], ["Color", "Gris"]] },
   { lote: "12", img: "img/h940.jpg", tipo: "Excavación", cat: "Retroexcavadora cargadora", nombre: "Hyundai H940C", anio: 2018, uso: "9.925 h", precio: 280000000,
     specs: [["Potencia", "136 hp aprox."], ["Peso operativo", "7,5 t aprox."], ["Tracción", "4x4"], ["Cabina", "Cerrada"]] },
