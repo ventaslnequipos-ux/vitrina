@@ -223,6 +223,10 @@ a { color: var(--ama); }
 .tesela .chapas { z-index: 1; }
 .antes { display: block; font-family: var(--mono); font-size: 12px; text-decoration: line-through; text-decoration-thickness: 1.5px; opacity: .75; }
 .tesela .antes { font-size: 11px; color: #D5CFC2; }
+.fijo-chip { display: block; width: fit-content; margin-top: 4px; padding: 2px 8px; font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; border: 1px solid currentColor; opacity: .85; }
+.etiqueta .fijo-chip { color: #0D0D0D; }
+.fila .fijo-chip { margin-left: auto; color: var(--ama); }
+.tesela .fijo-chip { color: var(--ama); font-size: 10px; }
 .fila .antes { color: var(--gris); text-align: right; }
 .nota-combo { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; padding: 10px 12px; border: 1px solid rgba(210,155,50,.45); background: rgba(210,155,50,.07); font-size: 15px; }
 .nota-combo b { color: var(--ama); font-family: var(--rotulo); font-weight: 400; }
@@ -877,6 +881,10 @@ function chapas(e) {
   const c = [esNuevo(e) ? '<span class="nuevo">Nuevo ingreso</span>' : "", bajo(e) ? '<span class="chapa baja">Bajó de precio</span>' : "", comboDe(e) ? '<span class="chapa combo">Combo</span>' : ""].filter(Boolean);
   return c.length ? `<span class="chapas">${c.join("")}</span>` : "";
 }
+// Lotes con precio fijo: no reciben ofertas (sin botón «Hacer oferta») y muestran la marca «Precio fijo».
+const PRECIO_FIJO = ["11"];
+const esFijo = e => PRECIO_FIJO.includes(e.lote);
+const fijoHTML = e => esFijo(e) ? `<span class="fijo-chip">Precio fijo</span>` : "";
 const antesHTML = e => bajo(e) ? `<s class="antes">${cop(bajo(e))}</s>` : "";
 const LOTES = EQUIPOS.map((e, i) => ({ ...e, lote: e.lote || String(i + 1).padStart(2, "0") })); // el lote viene del control y no cambia
 const DISPONIBLES = LOTES.filter(e => !esVendido(e));
@@ -898,11 +906,11 @@ function lote(e, grande, sinId) {
     <div class="info">
       <div class="cabeza">
         <div style="min-width: 0"><div class="num">Lote ${e.lote}</div><div class="tipo">${esc(e.cat)}</div><h2>${esc(e.nombre)}</h2></div>
-        ${esVendido(e) ? `<div class="etiqueta vend"><small>ESTADO</small><strong>Vendido</strong></div>` : `<div class="etiqueta"><small>PRECIO COP</small>${antesHTML(e)}<strong>${cop(e.precio)}</strong></div>`}
+        ${esVendido(e) ? `<div class="etiqueta vend"><small>ESTADO</small><strong>Vendido</strong></div>` : `<div class="etiqueta"><small>PRECIO COP</small>${antesHTML(e)}<strong>${cop(e.precio)}</strong>${fijoHTML(e)}</div>`}
       </div>
       ${notaCombo(e)}
       <dl class="ficha">${ficha.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>
-      ${esVendido(e) ? `<div class="botones"><button type="button" class="boton linea" data-similar="${esc(e.tipo)}">Ver equipos similares</button></div>` : `<div class="botones"><a class="boton wpp" data-consulta="${e.lote}" style="--d: ${(parseInt(e.lote, 10) % 5) * 0.9}s" href="${WA}${msg(e)}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>Consultar lote por WhatsApp</a><button type="button" class="boton linea interesa" data-lote="${e.lote}">Hacer oferta</button><button type="button" class="boton linea compartir" data-lote="${e.lote}" aria-label="Compartir ${esc(e.nombre)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M16 6l-4-4-4 4M12 2v13"/></svg>Compartir</button></div>`}
+      ${esVendido(e) ? `<div class="botones"><button type="button" class="boton linea" data-similar="${esc(e.tipo)}">Ver equipos similares</button></div>` : `<div class="botones"><a class="boton wpp" data-consulta="${e.lote}" style="--d: ${(parseInt(e.lote, 10) % 5) * 0.9}s" href="${WA}${msg(e)}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>Consultar lote por WhatsApp</a>${esFijo(e) ? "" : `<button type="button" class="boton linea interesa" data-lote="${e.lote}">Hacer oferta</button>`}<button type="button" class="boton linea compartir" data-lote="${e.lote}" aria-label="Compartir ${esc(e.nombre)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M16 6l-4-4-4 4M12 2v13"/></svg>Compartir</button></div>`}
     </div>
   </article>`;
 }
@@ -1045,12 +1053,12 @@ function pintarVista(l, animar) {
     html = `<div class="vista-lista${animar ? " entra" : ""}">${l.map((e, i) => `<article class="fila" id="lote-${e.lote}" data-ficha="${e.lote}" style="--i:${i}" tabindex="0" aria-label="Ver ficha de ${esc(e.nombre)}">
       <div class="mini">${foto(e)}${chapas(e).replace("Nuevo ingreso", "Nuevo")}${esVendido(e) ? SELLO_V : ""}</div>
       <div class="datos"><div class="num">Lote ${e.lote} · ${esc(e.cat)}</div><h3>${esc(e.nombre)}</h3><div class="meta">${[e.anio || "", e.uso].filter(Boolean).map(esc).join(" · ")}</div></div>
-      <div class="lado">${esVendido(e) ? `<div class="precio vend">Vendido</div><div class="mini-btns">` : `<div>${antesHTML(e)}<div class="precio">${cop(e.precio)}</div></div><div class="mini-btns"><a class="btn-ico wa" data-consulta="${e.lote}" href="${WA}${msg(e)}" target="_blank" rel="noopener" aria-label="Consultar ${esc(e.nombre)} por WhatsApp">${ICO_W}</a><button type="button" class="btn-ico red-ico" data-red-lote="${e.lote}" aria-label="Compartir en Instagram o Facebook" title="Instagram / Facebook">${ICO_RED}</button>`}<button type="button" class="btn-ico" data-ficha="${e.lote}" aria-label="Ver ficha completa">${ICO_OJO.replace('<svg', '<svg style="fill:none;stroke:currentColor;stroke-width:2"')}</button></div></div>
+      <div class="lado">${esVendido(e) ? `<div class="precio vend">Vendido</div><div class="mini-btns">` : `<div>${antesHTML(e)}<div class="precio">${cop(e.precio)}</div>${fijoHTML(e)}</div><div class="mini-btns"><a class="btn-ico wa" data-consulta="${e.lote}" href="${WA}${msg(e)}" target="_blank" rel="noopener" aria-label="Consultar ${esc(e.nombre)} por WhatsApp">${ICO_W}</a><button type="button" class="btn-ico red-ico" data-red-lote="${e.lote}" aria-label="Compartir en Instagram o Facebook" title="Instagram / Facebook">${ICO_RED}</button>`}<button type="button" class="btn-ico" data-ficha="${e.lote}" aria-label="Ver ficha completa">${ICO_OJO.replace('<svg', '<svg style="fill:none;stroke:currentColor;stroke-width:2"')}</button></div></div>
     </article>`).join("")}</div>`;
   } else if (VISTA === "mosaico") {
     html = `<div class="vista-mosaico${animar ? " entra" : ""}">${l.map((e, i) => `<button type="button" class="tesela" id="lote-${e.lote}" data-ficha="${e.lote}" style="--i:${i}" aria-label="Ver ficha de ${esc(e.nombre)}, ${esVendido(e) ? "vendido" : cop(e.precio)}">
       ${foto(e)}${chapas(e).replace("Nuevo ingreso", "Nuevo")}${esVendido(e) ? SELLO_V : ""}<span class="ver">${ICO_OJO}</span>${esVendido(e) ? "" : `<span class="red-btn" role="button" tabindex="0" data-red-lote="${e.lote}" aria-label="Compartir en Instagram o Facebook" title="Instagram / Facebook">${ICO_RED}</span>`}
-      <span class="pie"><span class="lt">Lote ${e.lote}</span><h3>${esc(e.nombre)}</h3>${esVendido(e) ? `<span class="pr vend">Vendido</span>` : `${antesHTML(e)}<span class="pr">${cop(e.precio)}</span>`}</span>
+      <span class="pie"><span class="lt">Lote ${e.lote}</span><h3>${esc(e.nombre)}</h3>${esVendido(e) ? `<span class="pr vend">Vendido</span>` : `${antesHTML(e)}<span class="pr">${cop(e.precio)}</span>${fijoHTML(e)}`}</span>
     </button>`).join("")}</div>`;
   } else {
     html = l.map(e => lote(e, false)).join("");
@@ -1173,7 +1181,7 @@ const FORMULARIO = "";
   let actualLote = null;
   document.addEventListener("click", ev => {
     const b = ev.target.closest(".interesa"); if (!b) return;
-    actualLote = LOTES.find(z => z.lote === b.dataset.lote); if (!actualLote) return;
+    actualLote = LOTES.find(z => z.lote === b.dataset.lote); if (!actualLote || esFijo(actualLote)) return;
     document.getElementById("int-lote").textContent = `Lote ${actualLote.lote} · ${actualLote.cat}`;
     document.getElementById("int-titulo").textContent = `Hacer oferta: ${actualLote.nombre}`;
     document.getElementById("int-ref").innerHTML = actualLote.precio ? `Precio publicado: <b>${cop(actualLote.precio)}</b>` : "Precio a convenir";
