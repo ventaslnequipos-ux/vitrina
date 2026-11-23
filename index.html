@@ -391,7 +391,7 @@ button.boton { border: 0; cursor: pointer; }
 .faq .resp a { display: inline-flex; align-items: center; gap: 8px; color: #25D366; font-weight: 700; text-decoration: none; }
 .faq .resp a svg { width: 20px; height: 20px; }
 
-/* Formulario "Me interesa" */
+/* Formulario "Hacer oferta" */
 dialog.interes { width: min(520px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); overflow-y: auto; padding: 0; border: 1px solid var(--ama); background: var(--carbon); color: var(--hueso); }
 dialog.interes::backdrop { background: rgba(0,0,0,.7); }
 .interes .cab { padding: 18px 20px 12px; border-bottom: 1px solid var(--linea); display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
@@ -406,6 +406,10 @@ dialog.interes::backdrop { background: rgba(0,0,0,.7); }
 .interes .trampa { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 .interes .listo { padding: 24px 20px; display: flex; flex-direction: column; gap: 14px; align-items: flex-start; }
 .interes .listo p { margin: 0; font-size: 18px; }
+.interes .ref { margin: 0; padding: 10px 12px; background: var(--negro); border-left: 3px solid var(--ama); font-size: 15px; }
+.interes .ref b { color: var(--ama); font-family: var(--mono); }
+.interes .monto { font-family: var(--mono); font-size: 20px; color: var(--ama); }
+.interes .req { color: var(--ama); }
 
 /* Consulta de uno o varios equipos */
 dialog.consulta { width: min(560px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); overflow-y: auto; padding: 0; border: 1px solid var(--ama); background: var(--carbon); color: var(--hueso); }
@@ -745,17 +749,20 @@ body.modo-aliado #barra-consulta, body.modo-cliente #barra-consulta, body.modo-a
 </div>
 
 <dialog class="interes" id="interes" aria-labelledby="int-titulo">
-  <div class="cab"><div><small id="int-lote">Lote</small><h2 id="int-titulo">Me interesa este equipo</h2></div><button type="button" class="cerrar" id="int-cerrar" aria-label="Cerrar">×</button></div>
+  <div class="cab"><div><small id="int-lote">Lote</small><h2 id="int-titulo">Hacer oferta</h2></div><button type="button" class="cerrar" id="int-cerrar" aria-label="Cerrar">×</button></div>
   <form id="int-form" novalidate>
-    <p class="nota">Déjame tus datos y te contacto personalmente.</p>
-    <label>Nombre completo<input id="int-nombre" name="nombre" autocomplete="name" required></label>
-    <label>Celular / WhatsApp<input id="int-tel" name="telefono" type="tel" inputmode="tel" autocomplete="tel" required></label>
-    <label>Ciudad<input id="int-ciudad" name="ciudad" autocomplete="address-level2"></label>
+    <p class="ref" id="int-ref"></p>
+    <label><span>Tu oferta (COP) <span class="req">*</span></span><input id="int-oferta" name="oferta" class="monto" inputmode="numeric" autocomplete="off" placeholder="$ 0" required></label>
+    <label><span>Celular / WhatsApp <span class="req">*</span></span><input id="int-tel" name="telefono" type="tel" inputmode="tel" autocomplete="tel" placeholder="300 123 4567" required></label>
+    <label>Forma de pago (opcional)<select id="int-pago" name="pago"><option value="">Seleccionar…</option><option>De contado</option><option>Financiado</option><option>Permuta + dinero</option><option>Por definir</option></select></label>
+    <label>Nombre (opcional)<input id="int-nombre" name="nombre" autocomplete="name"></label>
+    <label>Ciudad (opcional)<input id="int-ciudad" name="ciudad" autocomplete="address-level2"></label>
     <label>Correo (opcional)<input id="int-correo" name="correo" type="email" autocomplete="email"></label>
-    <label>¿Qué te gustaría saber? (opcional)<textarea id="int-msg" name="mensaje" placeholder="Por ejemplo: quiero verlo esta semana, ¿aceptan oferta?"></textarea></label>
+    <label>Comentario (opcional)<textarea id="int-msg" name="mensaje" placeholder="Por ejemplo: puedo verlo esta semana, pago al recibir"></textarea></label>
     <label class="trampa" aria-hidden="true">No llenar<input id="int-web" name="web" tabindex="-1" autocomplete="off"></label>
+    <p class="nota">Presento tu oferta al propietario y te respondo por WhatsApp si es aceptada o con una contraoferta.</p>
     <p class="nota" id="int-error" role="alert" hidden></p>
-    <button type="submit" class="boton" id="int-enviar">Enviar mis datos</button>
+    <button type="submit" class="boton" id="int-enviar">Enviar oferta</button>
   </form>
   <div class="listo" id="int-listo" hidden></div>
 </dialog>
@@ -895,7 +902,7 @@ function lote(e, grande, sinId) {
       </div>
       ${notaCombo(e)}
       <dl class="ficha">${ficha.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>
-      ${esVendido(e) ? `<div class="botones"><button type="button" class="boton linea" data-similar="${esc(e.tipo)}">Ver equipos similares</button></div>` : `<div class="botones"><a class="boton wpp" data-consulta="${e.lote}" style="--d: ${(parseInt(e.lote, 10) % 5) * 0.9}s" href="${WA}${msg(e)}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>Consultar lote por WhatsApp</a><button type="button" class="boton linea interesa" data-lote="${e.lote}">Me interesa</button><button type="button" class="boton linea compartir" data-lote="${e.lote}" aria-label="Compartir ${esc(e.nombre)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M16 6l-4-4-4 4M12 2v13"/></svg>Compartir</button></div>`}
+      ${esVendido(e) ? `<div class="botones"><button type="button" class="boton linea" data-similar="${esc(e.tipo)}">Ver equipos similares</button></div>` : `<div class="botones"><a class="boton wpp" data-consulta="${e.lote}" style="--d: ${(parseInt(e.lote, 10) % 5) * 0.9}s" href="${WA}${msg(e)}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>Consultar lote por WhatsApp</a><button type="button" class="boton linea interesa" data-lote="${e.lote}">Hacer oferta</button><button type="button" class="boton linea compartir" data-lote="${e.lote}" aria-label="Compartir ${esc(e.nombre)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M16 6l-4-4-4 4M12 2v13"/></svg>Compartir</button></div>`}
     </div>
   </article>`;
 }
@@ -1154,41 +1161,49 @@ document.addEventListener("click", ev => {
   document.querySelector(".lotes").scrollIntoView({ behavior: "smooth", block: "start" });
 });
 
-// "Me interesa": el visitante deja sus datos. Si FORMULARIO tiene la dirección del script de Google, los datos
-// llegan a la hoja "Interesados" y a tu correo; si no, se abre WhatsApp con el mensaje ya escrito.
+// "Hacer oferta": el visitante ofrece un valor por el lote. Celular obligatorio; lo demás es opcional.
+// Si FORMULARIO tiene la dirección del script de Google, la oferta llega a la hoja; siempre se abre WhatsApp
+// con la oferta escrita para que le llegue a Nestor.
 const FORMULARIO = "";
 (function () {
   const dlg = document.getElementById("interes"), form = document.getElementById("int-form"), listo = document.getElementById("int-listo"), err = document.getElementById("int-error");
+  const inOf = document.getElementById("int-oferta");
+  const soloNum = t => parseInt(String(t).replace(/\D/g, ""), 10) || 0;
+  inOf.addEventListener("input", () => { const n = soloNum(inOf.value); inOf.value = n ? cop(n) : ""; });
   let actualLote = null;
   document.addEventListener("click", ev => {
     const b = ev.target.closest(".interesa"); if (!b) return;
     actualLote = LOTES.find(z => z.lote === b.dataset.lote); if (!actualLote) return;
     document.getElementById("int-lote").textContent = `Lote ${actualLote.lote} · ${actualLote.cat}`;
-    document.getElementById("int-titulo").textContent = `Me interesa: ${actualLote.nombre}`;
+    document.getElementById("int-titulo").textContent = `Hacer oferta: ${actualLote.nombre}`;
+    document.getElementById("int-ref").innerHTML = actualLote.precio ? `Precio publicado: <b>${cop(actualLote.precio)}</b>` : "Precio a convenir";
     form.hidden = false; listo.hidden = true; err.hidden = true;
     if (dlg.showModal) dlg.showModal(); else dlg.setAttribute("open", "");
-    setTimeout(() => document.getElementById("int-nombre").focus(), 50);
+    setTimeout(() => inOf.focus(), 50);
   });
   document.getElementById("int-cerrar").onclick = () => dlg.close ? dlg.close() : dlg.removeAttribute("open");
   dlg.addEventListener("click", ev => { if (ev.target === dlg) dlg.close(); });
   form.addEventListener("submit", async ev => {
     ev.preventDefault();
     const v = id => document.getElementById(id).value.trim();
+    err.hidden = true;
     if (v("int-web")) return; // robots
-    if (!v("int-nombre") || v("int-tel").replace(/\D/g, "").length < 7) { err.textContent = "Escribe tu nombre y un número de celular válido."; err.hidden = false; return; }
-    const e = actualLote, datos = { lote: e.lote, equipo: e.nombre, precio: cop(e.precio), nombre: v("int-nombre"), telefono: v("int-tel"), ciudad: v("int-ciudad"), correo: v("int-correo"), mensaje: v("int-msg"), pagina: location.href };
-    const texto = `Hola Nestor, me interesa el lote ${e.lote}: ${e.nombre}${e.anio ? " (" + e.anio + ")" : ""} por ${cop(e.precio)}.\nNombre: ${datos.nombre}\nCelular: ${datos.telefono}${datos.ciudad ? "\nCiudad: " + datos.ciudad : ""}${datos.correo ? "\nCorreo: " + datos.correo : ""}${datos.mensaje ? "\n" + datos.mensaje : ""}`;
+    const monto = soloNum(v("int-oferta"));
+    if (!monto) { err.textContent = "Escribe el valor de tu oferta."; err.hidden = false; inOf.focus(); return; }
+    if (v("int-tel").replace(/\D/g, "").length < 7) { err.textContent = "Escribe un número de celular válido para responderte."; err.hidden = false; document.getElementById("int-tel").focus(); return; }
+    const e = actualLote, datos = { tipo: "oferta", lote: e.lote, equipo: e.nombre, precio: e.precio ? cop(e.precio) : "", oferta: cop(monto), pago: v("int-pago"), nombre: v("int-nombre"), telefono: v("int-tel"), ciudad: v("int-ciudad"), correo: v("int-correo"), mensaje: v("int-msg"), pagina: location.href };
+    const texto = `Hola Nestor, quiero hacer una OFERTA por el lote ${e.lote}: ${e.nombre}${e.anio ? " (" + e.anio + ")" : ""}.` +
+      `${datos.precio ? "\nPrecio publicado: " + datos.precio : ""}\n*Mi oferta: ${datos.oferta}*` +
+      `${datos.pago ? "\nForma de pago: " + datos.pago : ""}${datos.nombre ? "\nNombre: " + datos.nombre : ""}\nCelular: ${datos.telefono}` +
+      `${datos.ciudad ? "\nCiudad: " + datos.ciudad : ""}${datos.correo ? "\nCorreo: " + datos.correo : ""}${datos.mensaje ? "\nComentario: " + datos.mensaje : ""}` +
+      `\n\nQuedo atento a si es aceptada o a su contraoferta.`;
     const urlWA = WA + encodeURIComponent(texto);
     const btn = document.getElementById("int-enviar"); btn.disabled = true;
-    let enviado = false;
-    if (FORMULARIO) {
-      try { await fetch(FORMULARIO, { method: "POST", mode: "no-cors", body: new URLSearchParams(datos) }); enviado = true; } catch (x) {}
-    }
-    if (!enviado) window.open(urlWA, "_blank", "noopener");
+    if (FORMULARIO) { try { fetch(FORMULARIO, { method: "POST", mode: "no-cors", body: new URLSearchParams(datos) }); } catch (x) {} }
+    window.open(urlWA, "_blank", "noopener");
+    const quien = datos.nombre ? ", " + esc(datos.nombre.split(" ")[0]) : "";
     btn.disabled = false; form.reset(); form.hidden = true; listo.hidden = false;
-    listo.innerHTML = enviado
-      ? `<p>¡Gracias, ${esc(datos.nombre.split(" ")[0])}! Recibí tus datos y te contacto pronto.</p><a class="boton" href="${urlWA}" target="_blank" rel="noopener">Escribir ya por WhatsApp</a>`
-      : `<p>Se abrió WhatsApp con tu mensaje listo. Solo toca <b>Enviar</b> y te respondo.</p><a class="boton" href="${urlWA}" target="_blank" rel="noopener">Abrir WhatsApp de nuevo</a>`;
+    listo.innerHTML = `<p>¡Gracias${quien}! Se abrió WhatsApp con tu oferta de <b>${esc(datos.oferta)}</b>. Toca <b>Enviar</b> para que me llegue.</p><p class="nota">La presento al propietario y te respondo si es aceptada o con una contraoferta.</p><a class="boton" href="${urlWA}" target="_blank" rel="noopener">Abrir WhatsApp de nuevo</a>`;
   });
 })();
 
