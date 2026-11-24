@@ -80,7 +80,7 @@ const EQUIPOS = [
     specs: [["Capacidad operativa", "794 kg (1.750 lb)"], ["Potencia", "66 hp"], ["Rodaje", "Llantas"]] },
   { lote: "40", img: "img/l40-2de9d5ec.jpg", tipo: "Vehículos", cat: "Volqueta doble troque", nombre: "Chevrolet FVZ (Isuzu)", anio: 2013, uso: "447.000 km", precio: 280000000, fotos: ["img/volq_isuzu.jpg", "img/l40-504e3cad.jpg", "img/l40-dae64d0b.jpg", "img/l40-b2299223.jpg", "img/l40-d312322f.jpg", "img/l40-7f4ad100.jpg"],
     specs: [["Línea", "FVZ tecnología Isuzu"], ["Configuración", "Doble troque"], ["Carrocería", "Volco"]] },
-  { lote: "41", img: "img/volq_kodiak.jpg", tipo: "Vehículos", cat: "Volqueta doble troque", nombre: "Chevrolet volqueta doble troque (2008)", anio: 2008, uso: "Odómetro no funciona", precio: 140000000,
+  { lote: "41", img: "img/volq_kodiak.jpg", tipo: "Vehículos", cat: "Volqueta doble troque", nombre: "Chevrolet volqueta doble troque (2008)", anio: 2008, uso: "Odómetro no funciona", precio: 150000000,
     specs: [["Configuración", "Doble troque"], ["Carrocería", "Volco"], ["Kilometraje", "Odómetro no funciona"]] },
   { lote: "42", img: "img/l42-9fe9f9d2.jpg", tipo: "Cargadores", cat: "Cargador frontal", nombre: "SDLG LG936 (unidad 2)", anio: 2021, uso: "9.382 h", precio: 140000000,
     specs: [["Cucharón", "1,8 m³"], ["Estado", "Operativo"]] },
