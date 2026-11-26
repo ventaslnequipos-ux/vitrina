@@ -96,8 +96,8 @@ const EQUIPOS = [
     specs: [["Configuración", "Volqueta sencilla"], ["Estado", "Sin operar"]] },
   { lote: "48", img: "img/l48-b56a86ec.jpg", tipo: "Vehículos", cat: "Camión de estacas", nombre: "JAC JHR", anio: 2020, uso: "Km por confirmar", precio: 70000000,
     specs: [["Capacidad", "3 t (referencia)"], ["Carrocería", "Estacas con carpa"], ["Estado", "Disponible"]] },
-  { lote: "49", img: "img/l49-91012514.jpg", tipo: "Vehículos", cat: "Camioneta doble cabina", nombre: "Nissan Frontier", anio: 2017, uso: "200.000 km", precio: 70000000,
-    specs: [["Tipo", "Doble cabina"], ["Tracción", "4x4"], ["Transmisión", "Mecánica"], ["Estado", "Por confirmar"]] },
+  { lote: "49", img: "img/l49-91012514.jpg", tipo: "Vehículos", cat: "Camioneta doble cabina", nombre: "Nissan Frontier", anio: 0, uso: "Km por confirmar", precio: 70000000,
+    specs: [["Tipo", "Doble cabina"], ["Estado", "Por confirmar"]] },
   { lote: "50", img: "img/l50-7b683548.jpg", tipo: "Vehículos", cat: "Camioneta doble cabina", nombre: "Nissan Navara", anio: 2012, uso: "Km por confirmar", precio: 60000000,
     specs: [["Tipo", "Doble cabina"], ["Estado", "Disponible"]] },
 ];
@@ -141,6 +141,7 @@ const INGRESOS = {
 // Equipos vendidos: nombre del equipo y fecha de venta. Siguen en el catálogo con el sello "Equipo vendido", al final de la lista,
 // sin precio y fuera de destacados, cinta y "Nuevo ingreso". Se marcan desde el control privado (estado "Vendido").
 const VENDIDOS = {
+  "Ford Piragua": "2026-11-26",
 };
 // Precio anterior de los equipos que bajaron de precio (se muestra tachado 30 días). Lo calcula publicar.py.
 const PRECIO_ANTES = {"03": {"antes": 250000000, "desde": "2026-11-06"}, "09": {"antes": 60000000, "desde": "2026-11-06"}, "11": {"antes": 90000000, "desde": "2026-11-06"}, "31": {"antes": 95000000, "desde": "2026-11-16"}, "39": {"antes": 85000000, "desde": "2026-11-13"}};
