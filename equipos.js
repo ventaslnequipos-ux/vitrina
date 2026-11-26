@@ -96,8 +96,8 @@ const EQUIPOS = [
     specs: [["Configuración", "Volqueta sencilla"], ["Estado", "Sin operar"]] },
   { lote: "48", img: "img/l48-b56a86ec.jpg", tipo: "Vehículos", cat: "Camión de estacas", nombre: "JAC JHR", anio: 2020, uso: "Km por confirmar", precio: 70000000,
     specs: [["Capacidad", "3 t (referencia)"], ["Carrocería", "Estacas con carpa"], ["Estado", "Disponible"]] },
-  { lote: "49", img: "img/l49-91012514.jpg", tipo: "Vehículos", cat: "Camioneta doble cabina", nombre: "Nissan Frontier", anio: 0, uso: "Km por confirmar", precio: 70000000,
-    specs: [["Tipo", "Doble cabina"], ["Estado", "Por confirmar"]] },
+  { lote: "49", img: "img/l49-91012514.jpg", tipo: "Vehículos", cat: "Camioneta doble cabina", nombre: "Nissan Frontier", anio: 2017, uso: "200.000 km", precio: 70000000,
+    specs: [["Tipo", "Doble cabina"], ["Tracción", "4x4"], ["Transmisión", "Mecánica"], ["Estado", "Por confirmar"]] },
   { lote: "50", img: "img/l50-7b683548.jpg", tipo: "Vehículos", cat: "Camioneta doble cabina", nombre: "Nissan Navara", anio: 2012, uso: "Km por confirmar", precio: 60000000,
     specs: [["Tipo", "Doble cabina"], ["Estado", "Disponible"]] },
 ];
